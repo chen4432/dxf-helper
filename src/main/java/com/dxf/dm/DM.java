@@ -14,9 +14,9 @@ public class DM {
 
     private Config conf = ConfigUtil.getConfig();
 
-    private ActiveXComponent dm;
+    private static ActiveXComponent dm;
 
-    public DM() {
+     static {
         dm = new ActiveXComponent("dm.dmsoft");
     }
 
@@ -136,8 +136,106 @@ public class DM {
     }
 
 
+    /**
+     * 按住虚拟按键
+     * @param vkCode
+     * @return
+     */
     public boolean keyDown(int vkCode) {
         return Dispatch.call(dm, "KeyDown", vkCode).getInt() == 1;
+    }
+
+    public boolean keyUp(int vkCode) {
+        return Dispatch.call(dm, "KeyUp", vkCode).getInt() == 1;
+    }
+
+    public boolean keyDown(char c) {
+        return Dispatch.call(dm, "KeyDownChar", String.valueOf(c)).getInt() == 1;
+    }
+
+    public boolean keyUp(char c) {
+        return Dispatch.call(dm, "KeyUpChar", String.valueOf(c)).getInt() == 1;
+    }
+
+    public boolean keyPress(int vkCode) {
+        return Dispatch.call(dm, "KeyPress", vkCode).getInt() == 1;
+    }
+
+    public boolean keyPress(char c) {
+        return Dispatch.call(dm, "KeyPressChar", String.valueOf(c)).getInt() == 1;
+    }
+
+    public boolean leftClick() {
+        return Dispatch.call(dm, "LeftClick").getInt() == 1;
+    }
+
+    public boolean leftRight() {
+        return Dispatch.call(dm, "LeftRight").getInt() == 1;
+    }
+
+    public boolean leftDoubleClick() {
+        return Dispatch.call(dm, "LeftDoubleClick").getInt() == 1;
+    }
+
+    public boolean leftDown() {
+        return Dispatch.call(dm, "LeftDown").getInt() == 1;
+    }
+
+    public boolean rightDown() {
+        return Dispatch.call(dm, "RightDown").getInt() == 1;
+    }
+
+    public boolean rightUp() {
+        return Dispatch.call(dm, "RightUp").getInt() == 1;
+    }
+
+    public boolean moveTo(int x, int y) {
+        return Dispatch.call(dm, "ModeTo", x, y).getInt() == 1;
+    }
+
+
+    public static class MemoryUtil {
+        /**
+         * 根据指定的窗口句柄，来获取对应窗口句柄进程下的指定模块的基址
+         * @param hwnd 指定搜索的窗口句柄
+         * @param module 模块名
+         * @return 模块的基址
+         */
+        public int getModuleBaseAddr(int hwnd, String module) {
+            return Dispatch.call(dm, "GetModuleBaseAddr", hwnd, module).getInt();
+        }
+
+        /**
+         * 读取指定地址的二进制数据
+         * @param hwnd 指定搜索的窗口句柄
+         * @param addr 用字符串来描述地址，类似于CE的地址描述，数值必须是16进制,里面可以用[ ] + -这些符号来描述一个地址。+表示地址加，-表示地址减,模块名必须用<>符号来圈起来
+         *             1. "4DA678" 最简单的方式，用绝对数值来表示地址
+         *             2. "<360SE.exe>+DA678" 相对简单的方式，只是这里用模块名来决定模块基址，后面的是偏移
+         *             3. "[4DA678]+3A" 用绝对数值加偏移，相当于一级指针
+         *             4. "[<360SE.exe>+DA678]+3A" 用模块定基址的方式，也是一级指针
+         *             5. "[[[<360SE.exe>+DA678]+3A]+5B]+8" 这个是一个三级指针
+         * @param len len 二进制数据的长度
+         * @return 读取到的数值,以16进制表示的字符串 每个字节以空格相隔 比如"12 34 56 78 ab cd ef"
+         */
+        public String readData(int hwnd, String addr, int len) {
+            return Dispatch.call(dm, "ReadData", hwnd, addr, len).getString();
+        }
+
+        /**
+         * 对指定地址写入二进制数据
+         * @param hwnd 指定搜索的窗口句柄
+         * @param addr addr 用字符串来描述地址，类似于CE的地址描述，数值必须是16进制,里面可以用[ ] + -这些符号来描述一个地址。+表示地址加，-表示地址减;模块名必须用<>符号来圈起来
+         *             1. "4DA678" 最简单的方式，用绝对数值来表示地址
+         *             2. "<360SE.exe>+DA678" 相对简单的方式，只是这里用模块名来决定模块基址，后面的是偏移
+         *             3. "[4DA678]+3A" 用绝对数值加偏移，相当于一级指针
+         *             4. "[<360SE.exe>+DA678]+3A" 用模块定基址的方式，也是一级指针
+         *             5. "[[[<360SE.exe>+DA678]+3A]+5B]+8" 这个是一个三级指针
+         * @param data 二进制数据，以字符串形式描述，比如"12 34 56 78 90 ab cd"
+         * @return
+         */
+        public boolean writeData(int hwnd, String addr, String data) {
+            return Dispatch.call(dm, "WriteData", hwnd, addr, data).getInt() == 1;
+        }
     }
 
 }
