@@ -12,109 +12,115 @@ import com.typesafe.config.Config;
  */
 public class DM {
 
-    private Config conf = ConfigUtil.getConfig();
+    private static Config conf = ConfigUtil.getConfig();
 
     private static ActiveXComponent dm;
 
-     static {
+    static {
         dm = new ActiveXComponent("dm.dmsoft");
     }
 
-    public String getVersion() {
-        return Dispatch.call(dm, "Ver").getString();
-    }
-
-    public boolean register() {
+    synchronized public static boolean register() {
         return Dispatch.call(dm, "Reg", conf.getString("DM_CONF.CODE_1"), conf.getString("DM_CONF.CODE_2")).getInt() == 1;
     }
 
-    /**
-     * 查找符合类名或者标题名的顶层可见窗口
-     * @param className 窗口类名
-     * @param title 标题名
-     * @return 窗口句柄，没有返回0
-     */
-    public int findWindow(String className, String title) {
-        return Dispatch.call(dm, "FindWindow", className, title).getInt();
+    synchronized public static String getVersion() {
+        return Dispatch.call(dm, "Ver").getString();
     }
 
-    /**
-     * 获取指定窗口所在
-     * @param hwnd 窗口句柄
-     * @return 进程ID
-     */
-    public int getWindowProcessId(int hwnd) {
-        return Dispatch.call(dm, "GetWindowProcessId", hwnd).getInt();
+
+    public static class WindowUtil {
+        /**
+         * 查找符合类名或者标题名的顶层可见窗口
+         * @param className 窗口类名
+         * @param title 标题名
+         * @return 窗口句柄，没有返回0
+         */
+        synchronized public static int findWindow(String className, String title) {
+            return Dispatch.call(dm, "FindWindow", className, title).getInt();
+        }
+
+        /**
+         * 获取指定窗口所在
+         * @param hwnd 窗口句柄
+         * @return 进程ID
+         */
+        synchronized public static int getWindowProcessId(int hwnd) {
+            return Dispatch.call(dm, "GetWindowProcessId", hwnd).getInt();
+        }
+
+        /**
+         *
+         * @param hwnd
+         * @param x1
+         * @param y1
+         * @param x2
+         * @param y2
+         * @return
+         */
+        synchronized public static boolean getWindowRect(int hwnd, Variant x1, Variant y1, Variant x2, Variant y2) {
+            return Dispatch.call(dm, "GetWindowRect", hwnd, x1, y1, x2, y2).getInt() == 1;
+        }
+
+        /**
+         * 移动指定窗口到指定位置
+         * @param hwnd
+         * @param x
+         * @param y
+         * @return
+         */
+        synchronized public static boolean moveWindow(int hwnd, int x, int y) {
+            return Dispatch.call(dm, "MoveWindow", hwnd, x, y).getInt() == 1;
+        }
+
+        /**
+         * 向指定窗口发送文本数据
+         * @param hwnd
+         * @param message
+         * @return
+         */
+        synchronized public static boolean sendString(int hwnd, String message) {
+            return Dispatch.call(dm, "SendString", hwnd, message).getInt() == 1;
+        }
+
+        /**
+         * 设置窗口大小
+         * @param hwnd
+         * @param width
+         * @param height
+         * @return
+         */
+        synchronized public static boolean setWindowSize(int hwnd, int width, int height) {
+            return Dispatch.call(dm, "SetWindowSize", hwnd, width, height).getInt() == 1;
+        }
     }
 
-    /**
-     *
-     * @param hwnd
-     * @param x1
-     * @param y1
-     * @param x2
-     * @param y2
-     * @return
-     */
-    public boolean getWindowRect(int hwnd, Variant x1, Variant y1, Variant x2, Variant y2) {
-        return Dispatch.call(dm, "GetWindowRect", hwnd, x1, y1, x2, y2).getInt() == 1;
-    }
 
-    /**
-     * 移动指定窗口到指定位置
-     * @param hwnd
-     * @param x
-     * @param y
-     * @return
-     */
-    public boolean moveWindow(int hwnd, int x, int y) {
-        return Dispatch.call(dm, "MoveWindow", hwnd, x, y).getInt() == 1;
-    }
+    public static class BackgroundUtil {
+        /**
+         * 绑定指定窗口
+         * @param hwnd
+         * @param display
+         * @param mouse
+         * @param keypad
+         * @param mode
+         * @return
+         */
+        public static boolean bindWindow(int hwnd, String display, String mouse, String keypad, int mode) {
+            return Dispatch.call(dm, "BindWindow", hwnd, display, mouse, keypad, mode).getInt() == 1;
+        }
 
-    /**
-     * 向指定窗口发送文本数据
-     * @param hwnd
-     * @param message
-     * @return
-     */
-    public boolean sendString(int hwnd, String message) {
-        return Dispatch.call(dm, "SendString", hwnd, message).getInt() == 1;
-    }
+        public static boolean bindWindowEx(int hwnd, String display, String mouse, String keypad, String pub, int mode) {
+            return Dispatch.call(dm, "BindWindowEx", hwnd, display, mode, keypad, pub).getInt() == 1;
+        }
 
-    /**
-     * 设置窗口大小
-     * @param hwnd
-     * @param width
-     * @param height
-     * @return
-     */
-    public boolean setWindowSize(int hwnd, int width, int height) {
-        return Dispatch.call(dm, "SetWindowSize", hwnd, width, height).getInt() == 1;
-    }
-
-    /**
-     * 绑定指定窗口
-     * @param hwnd
-     * @param display
-     * @param mouse
-     * @param keypad
-     * @param mode
-     * @return
-     */
-    public boolean bindWindow(int hwnd, String display, String mouse, String keypad, int mode) {
-        return Dispatch.call(dm, "BindWindow", hwnd, display, mouse, keypad, mode).getInt() == 1;
-    }
-
-    public boolean bindWindowEx(int hwnd, String display, String mouse, String keypad, String pub, int mode) {
-        return Dispatch.call(dm, "BindWindowEx", hwnd, display, mode, keypad, pub).getInt() == 1;
-    }
-
-    /**
-     * 取消绑定窗口
-     * @return
-     */
-    public boolean unbindWindow() {
-        return Dispatch.call(dm, "UnBindWindow").getInt() == 1;
+        /**
+         * 取消绑定窗口
+         * @return
+         */
+        public static boolean unbindWindow() {
+            return Dispatch.call(dm, "UnBindWindow").getInt() == 1;
+        }
     }
 
     /**
@@ -195,13 +201,57 @@ public class DM {
 
 
     public static class MemoryUtil {
+
+        public static String doubleToData(double value) {
+            return Dispatch.call(dm, "DoubleToData", value).getString();
+        }
+
+        public static String floatToData(float value) {
+            return Dispatch.call(dm, "FloatToData", value).getString();
+        }
+
+        public static String intToData(int value, int type) {
+            return Dispatch.call(dm, "IntToData", value, type).getString();
+        }
+
+        public static String stringToData(String value, int type) {
+            return Dispatch.call(dm, "StringToData", value, type).getString();
+        }
+
+        /**
+         * 搜索指定的二进制数据,默认步长是1.如果要定制步长，请用FindDataEx
+         * @param hwnd hwnd 指定搜索的窗口句柄
+         * @param addrRange 指定搜索的地址集合，字符串类型，这个地方可以是上次FindXXX的返回地址集合,可以进行二次搜索.(类似CE的再次扫描),如果要进行地址范围搜索，那么这个值为的形如如下(类似于CE的新搜索);"00400000-7FFFFFFF" "80000000-BFFFFFFF" "00000000-FFFFFFFF" 等.
+         * @param data 要搜索的二进制数据 以字符串的形式描述比如"00 01 23 45 67 86 ab ce f1"等.
+         * @return 返回搜索到的地址集合，地址格式如下:"addr1|addr2|addr3…|addrn" 比如"400050|423435|453430"
+         */
+        public static String findData(int hwnd, String addrRange, String data) {
+            return Dispatch.call(dm, "FindData", hwnd, addrRange, data).getString();
+        }
+
+        public static String findDouble(int hwnd, String addrRange, double lowerBound, double upperBound) {
+            return Dispatch.call(dm, "FindDouble", hwnd, addrRange, lowerBound, upperBound).getString();
+        }
+
+        public static String findFloat(int hwnd, String addrRange, float lowerBound, float upperBound) {
+            return Dispatch.call(dm, "FindFloat", addrRange, lowerBound, upperBound).getString();
+        }
+
+        public static String findInt(int hwnd, String addrRange, int lowerBound, int upperBound) {
+            return Dispatch.call(dm, "FindInt", hwnd, addrRange, lowerBound, upperBound).getString();
+        }
+
+        public static String findString(int hwnd, String addrRange, String value, int type) {
+            return Dispatch.call(dm, "FindString", hwnd, addrRange, value, type).getString();
+        }
+
         /**
          * 根据指定的窗口句柄，来获取对应窗口句柄进程下的指定模块的基址
          * @param hwnd 指定搜索的窗口句柄
          * @param module 模块名
          * @return 模块的基址
          */
-        public int getModuleBaseAddr(int hwnd, String module) {
+        public static int getModuleBaseAddr(int hwnd, String module) {
             return Dispatch.call(dm, "GetModuleBaseAddr", hwnd, module).getInt();
         }
 
@@ -217,8 +267,24 @@ public class DM {
          * @param len len 二进制数据的长度
          * @return 读取到的数值,以16进制表示的字符串 每个字节以空格相隔 比如"12 34 56 78 ab cd ef"
          */
-        public String readData(int hwnd, String addr, int len) {
+        public static String readData(int hwnd, String addr, int len) {
             return Dispatch.call(dm, "ReadData", hwnd, addr, len).getString();
+        }
+
+        public static double readDouble(int hwnd, String addr) {
+            return Dispatch.call(dm, "ReadDouble", hwnd, addr).getDouble();
+        }
+
+        public static float readFloat(int hwnd, String addr) {
+            return Dispatch.call(dm, "ReadFloat", hwnd, addr).getFloat();
+        }
+
+        public static int readInt(int hwnd, String addr, int type) {
+            return Dispatch.call(dm, "ReadInt", hwnd, addr, type).getInt();
+        }
+
+        public static String readString(int hwnd, String addr, int type, int len) {
+            return Dispatch.call(dm, "ReadString", hwnd, addr, type, len).getString();
         }
 
         /**
