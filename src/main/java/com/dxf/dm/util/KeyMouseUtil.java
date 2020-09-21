@@ -18,8 +18,8 @@ public class KeyMouseUtil {
     private static final ActiveXComponent dm = DmCore.getDm();
 
     public static Coordinate2D getCursorPos() throws DmOptException {
-        Variant x = new Variant();
-        Variant y = new Variant();
+        Variant x = new Variant(0);
+        Variant y = new Variant(0);
         int retCode = Dispatch.call(dm, "GetCursorPos", x, y).getInt();
         if (retCode != 1) {
             throw new DmOptException("Failed to do GetCursorPos, retCode: " + retCode);
