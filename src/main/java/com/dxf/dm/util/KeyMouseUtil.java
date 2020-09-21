@@ -99,13 +99,28 @@ public class KeyMouseUtil {
         }
     }
 
+    /**
+     * 点击鼠标左键
+     * @throws DmOptException
+     */
     public static void leftClick() throws DmOptException {
-
+        int retCode = Dispatch.call(dm, "LeftClick").getInt();
+        if (retCode != 1) {
+            throw new DmOptException("Failed to do LeftClick, retCode: " + retCode);
+        }
     }
 
+    /**
+     * 点击鼠标左键
+     * @throws DmOptException
+     */
     public static void rightClick() throws DmOptException {
-
+        int retCode = Dispatch.call(dm, "RightClick").getInt();
+        if (retCode != 1) {
+            throw new DmOptException("Failed to do RightClick, retCode: " + retCode);
+        }
     }
+
 
 
 
