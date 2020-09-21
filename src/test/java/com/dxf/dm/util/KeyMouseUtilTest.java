@@ -20,4 +20,12 @@ public class KeyMouseUtilTest {
         System.out.println(pos);
     }
 
+    @Test
+    public void get_cursor_pos_continually() throws Exception {
+        for (int i = 0; i < 1000000; ++i) {
+            System.out.println(KeyMouseUtil.getCursorPos());
+            Thread.sleep(100);
+        }
+    }
+
 }

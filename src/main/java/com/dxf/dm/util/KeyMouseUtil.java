@@ -24,8 +24,89 @@ public class KeyMouseUtil {
         if (retCode != 1) {
             throw new DmOptException("Failed to do GetCursorPos, retCode: " + retCode);
         }
-        System.out.println(x);
-        System.out.println(y);
         return new Coordinate2D(x.getInt(), y.getInt());
     }
+
+    /**
+     * 按住指定的虚拟键码
+     * @param vkCode 虚拟按键码
+     * @throws DmOptException
+     */
+    public static void keyDown(int vkCode) throws DmOptException {
+        int retCode = Dispatch.call(dm, "KeyDown", vkCode).getInt();
+        if (retCode != 1) {
+            throw new DmOptException("Failed to do KeyDown, retCode: " + retCode);
+        }
+    }
+
+    /**
+     * 按住指定的虚拟键码
+     * @param keyStr 字符串描述的键码. 大小写无所谓
+     * @throws DmOptException
+     */
+    public static void keyDownChar(String keyStr) throws DmOptException {
+        int retCode = Dispatch.call(dm, "KeyDownChar", keyStr).getInt();
+        if (retCode != 1) {
+            throw new DmOptException("Failed to do KeyDownChar, retCode: " + retCode);
+        }
+    }
+
+    /**
+     * 按下指定的虚拟键码
+     * @param vkCode 虚拟按键码
+     * @throws DmOptException
+     */
+    public static void keyPress(int vkCode) throws DmOptException {
+        int retCode = Dispatch.call(dm, "KeyPress", vkCode).getInt();
+        if (retCode != 1) {
+            throw new DmOptException("Failed to do KeyPress, retCode: " + retCode);
+        }
+    }
+
+    /**
+     * 按下指定的虚拟键码
+     * @param keyStr 字符串描述的键码. 大小写无所谓
+     * @throws DmOptException
+     */
+    public static void keyPressChar(int keyStr) throws DmOptException {
+        int retCode = Dispatch.call(dm, "KeyPress", keyStr).getInt();
+        if (retCode != 1) {
+            throw new DmOptException("Failed to do KeyPressChar, retCode: " + retCode);
+        }
+    }
+
+    /**
+     * 弹起来虚拟键vk_code
+     * @param vkCode 虚拟按键码
+     * @throws DmOptException
+     */
+    public static void keyUp(int vkCode) throws DmOptException {
+        int retCode = Dispatch.call(dm, "KeyUp", vkCode).getInt();
+        if (retCode != 1) {
+            throw new DmOptException("Failed to do KeyUp, retCode: " + retCode);
+        }
+    }
+
+    /**
+     * 弹起来虚拟键key_str
+     * @param keyStr 字符串描述的键码. 大小写无所谓
+     * @throws DmOptException
+     */
+    public static void keyUpChar(String keyStr) throws DmOptException {
+        int retCode = Dispatch.call(dm, "KeyUpChar", keyStr).getInt();
+        if (retCode != 1) {
+            throw new DmOptException("Failed to do KeyUpChar, retCode: " + retCode);
+        }
+    }
+
+    public static void leftClick() throws DmOptException {
+
+    }
+
+    public static void rightClick() throws DmOptException {
+
+    }
+
+
+
 }
