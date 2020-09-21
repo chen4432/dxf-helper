@@ -1,10 +1,15 @@
-package com.dxf.dm;
+package com.dxf.dm.core;
 
+import com.dxf.dm.model.Coordinate2D;
 import com.dxf.util.ConfigUtil;
+import com.google.common.base.Strings;
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Dispatch;
 import com.jacob.com.Variant;
 import com.typesafe.config.Config;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author GuJun
@@ -12,16 +17,19 @@ import com.typesafe.config.Config;
  */
 public class DM {
 
-    private static Config conf = ConfigUtil.getConfig();
+    private static final Config conf = ConfigUtil.getConfig();
 
-    private static ActiveXComponent dm;
+    private static final ActiveXComponent dm;
 
     static {
         dm = new ActiveXComponent("dm.dmsoft");
     }
 
-    synchronized public static boolean register() {
-        return Dispatch.call(dm, "Reg", conf.getString("DM_CONF.CODE_1"), conf.getString("DM_CONF.CODE_2")).getInt() == 1;
+    synchronized public static void register() throws RuntimeException {
+        int retCode = Dispatch.call(dm, "Reg", conf.getString("DM_CONF.CODE_1"), conf.getString("DM_CONF.CODE_2")).getInt();
+        if (retCode != 1) {
+            throw new RuntimeException("Failed to register dm.dll to system, retCode: " + retCode);
+        }
     }
 
     synchronized public static String getVersion() {
@@ -29,7 +37,66 @@ public class DM {
     }
 
 
+    /**
+     * 窗口工具类
+     */
     public static class WindowUtil {
+
+        /**
+         * 把窗口坐标转换为屏幕坐标
+         * @param hwnd 制定的窗口句柄
+         * @param pos 窗口坐标
+         * @throws RuntimeException
+         */
+        synchronized public static void clientToScreen(int hwnd, Coordinate2D pos) throws RuntimeException {
+            int retCode = Dispatch.call(dm, "ClientToScreen", pos.x, pos.y).getInt();
+            if (retCode != 1) {
+                throw new RuntimeException("Failed to do ClientToScreen, retCode: " + retCode);
+            }
+        }
+
+        /**
+         * 根据指定进程名,枚举系统中符合条件的进程PID,并且按照进程打开顺序排序.
+         * @param name 进程名,比如qq.exe
+         * @return 返回所有匹配的进程PID列表
+         */
+        synchronized public static List<Integer> enumProcess(String name) {
+            List<Integer> pids = new ArrayList<>();
+            String ret = Dispatch.call(dm, "EnumProcess", name).getString();
+            if (!Strings.isNullOrEmpty(ret)) {
+                for (String s : ret.split(",", -1)) {
+                    pids.add(Integer.parseInt(s));
+                }
+            }
+            return pids;
+        }
+
+        /**
+         * 根据指定条件,枚举系统中符合条件的窗口,可以枚举到按键自带的无法枚举到的窗口
+         * @param parent 获得的窗口句柄是该窗口的子窗口的窗口句柄,取0时为获得桌面句柄
+         * @param title 窗口标题. 此参数是模糊匹配.
+         * @param className 窗口类名. 此参数是模糊匹配
+         * @param filter 取值定义如下
+         *               1 : 匹配窗口标题,参数title有效
+         *               2 : 匹配窗口类名,参数class_name有效.
+         *               4 : 只匹配指定父窗口的第一层孩子窗口
+         *               8 : 匹配父窗口为0的窗口,即顶级窗口
+         *               16 : 匹配可见的窗口
+         *               32 : 匹配出的窗口按照窗口打开顺序依次排列
+         *               这些值可以相加,比如4+8+16就是类似于任务管理器中的窗口列表
+         * @return 返回所有匹配的窗口句柄列表
+         */
+        synchronized public static List<Integer> enumWindow(int parent, String title, String className, int filter) {
+            List<Integer> hwnds = new ArrayList<>();
+            String ret = Dispatch.call(dm, "EnumWindow", parent, title, className, filter).getString();
+            if (!Strings.isNullOrEmpty(ret)) {
+                for (String s : ret.split(",", -1)) {
+                    hwnds.add(Integer.parseInt(s));
+                }
+            }
+            return hwnds;
+        }
+
         /**
          * 查找符合类名或者标题名的顶层可见窗口
          * @param className 窗口类名
@@ -92,6 +159,23 @@ public class DM {
          */
         synchronized public static boolean setWindowSize(int hwnd, int width, int height) {
             return Dispatch.call(dm, "SetWindowSize", hwnd, width, height).getInt() == 1;
+        }
+    }
+
+    /**
+     * 防护盾
+     */
+    public static class GuardUtil {
+        /**
+         * 针对部分监测措施的保护盾
+         * @param enable true： 打开保护盾； false： 关闭保护盾
+         * @param type
+         */
+        synchronized public static void guard(boolean enable, String type) throws RuntimeException {
+            int retCode = Dispatch.call(dm, "DmGuard", enable, type).getInt();
+            if (retCode != 1) {
+                throw new RuntimeException("Failed to do DmGuard, retCode: " + retCode);
+            }
         }
     }
 

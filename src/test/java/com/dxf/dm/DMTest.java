@@ -1,8 +1,16 @@
 package com.dxf.dm;
 
+import com.dxf.dm.core.DM;
 import org.junit.Test;
 
+import java.util.List;
+
 public class DMTest {
+
+    @Test
+    public void register() throws RuntimeException {
+        DM.register();
+    }
 
     @Test
     public void get_ver() {
@@ -10,8 +18,9 @@ public class DMTest {
     }
 
     @Test
-    public void register() {
-        System.out.println(DM.register());
+    public void enum_process() throws Exception {
+        List<Integer> pids = DM.WindowUtil.enumProcess("chrome.exe");
+        System.out.println(pids);
     }
 
     @Test
