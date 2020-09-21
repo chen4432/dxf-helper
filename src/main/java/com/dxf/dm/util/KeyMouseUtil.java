@@ -18,13 +18,14 @@ public class KeyMouseUtil {
     private static final ActiveXComponent dm = DmCore.getDm();
 
     public static Coordinate2D getCursorPos() throws DmOptException {
-        Variant x = new Variant(0, true);
-        Variant y = new Variant(0, true);
+        Variant x = new Variant(-1, true);
+        Variant y = new Variant(-1, true);
         int retCode = Dispatch.call(dm, "GetCursorPos", x, y).getInt();
         if (retCode != 1) {
             throw new DmOptException("Failed to do GetCursorPos, retCode: " + retCode);
         }
         System.out.println(x);
+        System.out.println(y);
         return new Coordinate2D(x.getInt(), y.getInt());
     }
 }
