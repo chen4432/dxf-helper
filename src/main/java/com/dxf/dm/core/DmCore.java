@@ -12,10 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 大漠核心
+ *
  * @author GuJun
  * @date 2020/9/1
  */
-public class DM {
+public class DmCore {
 
     private static final Config conf = ConfigUtil.getConfig();
 
@@ -23,6 +25,10 @@ public class DM {
 
     static {
         dm = new ActiveXComponent("dm.dmsoft");
+    }
+
+    public static ActiveXComponent getDm() {
+        return dm;
     }
 
     synchronized public static void register() throws RuntimeException {

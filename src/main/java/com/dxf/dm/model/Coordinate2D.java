@@ -16,4 +16,12 @@ public class Coordinate2D {
         this.x = 0;
         this.y = 0;
     }
+
+    @Override
+    public String toString() {
+        return "Coordinate2D{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
+    }
 }
