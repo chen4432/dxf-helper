@@ -25,7 +25,7 @@ public class BackgroundUtil {
      * @param mode
      * @throws DmOptException
      */
-    public static void bindWindow(int hwnd, String display, String mouse, String keypad, String mode) throws DmOptException {
+    public static void bindWindow(int hwnd, String display, String mouse, String keypad, int mode) throws DmOptException {
         int retCode = Dispatch.call(dm, "BindWindow", hwnd, display, mouse, keypad, mode).getInt();
         if (retCode != 1) {
             throw new DmOptException("Failed to do BindWindow, retCode: " + retCode);
@@ -41,8 +41,8 @@ public class BackgroundUtil {
      * @param mode
      * @throws DmOptException
      */
-    public static void bindWindowEx(int hwnd, String display, String mouse, String keypad, String mode) throws DmOptException {
-        int retCode = Dispatch.call(dm, "BindWindowEx", hwnd, display, mouse, keypad, mode).getInt();
+    public static void bindWindowEx(int hwnd, String display, String mouse, String keypad, String common, int mode) throws DmOptException {
+        int retCode = Dispatch.call(dm, "BindWindowEx", hwnd, display, mouse, keypad, common, mode).getInt();
         if (retCode != 1) {
             throw new DmOptException("Failed to do BindWindowEx, retCode: " + retCode);
         }

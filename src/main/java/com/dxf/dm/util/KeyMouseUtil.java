@@ -68,8 +68,8 @@ public class KeyMouseUtil {
      * @param keyStr 字符串描述的键码. 大小写无所谓
      * @throws DmOptException
      */
-    public static void keyPressChar(int keyStr) throws DmOptException {
-        int retCode = Dispatch.call(dm, "KeyPress", keyStr).getInt();
+    public static void keyPressChar(String keyStr) throws DmOptException {
+        int retCode = Dispatch.call(dm, "KeyPressChar", keyStr).getInt();
         if (retCode != 1) {
             throw new DmOptException("Failed to do KeyPressChar, retCode: " + retCode);
         }
@@ -121,7 +121,17 @@ public class KeyMouseUtil {
         }
     }
 
-
+    /**
+     * 把鼠标移动到目的点(x,y)
+     * @param pos
+     * @throws DmOptException
+     */
+    public static void moveTo(Coordinate2D pos) throws DmOptException {
+        int retCode = Dispatch.call(dm, "MoveTo", pos.x, pos.y).getInt();
+        if (retCode != 1) {
+            throw new DmOptException("Failed to do MoveTo, retCode: " + retCode);
+        }
+    }
 
 
 }
