@@ -1,5 +1,6 @@
 package com.dxf.dm.util;
 
+import com.dxf.dm.core.DmCore;
 import com.dxf.dm.exception.DmOptException;
 import com.dxf.dm.model.Coordinate2D;
 import org.junit.Test;
@@ -14,6 +15,7 @@ public class KeyMouseUtilTest {
 
     @Test
     public void get_cursor_pos() throws DmOptException {
+        DmCore.register();
         Coordinate2D pos = KeyMouseUtil.getCursorPos();
         System.out.println(pos);
     }

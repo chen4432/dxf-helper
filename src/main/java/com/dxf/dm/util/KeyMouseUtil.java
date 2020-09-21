@@ -24,6 +24,7 @@ public class KeyMouseUtil {
         if (retCode != 1) {
             throw new DmOptException("Failed to do GetCursorPos, retCode: " + retCode);
         }
+        System.out.println(x);
         return new Coordinate2D(x.getInt(), y.getInt());
     }
 }
