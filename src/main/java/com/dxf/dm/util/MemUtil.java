@@ -2,8 +2,12 @@ package com.dxf.dm.util;
 
 import com.dxf.dm.core.DmCore;
 import com.dxf.dm.exception.DmOptException;
+import com.google.common.base.Strings;
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Dispatch;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -74,6 +78,19 @@ public class MemUtil {
         if (retCode != 1) {
             throw new DmOptException("Failed to WriteInt, retCode: " + retCode);
         }
+    }
+
+    public static void writeInt(int hwnd, long addr, int type, long val) throws DmOptException {
+
+    }
+
+    public static String readString(int hwnd, long addr, int type, int len) throws DmOptException {
+        String str = Dispatch.call(dm, "ReadStringAddr", hwnd, addr, type, len).getString();
+        int errCode = BasicUtil.getLastError();
+        if (errCode != 0) {
+            throw new DmOptException("Failed to do ReadStringAddr, errCode: " + errCode);
+        }
+        return str;
     }
 
     /**
@@ -177,5 +194,48 @@ public class MemUtil {
         if (retCode != 1) {
             throw new DmOptException("Failed to do VirtualFreeEx, retCode: " + retCode);
         }
+    }
+
+    /**
+     * 搜索指定的二进制数据,默认步长是1.如果要定制步长，请用FindDataEx
+     * @param hwnd
+     * @param addrRange
+     * @param data
+     * @return
+     */
+    public List<String> findData(int hwnd, String addrRange, String data) {
+        List<String> ans = new ArrayList<>();
+        return ans;
+    }
+
+
+    /**
+     * 搜索指定的二进制数据.
+     * @param hwnd 指定搜索的窗口句柄或者进程ID.
+     * @param addrRange 指定搜索的地址集合，字符串类型，这个地方可以是上次FindXXX的返回地址集合,可以进行二次搜索.(类似CE的再次扫描)
+     *                  如果要进行地址范围搜索，那么这个值为的形如如下(类似于CE的新搜索)
+     *                  "00400000-7FFFFFFF" "80000000-BFFFFFFF" "00000000-FFFFFFFF" 等.
+     * @param data 要搜索的二进制数据 以字符串的形式描述比如"00 01 23 45 67 86 ab ce f1"等
+     *             这里也可以支持模糊查找,用??来代替单个字节. 比如"00 01 ?? ?? 67 86 ?? ce f1"等.
+     * @param step 搜索步长.
+     * @param multiThread 表示是否开启多线程查找.  0不开启，1开启.
+     *                    开启多线程查找速度较快，但会耗费较多CPU资源. 不开启速度较慢，但节省CPU.
+     * @param mode 1 表示开启快速扫描(略过只读内存)  0表示所有内存类型全部扫描.
+     * @return
+     */
+    public List<String> findDataEx(int hwnd, String addrRange, String data, int step, int multiThread, int mode) throws DmOptException {
+        List<String> ans = new ArrayList<>();
+        String ret = Dispatch.call(dm, "FindDataEx", hwnd, addrRange, data, step, multiThread, mode).getString();
+        int errCode = BasicUtil.getLastError();
+        if (errCode != 0) {
+            throw new DmOptException("Failed to do FindDataEx, errCode: " + errCode);
+        }
+        if (!Strings.isNullOrEmpty(ret)) {
+            String[] fields = ret.split("\\|", -1);
+            for (String s : fields) {
+                ans.add(s);
+            }
+        }
+        return ans;
     }
 }

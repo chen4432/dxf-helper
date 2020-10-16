@@ -23,7 +23,10 @@ public class MemUtilTest {
     public void write_int() throws Exception {
         DmCore.register();
         int hwnd = WindowUtil.findWindow("", "MFC示例代码");
-        MemUtil.writeInt(hwnd, "0024F8C8", 0, 1000);
+        //MemUtil.writeInt(hwnd, "0024F8C8", 0, 1000);
+        while (true) {
+            Thread.sleep(1000);
+        }
     }
 
     @Test

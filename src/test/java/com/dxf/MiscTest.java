@@ -4,10 +4,14 @@ import com.dxf.dm.core.DmCore;
 import com.dxf.dm.util.GuardUtil;
 import com.dxf.dm.util.MemUtil;
 import com.dxf.dm.util.WindowUtil;
+import com.dxf.util.ConfigUtil;
+import com.typesafe.config.Config;
 import org.junit.Before;
 import org.junit.Test;
 
 public class MiscTest {
+
+    private Config config;
 
     private int hwnd;
 
@@ -16,6 +20,7 @@ public class MiscTest {
         DmCore.register();
         GuardUtil.guard(true, "memory");
         hwnd = WindowUtil.findWindow("", "地下城与勇士");
+        config = ConfigUtil.getConfig("constant.conf");
     }
 
     @Test
@@ -28,5 +33,17 @@ public class MiscTest {
         }
     }
 
+    @Test
+    public void role_level() throws Exception {
+        long ROLE_LEVEL_ADDR = config.getLong("角色等级");
+        System.out.println(MemUtil.readInt(hwnd, ROLE_LEVEL_ADDR, 0));
+    }
+
+    @Test
+    public void role_name() throws Exception {
+        long ROLE_NAME_ADDR = config.getLong("人物名称");
+        System.out.println(ROLE_NAME_ADDR);
+        System.out.println(MemUtil.readString(hwnd, ROLE_NAME_ADDR, 1, 30));
+    }
 
 }
