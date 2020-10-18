@@ -11,9 +11,9 @@ import static org.junit.Assert.*;
 public class BackgroundUtilTest {
 
     @Test
-    public void bind_window() throws Exception {
+    public void bind_window() {
         DmCore.register();
-        int hwnd = WindowUtil.findWindow("地下城与勇士", "地下城与勇士");
+        int hwnd =  WindowUtil.findWindow("地下城与勇士", "地下城与勇士");
         System.out.println("窗口句柄： " + hwnd);
         WindowUtil.moveWindow(hwnd, new Coordinate2D(0, 0));
         WindowUtil.setWindowState(hwnd, 1);
@@ -23,13 +23,16 @@ public class BackgroundUtilTest {
         int mode = 101;
         BackgroundUtil.bindWindow(hwnd, display, mouse, keypad, mode);
         System.out.println("绑定成功~");
-        KeyMouseUtil.keyPressChar("i");
-        Thread.sleep(1000);
-        KeyMouseUtil.keyPressChar("i");
-        KeyMouseUtil.moveTo(new Coordinate2D(648, 576));
-        Thread.sleep(1000);
-        KeyMouseUtil.leftClick();
-        BackgroundUtil.unbindWindow();
+        try {
+            for (int i = 0; i < 10000000; ++i) {
+                KeyMouseUtil.keyPressChar("space");
+                Thread.sleep(1000);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            BackgroundUtil.unbindWindow();
+        }
     }
 
 }
