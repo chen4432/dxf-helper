@@ -29,6 +29,34 @@ public class MemUtilTest {
         }
     }
 
+    // 无敌
+    @Test
+    public void write_int_2() throws Exception {
+        DmCore.register();
+        GuardUtil.guard(true, "memory");
+        int hwnd = WindowUtil.findWindow("", "地下城与勇士");
+        long val = MemUtil.readInt(hwnd, "[14AC80E30]+1080", 0);
+        System.out.println(val);
+        MemUtil.writeInt(hwnd, "[14AC80E30]+1080", 0, 100);
+        val = MemUtil.readInt(hwnd, "[14AC80E30]+1080", 0);
+        System.out.println(val);
+    }
+
+    // 无敌
+    @Test
+    public void write_int_3() throws Exception {
+        DmCore.register();
+        GuardUtil.guard(true, "memory");
+        int hwnd = WindowUtil.findWindow("", "地下城与勇士");
+        long val = MemUtil.readInt(hwnd, "[14AC80E30]+1050", 0);
+        System.out.println(val);
+        MemUtil.writeInt(hwnd, "[14AC80E30]+1050", 0, 0);
+        val = MemUtil.readInt(hwnd, "[14AC80E30]+1050", 0);
+        System.out.println(val);
+    }
+
+
+
     @Test
     public void double_to_data() throws Exception {
         System.out.println(MemUtil.doubleToData(1.3)); // "cd cc cc cc cc cc f4 3f"

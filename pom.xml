@@ -6,9 +6,14 @@
 
   <groupId>com.dxf</groupId>
   <artifactId>dxf-helper</artifactId>
-  <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>core</module>
+      <module>common</module>
+    </modules>
 
-  <name>dxf-helper</name>
+    <name>dxf-helper</name>
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
 
