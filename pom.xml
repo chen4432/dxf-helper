@@ -11,6 +11,7 @@
     <modules>
         <module>core</module>
       <module>common</module>
+        <module>ui</module>
     </modules>
 
     <name>dxf-helper</name>

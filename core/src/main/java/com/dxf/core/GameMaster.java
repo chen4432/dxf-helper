@@ -4,7 +4,11 @@ import com.dxf.common.util.ConfigUtil;
 import com.google.common.base.Preconditions;
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Dispatch;
+import com.sun.jna.Library;
+import com.sun.jna.Native;
 import com.typesafe.config.Config;
+
+import java.nio.charset.StandardCharsets;
 
 
 public class GameMaster {
@@ -13,10 +17,22 @@ public class GameMaster {
 
     private static final ActiveXComponent DM;
 
+    private interface Dll extends Library {
+        Dll INSTANCE = Native.load("DmReg", Dll.class);
+        void SetDllPathA(String path, int mode);
+        void SetDllPathW(String path, int mode);
+    }
+
     static {
+        //Dll.INSTANCE.SetDllPathW(new String("src/main/resources/dm.dll".getBytes(), StandardCharsets.UTF_16), 0);
+        //Dll.INSTANCE.SetDllPathA("src/main/resources/dm.dll", 0);
         DM = new ActiveXComponent("dm.dmsoft");
         Preconditions.checkNotNull(DM);
+        GameMaster.reg("suifengyunnuo5fe95058910f5da8bb59e01fb48b93d2", "83Y4N");
+        GameMaster.dmGuard(1, "memory2");
+        GameMaster.dmGuard(1, "hm dm.dll 1");
     }
+
 
     public static String ver() {
         return Dispatch.call(DM, "Ver").getString();
@@ -108,7 +124,7 @@ public class GameMaster {
     }
 
     public static long asmCall(int hwnd, int mode) {
-        return Dispatch.call(DM, "AsmCall", hwnd, mode).getInt();
+        return Dispatch.call(DM, "AsmCall", hwnd, mode).getLong();
     }
 
     public static String assemble(long baseAddr, int is64Bit) {
@@ -141,6 +157,10 @@ public class GameMaster {
     //==================================================== 键鼠 =========================================================
     public static int keyPress(int vkCode) {
         return Dispatch.call(DM, "KeyPress", vkCode).getInt();
+    }
+
+    public static class DXF {
+
     }
     
 }
