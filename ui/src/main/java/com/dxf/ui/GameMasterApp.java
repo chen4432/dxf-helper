@@ -1,10 +1,13 @@
 package com.dxf.ui;
 
+import com.dxf.core.GameMaster;
+import com.dxf.util.DXF;
+import com.google.common.base.Strings;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 public class GameMasterApp {
 
@@ -18,6 +21,21 @@ public class GameMasterApp {
         frame.add(panel);
         button.setBackground(Color.ORANGE);
         button.addActionListener((e) -> {
+            int hwnd = GameMaster.findWindow("地下城与勇士", "地下城与勇士");
+            if (hwnd > 0) {
+                String str = textField.getText();
+                if (Strings.isNullOrEmpty(str) || "请填写物品代码（多个请用，分割）...".equals(str)) {
+                    for (int code : DXF.OBJECT_CODE.DEFAULT_BUFF) {
+                        DXF.consumeObject(hwnd, code);
+                    }
+                } else {
+                    String[] fields = str.split(",", -1);
+                    for (String s : fields) {
+                        DXF.consumeObject(hwnd, Integer.parseInt(s));
+                    }
+                }
+            }
+
             System.out.println(textField.getText());
         });
         textField.addMouseListener(new MouseAdapter() {

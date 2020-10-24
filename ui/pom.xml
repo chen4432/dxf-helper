@@ -11,5 +11,13 @@
 
     <artifactId>ui</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.dxf</groupId>
+            <artifactId>core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
 
 </project>

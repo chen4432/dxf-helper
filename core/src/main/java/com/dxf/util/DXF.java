@@ -10,12 +10,10 @@ public class DXF {
 
     public static class OBJECT_CODE {
 
-        private static final int[] DEFAULT_BUFF = {
-                1298,       // 超速 30三速
+        public static final int[] DEFAULT_BUFF = {
                 2600021,    // 精神刺激 20冷却
-                2600022,    // 霸体
-                2600027,    // 透明
-                2600656,    // 斗神 12伤害
+                2600561,    // 顶级175力量药
+                2600562,    // 顶级175智力药
         };
     }
 
@@ -42,7 +40,7 @@ public class DXF {
         GameMaster.asmAdd("add rsp, 28");
         GameMaster.asmAdd("pop rbx");
         GameMaster.asmAdd("ret");
-        GameMaster.asmCall(hwnd, 1);
+        GameMaster.asmCall(hwnd, 5);
     }
 
 }
