@@ -4,6 +4,27 @@ import com.dxf.core.GameMaster;
 
 public class DXF {
 
+    private final int hwnd;
+
+    public DXF(int hwnd) {
+        this.hwnd = hwnd;
+    }
+
+    public void setUp() {
+        GameMaster.bindWindowEx(
+                hwnd,
+                "dx.graphic.2d",
+                "dx.mouse.position.lock.api|dx.mouse.position.lock.message|dx.mouse.clip.lock.api|dx.mouse.input.lock.api|dx.mouse.state.api|dx.mouse.api|dx.mouse.cursor",
+                "dx.keypad.input.lock.api|dx.keypad.state.api|dx.keypad.api",
+                "dx.public.active.api|dx.public.active.message",
+                0
+                );
+    }
+
+    public void cleanUp() {
+        GameMaster.unbindWindow();
+    }
+
     public static class BASE_ADDR {
         private static final long PLAYER = 5549592112L; // 人物基址
     }
@@ -21,7 +42,7 @@ public class DXF {
      * 消耗品CLL
      * @param code
      */
-    public static void consumeObject(int hwnd, int code) {
+    public void consumeObject(int code) {
         String objectCode = Integer.toHexString(code);
         String playerBaseAddr = Long.toHexString(BASE_ADDR.PLAYER);
         GameMaster.asmClear();

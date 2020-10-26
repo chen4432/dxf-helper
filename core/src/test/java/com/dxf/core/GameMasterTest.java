@@ -117,6 +117,11 @@ public class GameMasterTest {
         System.out.println(GameMaster.disAssemble("FF D0", 0, 1));
     }
 
+    @Test
+    public void find_color() throws Exception {
+        String ret = GameMaster.findColorE(645, 557, 778, 678, "a2ff3d-202020", 0.8, 0);
+        System.out.println(ret);
+    }
 
 
 

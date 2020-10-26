@@ -24,14 +24,14 @@ public class BackgroundUtilTest {
         BackgroundUtil.bindWindow(hwnd, display, mouse, keypad, mode);
         System.out.println("绑定成功~");
         try {
-            for (int i = 0; i < 10000000; ++i) {
-                KeyMouseUtil.keyPressChar("space");
-                KeyMouseUtil.moveTo(new Coordinate2D(404,508));
-                KeyMouseUtil.leftClick();
-                KeyMouseUtil.leftClick();
-                Thread.sleep(1000);
-                System.out.println("ROUND----" + i);
-            }
+//            for (int i = 0; i < 10000000; ++i) {
+//                KeyMouseUtil.keyPressChar("space");
+//                KeyMouseUtil.moveTo(new Coordinate2D(404,508));
+//                KeyMouseUtil.leftClick();
+//                KeyMouseUtil.leftClick();
+//                Thread.sleep(1000);
+//                System.out.println("ROUND----" + i);
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

@@ -22,16 +22,17 @@ public class GameMasterApp {
         button.setBackground(Color.ORANGE);
         button.addActionListener((e) -> {
             int hwnd = GameMaster.findWindow("地下城与勇士", "地下城与勇士");
+            DXF dxf = new DXF(hwnd);
             if (hwnd > 0) {
                 String str = textField.getText();
                 if (Strings.isNullOrEmpty(str) || "请填写物品代码（多个请用，分割）...".equals(str)) {
                     for (int code : DXF.OBJECT_CODE.DEFAULT_BUFF) {
-                        DXF.consumeObject(hwnd, code);
+                        dxf.consumeObject(code);
                     }
                 } else {
                     String[] fields = str.split(",", -1);
                     for (String s : fields) {
-                        DXF.consumeObject(hwnd, Integer.parseInt(s));
+                        dxf.consumeObject(Integer.parseInt(s));
                     }
                 }
             }

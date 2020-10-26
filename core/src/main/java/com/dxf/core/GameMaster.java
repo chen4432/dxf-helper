@@ -4,11 +4,11 @@ import com.dxf.common.util.ConfigUtil;
 import com.google.common.base.Preconditions;
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Dispatch;
+import com.jacob.com.Variant;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.typesafe.config.Config;
 
-import java.nio.charset.StandardCharsets;
 
 
 public class GameMaster {
@@ -150,6 +150,10 @@ public class GameMaster {
         return Dispatch.call(DM, "BindWindow", hwnd, display, mouse, keypad, mode).getInt();
     }
 
+    public static int bindWindowEx(int hwnd, String display, String mouse, String keypad, String pub, int mode) {
+        return Dispatch.call(DM, "BindWindowEx", hwnd, display, mouse, keypad, pub, mode).getInt();
+    }
+
     public static int unbindWindow() {
         return Dispatch.call(DM, "UnBindWindow").getInt();
     }
@@ -159,8 +163,45 @@ public class GameMaster {
         return Dispatch.call(DM, "KeyPress", vkCode).getInt();
     }
 
-    public static class DXF {
+    public static int keyPressChar(String keyStr) {
+        return Dispatch.call(DM, "KeyPressChar", keyStr).getInt();
+    }
 
+    public static int keyPressStr(String keyStr, int delay) {
+        return Dispatch.call(DM, "KeyPressStr", keyStr, delay).getInt();
+    }
+
+    public static int keyDown(int vkCode) {
+        return Dispatch.call(DM, "KeyDown", vkCode).getInt();
+    }
+
+    public static int keyUp(int vkCode) {
+        return Dispatch.call(DM, "KeyUp", vkCode).getInt();
+    }
+
+    public static int keyDownChar(String keyStr) {
+        return Dispatch.call(DM, "KeyDownChar", keyStr).getInt();
+    }
+
+    public static int keyUpChar(String keyStr) {
+        return Dispatch.call(DM, "KeyUpChar", keyStr).getInt();
+    }
+
+    public static int leftClick() {
+        return Dispatch.call(DM, "LeftClick").getInt();
+    }
+
+    public static int moveTo(int x, int y) {
+        return Dispatch.call(DM, "MoveTo", x, y).getInt();
+    }
+
+    public static int setKeypadDelay(String type, int delay) {
+        return Dispatch.call(DM, "SetKeypadDelay", type, delay).getInt();
+    }
+
+    //==================================================== 图色 =========================================================
+    public static String findColorE(int x1, int y1, int x2, int y2, String color, double sim, int dir) {
+        return Dispatch.call(DM, "FindColorE", x1, y1, x2, y2, color, sim, dir).getString();
     }
     
 }
