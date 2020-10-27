@@ -25,12 +25,20 @@ public class DXF {
         GameMaster.unbindWindow();
     }
 
+    // 基址
     public static class BASE_ADDR {
-        private static final long PLAYER = 5549592112L; // 人物基址
+        private static final long PLAYER            = 5549592112L; // 人物基址
+        private static final long GAME_STATE        = 0L; // 游戏状态
+
+
+    }
+
+    // 偏移
+    public static class OFFSET_ADDR {
+
     }
 
     public static class OBJECT_CODE {
-
         public static final int[] DEFAULT_BUFF = {
                 2600021,    // 精神刺激 20冷却
                 2600561,    // 顶级175力量药
@@ -40,18 +48,16 @@ public class DXF {
 
     /**
      * 消耗品CLL
-     * @param code
+     * @param code 消耗品代码
      */
     public void consumeObject(int code) {
-        String objectCode = Integer.toHexString(code);
-        String playerBaseAddr = Long.toHexString(BASE_ADDR.PLAYER);
         GameMaster.asmClear();
         GameMaster.asmAdd("push rbx");
         GameMaster.asmAdd("sub rsp, 28");
-        GameMaster.asmAdd("mov rax," + playerBaseAddr);
+        GameMaster.asmAdd("mov rax," + Long.toHexString(BASE_ADDR.PLAYER));
         GameMaster.asmAdd("mov rax, [rax]");
         GameMaster.asmAdd("mov r8, [rax]");
-        GameMaster.asmAdd("mov edx," + objectCode); // 物品BUFF代码
+        GameMaster.asmAdd("mov edx," + Integer.toHexString(code));
         GameMaster.asmAdd("add [rax], al");
         GameMaster.asmAdd("add [rax], al");
         GameMaster.asmAdd("mov rcx, rax");

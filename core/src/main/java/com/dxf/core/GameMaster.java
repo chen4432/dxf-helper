@@ -4,7 +4,6 @@ import com.dxf.common.util.ConfigUtil;
 import com.google.common.base.Preconditions;
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Dispatch;
-import com.jacob.com.Variant;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.typesafe.config.Config;
@@ -29,10 +28,10 @@ public class GameMaster {
         DM = new ActiveXComponent("dm.dmsoft");
         Preconditions.checkNotNull(DM);
         GameMaster.reg("suifengyunnuo5fe95058910f5da8bb59e01fb48b93d2", "83Y4N");
-        GameMaster.dmGuard(1, "memory2");
-        GameMaster.dmGuard(1, "hm dm.dll 1");
+        GameMaster.dmGuard(1, "memory2");       // 破读写
+        GameMaster.dmGuard(1, "hm dm.dll 1");   // 隐藏模块
+        GameMaster.dmGuard(1, "b2");            // 保护指定进程不被非法访问
     }
-
 
     public static String ver() {
         return Dispatch.call(DM, "Ver").getString();
@@ -47,7 +46,9 @@ public class GameMaster {
     }
 
     /**
-     *     "hm module unlink" : 防止当前进程中的指定模块被非法访问. module为模块名(为0表示EXE模块),比如dm.dll 。 unlink取0或者1，1表示是否把模块在进程模块链表中擦除,0表示不擦除.(此模式需要加载驱动)
+     *     "hm module unlink" : 防止当前进程中的指定模块被非法访问
+     *                          module 为模块名(为0表示EXE模块),比如 dm.dll
+     *                          unlink 取 0 或者 1，1 表示是否把模块在进程模块链表中擦除, 0 表示不擦除.(此模式需要加载驱动)
      *     保护盾返回 ＝ 大漠保护盾 (1, “hm dm.dll 1”)
      *     "b2 [pid]" : 保护指定进程不被非法访问
      *     保护盾返回 ＝ 大漠保护盾 (1, “b2”)
@@ -66,6 +67,7 @@ public class GameMaster {
         return Dispatch.call(DM, "GetPath").getString();
     }
 
+    //==================================================== 内存 =========================================================
     public static long readInt(int hwnd, String addr, int type) {
         return Dispatch.call(DM, "ReadInt", hwnd, addr, type).getLong();
     }
@@ -114,7 +116,7 @@ public class GameMaster {
         return Dispatch.call(DM, "GetModuleBaseAddr", hwnd, module).getLong();
     }
 
-    //============================= 汇编 =============================
+    //==================================================== 汇编 =========================================================
     public static int asmClear() {
         return Dispatch.call(DM, "AsmClear").getInt();
     }
@@ -135,7 +137,7 @@ public class GameMaster {
         return Dispatch.call(DM, "DisAssemble", asmCode, baseAddr, is64Bit).getString();
     }
 
-    //============================= 窗口 ==============================
+    //==================================================== 窗口 =========================================================
     public static int findWindow(String clazz, String title) {
         return Dispatch.call(DM, "FindWindow", clazz, title).getInt();
     }
