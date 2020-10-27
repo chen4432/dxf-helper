@@ -1,9 +1,9 @@
 package com.dxf.util;
 
 import com.dxf.core.GameMaster;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.Data;
 
+import javax.naming.SizeLimitExceededException;
 import java.awt.*;
 import java.util.List;
 
@@ -13,6 +13,14 @@ public class DXF {
 
     public DXF(int hwnd) {
         this.hwnd = hwnd;
+    }
+
+    public DXF() {
+        hwnd = GameMaster.findWindow("地下城与勇士", "地下城与勇士");
+    }
+
+    public int getHwnd() {
+        return hwnd;
     }
 
     public void setUp() {
@@ -39,6 +47,13 @@ public class DXF {
         }
         // 偏移
         public static class OFFSET {
+            public static final long MAP                = 336L;  // 地图偏移
+            public static final long MAP_START          = 376L;  // 地图开始2
+            public static final long MAP_END            = 384L;  // 地图结束2
+            public static final long OBJ_NAME           = 1976L; // 名称偏移
+            public static final long OBJ_TYPE           = 292L;  // 类型偏移
+            public static final long OBJ_ZY             = 3496L; // 阵营偏移
+            public static final long OBJ_HP             = 20392L;// 血量偏移
             public static final long IGNORE_MAP         = 1984L; // 地图穿透
             public static final long IGNORE_OBSTACLE    = 1988L; // 建筑穿越
         }
@@ -157,10 +172,20 @@ public class DXF {
         GameMaster.writeInt(hwnd, addr + ADDRESS.OFFSET.IGNORE_OBSTACLE, IGNORE_OBSTACLE_ORI_VAL);
     }
 
+    public Point getPlayerPos() {
+        long addr = GameMaster.readLong(hwnd, ADDRESS.BASE.PLAYER);
+        return getHumanPos(addr);
+    }
+
     @Data
     public static class MapInfo {
         private final Integer width;
         private final Integer height;
+
+        public MapInfo() {
+            this.width = 0;
+            this.height = 0;
+        }
 
 
     }
@@ -200,6 +225,46 @@ public class DXF {
         private List<Point> golds;
         private Point player;
         private Boolean doorOpen;
+        private DXF dxf;
+        private int hwnd;
+
+        private static final int OBJ_TYPE_CAMP_FIRE         =    4;       // 营火
+        private static final int OBJ_TYPE_BUILDING          =   33;       // 建筑
+        private static final int OBJ_TYPE_HUMAN             =   273;      // 人形
+        private static final int OBJ_TYPE_GOLD_OBJ          =   289;      // 金币或材料
+        private static final int OBJ_TYPE_MONSTER           =   529;      // 怪物
+        private static final int OBJ_TYPE_DOOR_WALL         =  4129;      // 门或墙
+        private static final int OBJ_ATTACK                 = 61400;      // 技能
+
+        private static final int ZY_0                       =     0;      // 己方
+        private static final int ZY_100                     =   100;      // 敌人
+        private static final int ZY_200                     =   200;      // 建筑
+
+        public RoomInfo(DXF dxf) {
+            this.dxf = dxf;
+            this.hwnd = dxf.getHwnd();
+            long addr = GameMaster.readLong(hwnd, ADDRESS.BASE.PLAYER);
+            long mapPtr = GameMaster.readLong(hwnd, addr + ADDRESS.OFFSET.MAP);
+            long startAddr = GameMaster.readLong(hwnd, mapPtr + ADDRESS.OFFSET.MAP_START);
+            long endAddr = GameMaster.readLong(hwnd, mapPtr + ADDRESS.OFFSET.MAP_END);
+            for (long objAddr = startAddr; objAddr < endAddr; objAddr += 8) {
+                long objPtr = GameMaster.readLong(hwnd, objAddr);
+                String name = GameMaster.readStringAddr(hwnd, GameMaster.readLong(hwnd, objPtr + ADDRESS.OFFSET.OBJ_NAME), 1, 50);
+                int type1 = GameMaster.readInt(hwnd, objPtr + ADDRESS.OFFSET.OBJ_TYPE);
+                int type2 = GameMaster.readInt(hwnd, objPtr + ADDRESS.OFFSET.OBJ_TYPE + 4);
+                if (type1 == OBJ_TYPE_HUMAN || type2 == OBJ_TYPE_HUMAN) continue;
+                Point pos = dxf.getMonsterPos(objPtr);
+                int zy = GameMaster.readInt(hwnd, objPtr + ADDRESS.OFFSET.OBJ_ZY);
+                int hp = (type2 == OBJ_TYPE_MONSTER) ? GameMaster.readInt(hwnd, objPtr + ADDRESS.OFFSET.OBJ_HP) : 0;
+                System.out.printf("name: %s\ttype1: %d\ttype2: %d\tzy:%d\thp:%d\tpos: %s\n",
+                        name,
+                        type1,
+                        type2,
+                        zy,
+                        hp,
+                        pos);
+            }
+        }
 
         @Data
         public static class MonsterInfo {
@@ -211,9 +276,98 @@ public class DXF {
 
         void update() {
 
+
         }
 
 
+
+    }
+
+    private float xSpeed = 0.546f;
+    private float ySpeed = 0.188f;
+
+    private static final int KEY_UP = 38;
+    private static final int KEY_DN = 40;
+    private static final int KEY_LL = 37;
+    private static final int KEY_RR = 39;
+
+    public void measureSpeed() {
+        Point start = getPlayerPos();
+        GameMaster.keyPress(KEY_RR);
+        try {
+            Thread.sleep(30);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        GameMaster.keyDown(KEY_RR);
+        try {
+            Thread.sleep(30);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        GameMaster.keyDown(KEY_DN);
+        int duration = 500;
+        try {
+            Thread.sleep(duration);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        GameMaster.keyUp(KEY_RR);
+        GameMaster.keyUp(KEY_DN);
+        Point end = getPlayerPos();
+        int xDelta = end.x - start.x;
+        int yDelta = end.y - start.y;
+        xSpeed = (float)xDelta / duration;
+        ySpeed = (float)yDelta / duration;
+        System.out.printf("xSpeed: %f\tySpeed: %f", xSpeed, ySpeed);
+    }
+
+
+    public void moveTo(Point target) throws Exception {
+        Point curr = getPlayerPos();
+        String dirLR = (target.x > curr.x) ? "right" : "left";
+        String dirUD = (target.y > curr.y) ? "down" : "up";
+        int xTime = 0, yTime = 0;
+        int xDistance = Math.abs(curr.x - target.x);
+        if (xDistance != 0) {
+            xTime = (int)(xDistance / xSpeed);
+        }
+        int yDistance = Math.abs(curr.y - target.y);
+        if (yDistance != 0) {
+            yTime = (int)(yDistance / ySpeed);
+        }
+        System.out.printf("xTime: %d\tyTime: %d\n", xTime, yTime);
+        if (xDistance == 0) {
+            GameMaster.keyDownChar(dirUD);
+            Thread.sleep(yTime);
+            GameMaster.keyUpChar(dirUD);
+            return;
+        }
+        if (yDistance == 0) {
+            GameMaster.keyPressChar(dirLR);
+            Thread.sleep(30);
+            GameMaster.keyDownChar(dirLR);
+            Thread.sleep(xTime);
+            GameMaster.keyUpChar(dirLR);
+            return;
+        }
+        GameMaster.keyPressChar(dirLR);
+        Thread.sleep(30);
+        GameMaster.keyDownChar(dirLR);
+        Thread.sleep(30);
+        GameMaster.keyDownChar(dirUD);
+        if (xTime > yTime) {
+            Thread.sleep(yTime);
+            GameMaster.keyUpChar(dirUD);
+            Thread.sleep(xTime - yTime);
+            GameMaster.keyUpChar(dirLR);
+        } else {
+            Thread.sleep(xTime);
+            GameMaster.keyUpChar(dirLR);
+            Thread.sleep(yTime - xTime);
+            GameMaster.keyUpChar(dirUD);
+        }
+        Thread.sleep(100);
     }
 
 

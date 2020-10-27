@@ -30,7 +30,8 @@ public class GameMaster {
         GameMaster.reg("suifengyunnuo5fe95058910f5da8bb59e01fb48b93d2", "83Y4N");
         GameMaster.dmGuard(1, "memory2");       // 破读写
         GameMaster.dmGuard(1, "hm dm.dll 1");   // 隐藏模块
-        GameMaster.dmGuard(1, "b2");            // 保护指定进程不被非法访问
+        //GameMaster.dmGuard(1, "b2");            // 保护指定进程不被非法访问
+        try {Thread.sleep(2000);} catch (Exception e) {e.printStackTrace();}
     }
 
     public static String ver() {
