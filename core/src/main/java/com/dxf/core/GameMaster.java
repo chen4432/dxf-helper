@@ -72,40 +72,112 @@ public class GameMaster {
         return Dispatch.call(DM, "ReadInt", hwnd, addr, type).getLong();
     }
 
+    public static int readInt(int hwnd, String addr) {
+        return (int) Dispatch.call(DM, "ReadInt", hwnd, addr, 0).getLong();
+    }
+
+    public static int readInt(int hwnd, long addr) {
+        return (int) Dispatch.call(DM, "ReadIntAddr", hwnd, addr, 0).getLong();
+    }
+
+    public static long readIntAddr(int hwnd, long addr, int type) {
+        return Dispatch.call(DM, "ReadIntAddr", hwnd, addr, type).getLong();
+    }
+
+    public static long readLong(int hwnd, String addr) {
+        return Dispatch.call(DM, "ReadInt", hwnd, addr, 3).getLong();
+    }
+
+    public static long readLong(int hwnd, long addr) {
+        return Dispatch.call(DM, "ReadIntAddr", hwnd, addr, 3).getLong();
+    }
+
     public static String readString(int hwnd, String addr, int type, int len) {
         return Dispatch.call(DM, "ReadString", hwnd, addr, type, len).getString();
+    }
+
+    public static String readStringAddr(int hwnd, long addr, int type, int len) {
+        return Dispatch.call(DM, "ReadStringAddr", hwnd, addr, type, len).getString();
     }
 
     public static float readFloat(int hwnd, String addr) {
         return Dispatch.call(DM, "ReadFloat", hwnd, addr).getFloat();
     }
 
+    public static float readFloat(int hwnd, long addr) {
+        return Dispatch.call(DM, "ReadFloatAddr", hwnd, addr).getFloat();
+    }
+
     public static double readDouble(int hwnd, String addr) {
         return Dispatch.call(DM, "ReadDouble", hwnd, addr).getDouble();
+    }
+
+    public static double readDoubleAddr(int hwnd, long addr) {
+        return Dispatch.call(DM, "ReadDoubleAddr", hwnd, addr).getDouble();
     }
 
     public static String readData(int hwnd, String addr, int len) {
         return Dispatch.call(DM, "ReadData", hwnd, addr, len).getString();
     }
 
+    public static String readDataAddr(int hwnd, long addr, int len) {
+        return Dispatch.call(DM, "ReadDataAddr", hwnd, addr, len).getString();
+    }
+
     public static int writeData(int hwnd, String addr, String data) {
         return Dispatch.call(DM, "WriteData", hwnd, addr, data).getInt();
+    }
+
+    public static int writeDataAddr(int hwnd, long addr, String data) {
+        return Dispatch.call(DM, "WriteDataAddr", hwnd, addr, data).getInt();
     }
 
     public static int writeInt(int hwnd, String addr, int type, long val) {
         return Dispatch.call(DM, "WriteInt", hwnd, addr, type, val).getInt();
     }
 
+    public static int writeIntAddr(int hwnd, long addr, int type, long val) {
+        return Dispatch.call(DM, "WriteIntAddr", hwnd, addr, type, val).getInt();
+    }
+
+    public static void writeInt(int hwnd, String addr, int val) {
+        Dispatch.call(DM, "WriteInt", hwnd, addr, 0, (long)val);
+    }
+
+    public static void writeInt(int hwnd, long addr, int val) {
+        Dispatch.call(DM, "WriteInt", hwnd, addr, 0, (long)val);
+    }
+
+    public static void writeLong(int hwnd, String addr, long val) {
+        Dispatch.call(DM, "WriteInt", hwnd, addr, 3, val);
+    }
+
+    public static void writeLong(int hwnd, long addr, long val) {
+        Dispatch.call(DM, "WriteLong", hwnd, addr, 3, val);
+    }
+
     public static int writeString(int hwnd, String addr, int type, String val) {
         return Dispatch.call(DM, "WriteString", hwnd, addr, type, val).getInt();
+    }
+
+    public static int writeStringAddr(int hwnd, long addr, int type, String val) {
+        return Dispatch.call(DM, "WriteStringAddr", hwnd, addr, type, val).getInt();
     }
 
     public static int writeFloat(int hwnd, String addr, int type, float val) {
         return Dispatch.call(DM, "WriteFloat", hwnd, addr, type, val).getInt();
     }
 
+    public static int writeFloatAddr(int hwnd, long addr, int type, float val) {
+        return Dispatch.call(DM, hwnd, addr, type, val).getInt();
+    }
+
     public static int writeDouble(int hwnd, String addr, int type, double val) {
         return Dispatch.call(DM, "WriteDouble", hwnd, addr, type, val).getInt();
+    }
+
+    public static int writeDoubleAddr(int hwnd, long addr, int type, double val) {
+        return Dispatch.call(DM, "WriteDoubleAddr", hwnd, addr, type, val).getInt();
     }
 
     public static String intToData(long value, int type) {
@@ -145,7 +217,6 @@ public class GameMaster {
     public static int moveWindow(int hwnd, int x, int y) {
         return Dispatch.call(DM, "MoveWindow", hwnd, x, y).getInt();
     }
-
 
     //==================================================== 后台 =========================================================
     public static int bindWindow(int hwnd, String display, String mouse, String keypad, int mode) {
