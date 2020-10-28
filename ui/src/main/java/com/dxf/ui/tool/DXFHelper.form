@@ -110,7 +110,9 @@
                             <preferred-size width="150" height="50"/>
                           </grid>
                         </constraints>
-                        <properties/>
+                        <properties>
+                          <lineWrap value="true"/>
+                        </properties>
                       </component>
                       <component id="66552" class="javax.swing.JTextArea" binding="taTarget">
                         <constraints>
