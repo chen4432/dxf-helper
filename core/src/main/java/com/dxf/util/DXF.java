@@ -137,26 +137,33 @@ public class DXF {
         return new Point(x, y);
     }
 
+    public int decrypt(long addr) {
+        int a = GameMaster.readInt(hwnd, addr);
+        long b = GameMaster.readLong(hwnd, ADDRESS.BASE.DECRYPT);
+        long c = GameMaster.readLong(hwnd, b + 8 * (a >> 16) + 56);
+        int d = GameMaster.readInt(hwnd,  c + 4 * (a & 65535) + 8476) & 65535;
+        return GameMaster.readInt(hwnd, addr + 4) ^ (d | (d << 16));
+    }
     /**
      * 解密
      * @param addr 内存地址
      * @return
      */
-    public int decrypt(long addr) {
-        int eax = GameMaster.readInt(hwnd, addr);
-        int esi = GameMaster.readInt(hwnd, ADDRESS.BASE.DECRYPT);
-        int edx = eax;
-        edx >>= 0x10;
-        edx = GameMaster.readInt(hwnd, esi + edx * 4 + 56);
-        eax = eax & 0xFFFF;
-        eax = GameMaster.readInt(hwnd, edx + eax * 4 + 8476);
-        edx = (short) eax;
-        esi = edx;
-        esi <<= 0x10;
-        esi = esi ^ edx;
-        edx = GameMaster.readInt(hwnd, addr + 4);
-        eax = esi ^ edx;
-        return eax;
+    public int decrypt2(long addr) {
+        long rax = GameMaster.readInt(hwnd, addr);
+        long rsi = GameMaster.readLong(hwnd, ADDRESS.BASE.DECRYPT);
+        long rdx = rax;
+        rdx >>= 0x10;
+        rdx = GameMaster.readInt(hwnd, rsi + rdx * 8 + 56);
+        rax = rax & 0xFFFF;
+        rax = GameMaster.readInt(hwnd, rdx + rax * 4 + 8476);
+        rdx = (short) rax;
+        rsi = rdx;
+        rsi <<= 0x10;
+        rsi = rsi ^ rdx;
+        rdx = GameMaster.readLong(hwnd, addr + 4);
+        rax = rsi ^ rdx;
+        return (int)rax;
     }
 
     /**
@@ -201,35 +208,40 @@ public class DXF {
 
     @Data
     public static class MapInfo {
-        private final Integer width;
-        private final Integer height;
-        private final Point bossRoom;
-        private final Point startRoom;
-        private Point currRoom;
-        private DXF dxf;
-        private int hwnd;
+        private final Integer                           width;
+        private final Integer                           height;
+        private final Point                             bossRoom;
+        private Point                                   currRoom;
+        private DXF                                     dxf;
+        private int                                     hwnd;
 
-        public MapInfo(DXF dxf, int hwnd) {
+        private List<Point2D>                           path;
+        public void setPath(List<Point2D> path) {
+            this.path = path;
+        }
+
+        public MapInfo(DXF dxf) {
             this.dxf = dxf;
-            this.hwnd = hwnd;
+            this.hwnd = dxf.getHwnd();
             long roomData = GameMaster.readLong(
                     hwnd,
                     ADDRESS.BASE.ROOM_INDEX,
                     ADDRESS.OFFSET.TIME,
                     ADDRESS.OFFSET.DOOR_TYPE
             );
-            long startRoomX = GameMaster.readLong(hwnd, roomData + ADDRESS.OFFSET.CURR_ROOM_X);
-            long startRoomY = GameMaster.readLong(hwnd, roomData + ADDRESS.OFFSET.CURR_ROOM_Y);
-            startRoom = new Point((int)startRoomX, (int)startRoomY);
+
             int bossRoomX = dxf.decrypt(roomData + ADDRESS.OFFSET.BOSS_ROOM_X);
             int bossRoomY = dxf.decrypt(roomData + ADDRESS.OFFSET.BOSS_ROOM_Y);
             bossRoom = new Point(bossRoomX, bossRoomY);
+            System.out.println("BossRoom: " + bossRoom);
 
-            int roomIndex = dxf.decrypt(roomData);
+            int roomIndex = dxf.decrypt(roomData + ADDRESS.OFFSET.MAP_CODE);
             width  = GameMaster.readInt(hwnd, roomData + ADDRESS.OFFSET.WIDTH_HEIGHT,
                     roomIndex * 8);
             height = GameMaster.readInt(hwnd, roomData + ADDRESS.OFFSET.WIDTH_HEIGHT,
                     roomIndex * 8 + 4);
+            System.out.println("width: " + width + ", height:" + height);
+
             long tmp = GameMaster.readLong(hwnd, roomData + ADDRESS.OFFSET.ARRAY, 40*roomIndex + 8);
             int channelNum = width * height;
             int[] channels = new int[channelNum];
@@ -241,16 +253,34 @@ public class DXF {
                 channels[i] = GameMaster.readInt(hwnd, tmp + i * 4);
             }
 
-            System.out.printf("width: %d, height: %d", width, height);
+            for (int i = 0; i < channels.length; i++) {
+                System.out.print(channels[i] + " ");
+            }
+            System.out.println();
+
+            update();
         }
 
-        public int toChannelIndex(Point2D pos) {
-            return pos.y * width + pos.x;
+        public void update() {
+            long roomData = GameMaster.readLong(
+                    hwnd,
+                    ADDRESS.BASE.ROOM_INDEX,
+                    ADDRESS.OFFSET.TIME,
+                    ADDRESS.OFFSET.DOOR_TYPE
+            );
+            long startRoomX = GameMaster.readLong(hwnd, roomData + ADDRESS.OFFSET.CURR_ROOM_X);
+            long startRoomY = GameMaster.readLong(hwnd, roomData + ADDRESS.OFFSET.CURR_ROOM_Y);
+            currRoom = new Point((int)startRoomX, (int)startRoomY);
+            System.out.println("CurrRoom: " + currRoom);
         }
 
-        public Point2D toCoordinate(int channelIndex) {
-            return new Point2D(channelIndex % width, channelIndex / width);
-        }
+        //public int toChannelIndex(Point2D pos) {
+        //    return pos.y * width + pos.x;
+        //}
+
+        //public Point2D toCoordinate(int channelIndex) {
+        //    return new Point2D(channelIndex % width, channelIndex / width);
+        //}
     }
 
     @Data
@@ -356,7 +386,7 @@ public class DXF {
             if (monsters.isEmpty()) return Optional.empty();
             monsters.sort((a, b) -> {
                 if (Point2D.distance(playerPos, a) == Point2D.distance(playerPos, b)) return 0;
-                return Point2D.distance(playerPos, a) > Point2D.distance(playerPos, a)? 1 : -1;
+                return Point2D.distance(playerPos, a) > Point2D.distance(playerPos, b)? 1 : -1;
             });
             return Optional.of(monsters.get(0));
         }
@@ -376,10 +406,17 @@ public class DXF {
         public RoomInfo(DXF dxf) {
             this.dxf = dxf;
             this.hwnd = dxf.getHwnd();
+            update();
+        }
+
+        void update() {
             long addr = GameMaster.readLong(hwnd, ADDRESS.BASE.PLAYER);
             long mapPtr = GameMaster.readLong(hwnd, addr + ADDRESS.OFFSET.MAP);
             long startAddr = GameMaster.readLong(hwnd, mapPtr + ADDRESS.OFFSET.MAP_START);
             long endAddr = GameMaster.readLong(hwnd, mapPtr + ADDRESS.OFFSET.MAP_END);
+            doors.clear();
+            monsters.clear();
+            materials.clear();
             for (long objAddr = startAddr; objAddr < endAddr; objAddr += 8) {
                 long objPtr = GameMaster.readLong(hwnd, objAddr);
                 String name = GameMaster.readStringAddr(hwnd, GameMaster.readLong(hwnd, objPtr + ADDRESS.OFFSET.OBJ_NAME), 1, 50);
@@ -388,14 +425,16 @@ public class DXF {
                 if (type1 == OBJ_TYPE_HUMAN || type2 == OBJ_TYPE_HUMAN) continue;
                 int state = GameMaster.readInt(hwnd, objPtr + ADDRESS.OFFSET.OBJ_STATE); // 0 或者 1 表示是可通过门
                 Point pos = dxf.getMonsterPos(objPtr);
-                if (state == 0 || startAddr == 1) {
+                if (type2 == OBJ_TYPE_DOOR_WALL && (state == 0 || state == 1)) {
                     doors.add(new Point2D(pos.x, pos.y));
+                    System.out.println("door: " + new Point2D(pos.x, pos.y));
                 }
-                if (type2 == OBJ_TYPE_MONSTER) {
+                int hp = (type2 == OBJ_TYPE_MONSTER) ? GameMaster.readInt(hwnd, objPtr + ADDRESS.OFFSET.OBJ_HP) : 0;
+                if (type2 == OBJ_TYPE_MONSTER && hp != 0) {
                     monsters.add(new Point2D(pos.x, pos.y));
                 }
                 int zy = GameMaster.readInt(hwnd, objPtr + ADDRESS.OFFSET.OBJ_ZY);
-                int hp = (type2 == OBJ_TYPE_MONSTER) ? GameMaster.readInt(hwnd, objPtr + ADDRESS.OFFSET.OBJ_HP) : 0;
+
                 System.out.printf("name: %s\ttype1: %d\ttype2: %d\tstate:%d\tzy:%d\thp:%d\tpos: %s\n",
                         name,
                         type1,
@@ -405,18 +444,6 @@ public class DXF {
                         hp,
                         pos);
             }
-        }
-
-        @Data
-        public static class MonsterInfo {
-            private String      name;
-            private Long        code;
-            private Point       pos;
-            private Integer     hp;
-        }
-
-        void update() {
-
 
         }
 
@@ -424,8 +451,8 @@ public class DXF {
 
     }
 
-    private float xSpeed = 0.546f;
-    private float ySpeed = 0.188f;
+    private float xSpeed = 0.494f;
+    private float ySpeed = 0.172f;
 
     private static final int KEY_UP = 38;
     private static final int KEY_DN = 40;
@@ -464,7 +491,7 @@ public class DXF {
     }
 
 
-    public void moveTo(Point target) throws Exception {
+    public void moveTo(Point2D target) throws Exception {
         Point curr = getPlayerPos();
         String dirLR = (target.x > curr.x) ? "right" : "left";
         String dirUD = (target.y > curr.y) ? "down" : "up";

@@ -1,10 +1,12 @@
 package com.dxf.util;
 
+import com.dxf.model.Point2D;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.awt.*;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 
@@ -34,12 +36,44 @@ public class DXFTest {
 
     @Test
     public void move_to() throws Exception {
-        dxf.moveTo(new Point(773, 135));
+        dxf.moveTo(new Point2D(773, 135));
     }
 
     @Test
-    public void traversal_map() throws Exception {
+    public void move_to_next_door() throws Exception {
         DXF.RoomInfo roomInfo = new DXF.RoomInfo(dxf);
+        Point2D door = roomInfo.nextDoorPos(DXF.Direction.DN);
+        System.out.println("nextDoor: " + door);
+        dxf.moveTo(door);
+        Thread.sleep(1000);
+        for (int i = 0; i < 10; ++i) {
+            roomInfo.update();
+            Point ps = dxf.getPlayerPos();
+            Optional<Point2D> opt = roomInfo.nextMonsterPos(new Point2D(ps.x, ps.y));
+            System.out.println("nextMonster: " + opt);
+            if (opt.isPresent()) {
+                dxf.moveTo(opt.get());
+            } else {
+                break;
+            }
+            Thread.sleep(1000);
+        }
+    }
+
+    @Test
+    public void move_to_next_monster() throws Exception {
+        for (int i = 0; i < 10; ++i) {
+            DXF.RoomInfo roomInfo = new DXF.RoomInfo(dxf);
+            Point ps = dxf.getPlayerPos();
+            Optional<Point2D> opt = roomInfo.nextMonsterPos(new Point2D(ps.x, ps.y));
+            System.out.println("nextMonster: " + opt);
+            if (opt.isPresent()) {
+                dxf.moveTo(opt.get());
+            } else {
+                break;
+            }
+            Thread.sleep(1000);
+        }
     }
 
     @Test
@@ -47,5 +81,14 @@ public class DXFTest {
         dxf.measureSpeed();
     }
 
+    @Test
+    public void traverse_map() throws Exception {
+        DXF.RoomInfo roomInfo = new DXF.RoomInfo(dxf);
+    }
+
+    @Test
+    public void get_map() throws Exception {
+        DXF.MapInfo mapInfo = new DXF.MapInfo(dxf);
+    }
 
 }
