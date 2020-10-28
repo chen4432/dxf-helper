@@ -1,11 +1,13 @@
 package com.dxf.util;
 
 import com.dxf.core.GameMaster;
+import com.dxf.model.Point2D;
 import lombok.Data;
 
-import javax.naming.SizeLimitExceededException;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class DXF {
 
@@ -17,6 +19,10 @@ public class DXF {
 
     public DXF() {
         hwnd = GameMaster.findWindow("地下城与勇士", "地下城与勇士");
+        if (hwnd == 0) {
+            System.out.println("地下城与勇士游戏未启动！");
+            System.exit(-1);
+        }
     }
 
     public int getHwnd() {
@@ -65,8 +71,13 @@ public class DXF {
             public static final int WIDTH_HEIGHT       = 1488; // 宽高偏移
             public static final int ARRAY              = 1528; // 数组偏移
             public static final int START_X            = 336; // 起始坐标X
-            public static final int START_Y            = 340; // 起始坐标Y
+            public static final int START_Y            = 340; // 终止坐标Y
             public static final int MAP_NAME           = 984; // 地图名称
+            public static final int CURR_ROOM_X        = 6448; // 当前房间X
+            public static final int CURR_ROOM_Y        = 6452; // 当前房间Y
+            public static final int BOSS_ROOM_X        = 6780; // BOSS房间Y
+            public static final int BOSS_ROOM_Y        = 6788; // BOSS房间Y
+            public static final int CAMP_FIRE          = 6976; // 篝火判断
         }
     }
 
@@ -193,24 +204,52 @@ public class DXF {
         private final Integer width;
         private final Integer height;
         private final Point bossRoom;
+        private final Point startRoom;
+        private Point currRoom;
         private DXF dxf;
         private int hwnd;
 
         public MapInfo(DXF dxf, int hwnd) {
             this.dxf = dxf;
             this.hwnd = hwnd;
-            bossRoom = new Point();
-            long roomData = GameMaster.readLong(hwnd,
+            long roomData = GameMaster.readLong(
+                    hwnd,
                     ADDRESS.BASE.ROOM_INDEX,
                     ADDRESS.OFFSET.TIME,
-                    ADDRESS.OFFSET.DOOR_TYPE);
+                    ADDRESS.OFFSET.DOOR_TYPE
+            );
+            long startRoomX = GameMaster.readLong(hwnd, roomData + ADDRESS.OFFSET.CURR_ROOM_X);
+            long startRoomY = GameMaster.readLong(hwnd, roomData + ADDRESS.OFFSET.CURR_ROOM_Y);
+            startRoom = new Point((int)startRoomX, (int)startRoomY);
+            int bossRoomX = dxf.decrypt(roomData + ADDRESS.OFFSET.BOSS_ROOM_X);
+            int bossRoomY = dxf.decrypt(roomData + ADDRESS.OFFSET.BOSS_ROOM_Y);
+            bossRoom = new Point(bossRoomX, bossRoomY);
+
             int roomIndex = dxf.decrypt(roomData);
             width  = GameMaster.readInt(hwnd, roomData + ADDRESS.OFFSET.WIDTH_HEIGHT,
                     roomIndex * 8);
             height = GameMaster.readInt(hwnd, roomData + ADDRESS.OFFSET.WIDTH_HEIGHT,
                     roomIndex * 8 + 4);
-            //long tmp = GameMaster.readLong(hwnd, roomData + ADDRESS.OFFSET.ARRAY)
+            long tmp = GameMaster.readLong(hwnd, roomData + ADDRESS.OFFSET.ARRAY, 40*roomIndex + 8);
+            int channelNum = width * height;
+            int[] channels = new int[channelNum];
+            // channel & 1 != 0 has right door
+            // channel & 2 != 0 has up door
+            // channel & 4 != 0 has left door
+            // channel & 8 != 0 has down door
+            for (int i = 0; i < channelNum; ++i) {
+                channels[i] = GameMaster.readInt(hwnd, tmp + i * 4);
+            }
+
             System.out.printf("width: %d, height: %d", width, height);
+        }
+
+        public int toChannelIndex(Point2D pos) {
+            return pos.y * width + pos.x;
+        }
+
+        public Point2D toCoordinate(int channelIndex) {
+            return new Point2D(channelIndex % width, channelIndex / width);
         }
     }
 
@@ -242,15 +281,85 @@ public class DXF {
         }
     }
 
+    public enum Direction {
+        UP(1),
+        DN(2),
+        LL(3),
+        RR(4);
+
+        private final int code;
+
+        Direction(int code) {
+            this.code = code;
+        }
+
+        public int getCode() {
+            return code;
+        }
+    }
+
     @Data
     public static class RoomInfo {
-        private Point index;                // 房间索引
-        private List<MonsterInfo> monsters;
-        private List<Point> golds;
-        private Point player;
-        private Boolean doorOpen;
-        private DXF dxf;
-        private int hwnd;
+        private Point                                   index;                          // 房间索引
+        private List<Point2D>                           doors = new ArrayList<>();      // 门
+        private List<Point2D>                           monsters = new ArrayList<>();   // 怪物
+        private List<Point2D>                           materials = new ArrayList<>();  // 材料
+        private Point                                   player;
+        private Boolean                                 doorOpen;
+        private DXF                                     dxf;
+        private int                                     hwnd;
+
+        public boolean idDoorOpen() {
+            return false;
+        }
+
+        public Point2D nextDoorPos(Direction direction) {
+            switch (direction) {
+                case UP:
+                    doors.sort((a, b) -> {
+                        if (a.y == b.y) return 0;
+                        return a.y > b.y ? 1 : -1;
+                    });
+                    break;
+                case DN:
+                    doors.sort((a, b) -> {
+                        if (a.y == b.y) return 0;
+                        return a.y < b.y ? 1 : -1;
+                    });
+                    break;
+                case LL:
+                    doors.sort((a, b) -> {
+                        if (a.x == b.x) return 0;
+                        return a.x > b.y ? 1 : -1;
+                    });
+                    break;
+                case RR:
+                    doors.sort((a, b) -> {
+                        if (a.x == b.x) return 0;
+                        return a.x < b.x ? 1 : -1;
+                    });
+                    break;
+            }
+            return doors.get(0);
+        }
+
+        public Optional<Point2D> nextMaterialPos(Point2D playerPos) {
+            if (materials.isEmpty()) return Optional.empty();
+            materials.sort((a, b) -> {
+                if (Point2D.distance(playerPos, a) == Point2D.distance(playerPos, b)) return 0;
+                return Point2D.distance(playerPos, a) > Point2D.distance(playerPos, a)? 1 : -1;
+            });
+            return Optional.of(materials.get(0));
+        }
+
+        public Optional<Point2D> nextMonsterPos(Point2D playerPos) {
+            if (monsters.isEmpty()) return Optional.empty();
+            monsters.sort((a, b) -> {
+                if (Point2D.distance(playerPos, a) == Point2D.distance(playerPos, b)) return 0;
+                return Point2D.distance(playerPos, a) > Point2D.distance(playerPos, a)? 1 : -1;
+            });
+            return Optional.of(monsters.get(0));
+        }
 
         private static final int OBJ_TYPE_CAMP_FIRE         =    4;       // 营火
         private static final int OBJ_TYPE_BUILDING          =   33;       // 建筑
@@ -279,6 +388,12 @@ public class DXF {
                 if (type1 == OBJ_TYPE_HUMAN || type2 == OBJ_TYPE_HUMAN) continue;
                 int state = GameMaster.readInt(hwnd, objPtr + ADDRESS.OFFSET.OBJ_STATE); // 0 或者 1 表示是可通过门
                 Point pos = dxf.getMonsterPos(objPtr);
+                if (state == 0 || startAddr == 1) {
+                    doors.add(new Point2D(pos.x, pos.y));
+                }
+                if (type2 == OBJ_TYPE_MONSTER) {
+                    monsters.add(new Point2D(pos.x, pos.y));
+                }
                 int zy = GameMaster.readInt(hwnd, objPtr + ADDRESS.OFFSET.OBJ_ZY);
                 int hp = (type2 == OBJ_TYPE_MONSTER) ? GameMaster.readInt(hwnd, objPtr + ADDRESS.OFFSET.OBJ_HP) : 0;
                 System.out.printf("name: %s\ttype1: %d\ttype2: %d\tstate:%d\tzy:%d\thp:%d\tpos: %s\n",
@@ -294,10 +409,10 @@ public class DXF {
 
         @Data
         public static class MonsterInfo {
-            private String name;
-            private Long code;
-            private Point pos;
-            private Integer hp;
+            private String      name;
+            private Long        code;
+            private Point       pos;
+            private Integer     hp;
         }
 
         void update() {

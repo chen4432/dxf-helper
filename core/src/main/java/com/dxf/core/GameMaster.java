@@ -12,9 +12,7 @@ import com.typesafe.config.Config;
 
 public class GameMaster {
 
-    private static final Config CONF = ConfigUtil.getConfig();
-
-    private static final ActiveXComponent DM;
+    private static ActiveXComponent DM;
 
     private interface Dll extends Library {
         Dll INSTANCE = Native.load("DmReg", Dll.class);
@@ -23,15 +21,20 @@ public class GameMaster {
     }
 
     static {
-        //Dll.INSTANCE.SetDllPathW(new String("src/main/resources/dm.dll".getBytes(), StandardCharsets.UTF_16), 0);
-        //Dll.INSTANCE.SetDllPathA("src/main/resources/dm.dll", 0);
-        DM = new ActiveXComponent("dm.dmsoft");
-        Preconditions.checkNotNull(DM);
-        GameMaster.reg("suifengyunnuo5fe95058910f5da8bb59e01fb48b93d2", "83Y4N");
-        GameMaster.dmGuard(1, "memory2");       // 破读写
-        GameMaster.dmGuard(1, "hm dm.dll 1");   // 隐藏模块
-        //GameMaster.dmGuard(1, "b2");            // 保护指定进程不被非法访问
-        try {Thread.sleep(2000);} catch (Exception e) {e.printStackTrace();}
+        try {
+            //Dll.INSTANCE.SetDllPathW(new String("src/main/resources/dm.dll".getBytes(), StandardCharsets.UTF_16), 0);
+            //Dll.INSTANCE.SetDllPathA("src/main/resources/dm.dll", 0);
+            DM = new ActiveXComponent("dm.dmsoft");
+            Preconditions.checkNotNull(DM);
+            GameMaster.reg("suifengyunnuo5fe95058910f5da8bb59e01fb48b93d2", "83Y4N");
+            GameMaster.dmGuard(1, "memory2");       // 破读写
+            GameMaster.dmGuard(1, "hm dm.dll 1");   // 隐藏模块
+            //GameMaster.dmGuard(1, "b2");            // 保护指定进程不被非法访问
+            Thread.sleep(2000);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
     }
 
     public static String ver() {
