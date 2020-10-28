@@ -46,7 +46,7 @@ public class DXFHelper {
                         String[] fields = source.split(",", -1);
                         hexBytes = Arrays.stream(fields).map(Byte::new).map(Integer::toHexString).collect(Collectors.toList());
                     } else {
-                        String[] fields = source.split(",", -1);
+                        String[] fields = source.split(" ", -1);
                         hexBytes = Arrays.stream(fields).collect(Collectors.toList());
                     }
                     taTarget.setText(GameMaster.disAssemble(Joiner.on(" ").join(hexBytes), 0,1));
