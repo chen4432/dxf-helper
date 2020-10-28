@@ -41,7 +41,7 @@ public class DXFHelper {
             public void actionPerformed(ActionEvent e) {
                 String source = taSource.getText();
                 if ("字节集->汇编".equals(cbType.getSelectedItem())) {
-                    List<String> hexBytes = new ArrayList<>();
+                    List<String> hexBytes;
                     if (source.contains(",")) {
                         String[] fields = source.split(",", -1);
                         hexBytes = Arrays.stream(fields).map(Byte::new).map(Integer::toHexString).collect(Collectors.toList());
