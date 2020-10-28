@@ -54,6 +54,7 @@ public class DXF {
             public static final long OBJ_TYPE           = 292L;  // 类型偏移
             public static final long OBJ_ZY             = 3496L; // 阵营偏移
             public static final long OBJ_HP             = 20392L;// 血量偏移
+            public static final long OBJ_STATE          = 3392L;
             public static final long IGNORE_MAP         = 1984L; // 地图穿透
             public static final long IGNORE_OBSTACLE    = 1988L; // 建筑穿越
         }
@@ -253,13 +254,15 @@ public class DXF {
                 int type1 = GameMaster.readInt(hwnd, objPtr + ADDRESS.OFFSET.OBJ_TYPE);
                 int type2 = GameMaster.readInt(hwnd, objPtr + ADDRESS.OFFSET.OBJ_TYPE + 4);
                 if (type1 == OBJ_TYPE_HUMAN || type2 == OBJ_TYPE_HUMAN) continue;
+                int state = GameMaster.readInt(hwnd, objPtr + ADDRESS.OFFSET.OBJ_STATE); // 0 或者 1 表示是可通过门
                 Point pos = dxf.getMonsterPos(objPtr);
                 int zy = GameMaster.readInt(hwnd, objPtr + ADDRESS.OFFSET.OBJ_ZY);
                 int hp = (type2 == OBJ_TYPE_MONSTER) ? GameMaster.readInt(hwnd, objPtr + ADDRESS.OFFSET.OBJ_HP) : 0;
-                System.out.printf("name: %s\ttype1: %d\ttype2: %d\tzy:%d\thp:%d\tpos: %s\n",
+                System.out.printf("name: %s\ttype1: %d\ttype2: %d\tstate:%d\tzy:%d\thp:%d\tpos: %s\n",
                         name,
                         type1,
                         type2,
+                        state,
                         zy,
                         hp,
                         pos);

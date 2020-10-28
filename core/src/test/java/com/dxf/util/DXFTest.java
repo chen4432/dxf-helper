@@ -15,10 +15,12 @@ public class DXFTest {
     @Before
     public void setUp() {
         dxf.setUp();
+        dxf.ignoreMapAndObstacle();
     }
 
     @After
     public void cleanUp() {
+        dxf.unIgnoreMapAndObstacle();
         dxf.cleanUp();
     }
 
@@ -32,7 +34,7 @@ public class DXFTest {
 
     @Test
     public void move_to() throws Exception {
-        dxf.moveTo(new Point(400, 148));
+        dxf.moveTo(new Point(773, 135));
     }
 
     @Test
@@ -44,5 +46,6 @@ public class DXFTest {
     public void measure_speed() throws Exception {
         dxf.measureSpeed();
     }
+
 
 }

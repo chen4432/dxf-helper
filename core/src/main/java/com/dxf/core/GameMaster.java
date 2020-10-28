@@ -146,7 +146,7 @@ public class GameMaster {
     }
 
     public static void writeInt(int hwnd, long addr, int val) {
-        Dispatch.call(DM, "WriteInt", hwnd, addr, 0, (long)val);
+        Dispatch.call(DM, "WriteIntAddr", hwnd, addr, 0, (long)val);
     }
 
     public static void writeLong(int hwnd, String addr, long val) {
@@ -154,7 +154,7 @@ public class GameMaster {
     }
 
     public static void writeLong(int hwnd, long addr, long val) {
-        Dispatch.call(DM, "WriteLong", hwnd, addr, 3, val);
+        Dispatch.call(DM, "WriteIntAddr", hwnd, addr, 3, val);
     }
 
     public static int writeString(int hwnd, String addr, int type, String val) {
