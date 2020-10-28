@@ -81,6 +81,21 @@ public class GameMaster {
         return (int) Dispatch.call(DM, "ReadIntAddr", hwnd, addr, 0).getLong();
     }
 
+    public static int readInt(int hwnd, long baseAddr, int offsetAddr) {
+        String addr = String.format("[%x]+%x", baseAddr, offsetAddr);
+        return readInt(hwnd, addr);
+    }
+
+    public static int readInt(int hwnd, long baseAddr, int offsetAddr1, int offsetAddr2) {
+        String addr = String.format("[[%x]+%x]+%x", baseAddr, offsetAddr1, offsetAddr2);
+        return readInt(hwnd, addr);
+    }
+
+    public static int readInt(int hwnd, long baseAddr, int offsetAddr1, int offsetAddr2, int offsetAddr3) {
+        String addr = String.format("[[[%x]+%x]+%x]+%x", baseAddr, offsetAddr1, offsetAddr2, offsetAddr3);
+        return readInt(hwnd, addr);
+    }
+
     public static long readIntAddr(int hwnd, long addr, int type) {
         return Dispatch.call(DM, "ReadIntAddr", hwnd, addr, type).getLong();
     }
@@ -91,6 +106,21 @@ public class GameMaster {
 
     public static long readLong(int hwnd, long addr) {
         return Dispatch.call(DM, "ReadIntAddr", hwnd, addr, 3).getLong();
+    }
+
+    public static long readLong(int hwnd, long baseAddr, int offset) {
+        String addr = String.format("[%x]+%x", baseAddr, offset);
+        return readLong(hwnd, addr);
+    }
+
+    public static long readLong(int hwnd, long baseAddr, int offset1, int offset2) {
+        String addr = String.format("[[%x]+%x]+%x", baseAddr, offset1, offset2);
+        return readLong(hwnd, addr);
+    }
+
+    public static long readLong(int hwnd, long baseAddr, int offset1, int offset2, int offset3) {
+        String addr = String.format("[[[%x]+%x]+%x]+%x", baseAddr, offset1, offset2, offset3);
+        return readLong(hwnd, addr);
     }
 
     public static String readString(int hwnd, String addr, int type, int len) {

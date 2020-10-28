@@ -44,19 +44,29 @@ public class DXF {
             private static final long PLAYER            = 5549592112L; // 人物基址
             private static final long GAME_STATE        = 5545477624L; // 游戏状态
             private static final long DECRYPT           = 5549974944L; // 解密基址
+            private static final long ROOM_INDEX        = 5546913896L; // 房间编号
+
         }
         // 偏移
         public static class OFFSET {
-            public static final long MAP                = 336L;  // 地图偏移
-            public static final long MAP_START          = 376L;  // 地图开始2
-            public static final long MAP_END            = 384L;  // 地图结束2
-            public static final long OBJ_NAME           = 1976L; // 名称偏移
-            public static final long OBJ_TYPE           = 292L;  // 类型偏移
-            public static final long OBJ_ZY             = 3496L; // 阵营偏移
-            public static final long OBJ_HP             = 20392L;// 血量偏移
-            public static final long OBJ_STATE          = 3392L;
-            public static final long IGNORE_MAP         = 1984L; // 地图穿透
-            public static final long IGNORE_OBSTACLE    = 1988L; // 建筑穿越
+            public static final int MAP                = 336;  // 地图偏移
+            public static final int MAP_START          = 376;  // 地图开始2
+            public static final int MAP_END            = 384;  // 地图结束2
+            public static final int OBJ_NAME           = 1976; // 名称偏移
+            public static final int OBJ_TYPE           = 292;  // 类型偏移
+            public static final int OBJ_ZY             = 3496; // 阵营偏移
+            public static final int OBJ_HP             = 20392;// 血量偏移
+            public static final int OBJ_STATE          = 3392;
+            public static final int IGNORE_MAP         = 1984; // 地图穿透
+            public static final int IGNORE_OBSTACLE    = 1988; // 建筑穿越
+            public static final int TIME               = 2138192; // 时间基址
+            public static final int DOOR_TYPE          = 328; // 门型偏移
+            public static final int MAP_CODE           = 6756; // 地图编码
+            public static final int WIDTH_HEIGHT       = 1488; // 宽高偏移
+            public static final int ARRAY              = 1528; // 数组偏移
+            public static final int START_X            = 336; // 起始坐标X
+            public static final int START_Y            = 340; // 起始坐标Y
+            public static final int MAP_NAME           = 984; // 地图名称
         }
     }
 
@@ -182,13 +192,26 @@ public class DXF {
     public static class MapInfo {
         private final Integer width;
         private final Integer height;
+        private final Point bossRoom;
+        private DXF dxf;
+        private int hwnd;
 
-        public MapInfo() {
-            this.width = 0;
-            this.height = 0;
+        public MapInfo(DXF dxf, int hwnd) {
+            this.dxf = dxf;
+            this.hwnd = hwnd;
+            bossRoom = new Point();
+            long roomData = GameMaster.readLong(hwnd,
+                    ADDRESS.BASE.ROOM_INDEX,
+                    ADDRESS.OFFSET.TIME,
+                    ADDRESS.OFFSET.DOOR_TYPE);
+            int roomIndex = dxf.decrypt(roomData);
+            width  = GameMaster.readInt(hwnd, roomData + ADDRESS.OFFSET.WIDTH_HEIGHT,
+                    roomIndex * 8);
+            height = GameMaster.readInt(hwnd, roomData + ADDRESS.OFFSET.WIDTH_HEIGHT,
+                    roomIndex * 8 + 4);
+            //long tmp = GameMaster.readLong(hwnd, roomData + ADDRESS.OFFSET.ARRAY)
+            System.out.printf("width: %d, height: %d", width, height);
         }
-
-
     }
 
     @Data
