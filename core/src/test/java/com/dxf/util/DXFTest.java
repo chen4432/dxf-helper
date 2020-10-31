@@ -36,13 +36,13 @@ public class DXFTest {
 
     @Test
     public void move_to() throws Exception {
-        dxf.moveTo(new Point2D(773, 135));
+        dxf.moveTo(new Point2D(0, 0));
     }
 
     @Test
     public void move_to_next_door() throws Exception {
         DXF.RoomInfo roomInfo = new DXF.RoomInfo(dxf);
-        Point2D door = roomInfo.nextDoorPos(DXF.Direction.DN);
+        Point2D door = roomInfo.nextDoorPos(DXF.Direction.LL);
         System.out.println("nextDoor: " + door);
         dxf.moveTo(door);
         Thread.sleep(1000);

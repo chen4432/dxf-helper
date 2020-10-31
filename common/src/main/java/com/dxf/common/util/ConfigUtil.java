@@ -4,11 +4,18 @@ import com.typesafe.config.Config;
 import com.typesafe.config.ConfigBeanFactory;
 import com.typesafe.config.ConfigFactory;
 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
 /**
  * @author GuJun
  * @date 2020/9/1
  */
 public class ConfigUtil {
+
+    private static Config CONF;
+
+    private static final ConcurrentMap<String, Config> CONF_MAP = new ConcurrentHashMap<>();
 
     /**
      * 读取classpath目录下指定文件并且解析为Config
@@ -16,7 +23,10 @@ public class ConfigUtil {
      * @return 配置类
      */
     public static Config getConfig(String resource) {
-        return ConfigFactory.parseResources(resource).resolve();
+        if (!CONF_MAP.containsKey(resource)) {
+            CONF_MAP.put(resource, ConfigFactory.parseResources(resource).resolve());
+        }
+        return CONF_MAP.get(resource);
     }
 
     /**
@@ -24,7 +34,10 @@ public class ConfigUtil {
      * @return 配置类
      */
     public static Config getConfig() {
-        return ConfigFactory.load();
+        if (CONF == null) {
+            CONF = ConfigFactory.load();
+        }
+        return CONF;
     }
 
     /**

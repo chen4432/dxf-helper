@@ -1,12 +1,10 @@
 package com.dxf.core;
 
-import com.dxf.common.util.ConfigUtil;
 import com.google.common.base.Preconditions;
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Dispatch;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
-import com.typesafe.config.Config;
 
 
 
@@ -30,7 +28,7 @@ public class GameMaster {
             GameMaster.dmGuard(1, "memory2");       // 破读写
             GameMaster.dmGuard(1, "hm dm.dll 1");   // 隐藏模块
             //GameMaster.dmGuard(1, "b2");            // 保护指定进程不被非法访问
-            Thread.sleep(2000);
+            Thread.sleep(1000);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
@@ -250,6 +248,10 @@ public class GameMaster {
 
     public static int moveWindow(int hwnd, int x, int y) {
         return Dispatch.call(DM, "MoveWindow", hwnd, x, y).getInt();
+    }
+
+    public static int setWindowState(int hwnd, int flag) {
+        return Dispatch.call(DM, "SetWindowState", hwnd, flag).getInt();
     }
 
     //==================================================== 后台 =========================================================

@@ -30,7 +30,7 @@ public class DXF {
     }
 
     public void setUp() {
-        GameMaster.bindWindowEx(
+        int ret = GameMaster.bindWindowEx(
                 hwnd,
                 "dx.graphic.2d",
                 "dx.mouse.position.lock.api|dx.mouse.position.lock.message|dx.mouse.clip.lock.api|dx.mouse.input.lock.api|dx.mouse.state.api|dx.mouse.api|dx.mouse.cursor",
@@ -38,6 +38,15 @@ public class DXF {
                 "dx.public.active.api|dx.public.active.message",
                 0
                 );
+        System.out.println("BindWindowState:" + ret);
+        try {
+            Thread.sleep(1000);
+            GameMaster.setWindowState(hwnd, 1);
+            Thread.sleep(1000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void cleanUp() {
@@ -144,6 +153,14 @@ public class DXF {
         int d = GameMaster.readInt(hwnd,  c + 4 * (a & 65535) + 8476) & 65535;
         return GameMaster.readInt(hwnd, addr + 4) ^ (d | (d << 16));
     }
+
+    public int 解密(long 内存地址) {
+        int a = GameMaster.readInt(hwnd, 内存地址);
+        long b = GameMaster.readLong(hwnd, ADDRESS.BASE.DECRYPT);
+        long c = GameMaster.readLong(hwnd, b + 8 * (a >> 16) + 56);
+        int d = GameMaster.readInt(hwnd,  c + 4 * (a & 65535) + 8476) & 65535;
+        return GameMaster.readInt(hwnd, 内存地址 + 4) ^ (d | (d << 16));
+    }
     /**
      * 解密
      * @param addr 内存地址
@@ -210,8 +227,8 @@ public class DXF {
     public static class MapInfo {
         private final Integer                           width;
         private final Integer                           height;
-        private final Point                             bossRoom;
-        private Point                                   currRoom;
+        private final Point2D                           bossRoom;
+        private Point2D                                 currRoom;
         private DXF                                     dxf;
         private int                                     hwnd;
 
@@ -232,7 +249,7 @@ public class DXF {
 
             int bossRoomX = dxf.decrypt(roomData + ADDRESS.OFFSET.BOSS_ROOM_X);
             int bossRoomY = dxf.decrypt(roomData + ADDRESS.OFFSET.BOSS_ROOM_Y);
-            bossRoom = new Point(bossRoomX, bossRoomY);
+            bossRoom = new Point2D(bossRoomX, bossRoomY);
             System.out.println("BossRoom: " + bossRoom);
 
             int roomIndex = dxf.decrypt(roomData + ADDRESS.OFFSET.MAP_CODE);
@@ -270,7 +287,7 @@ public class DXF {
             );
             long startRoomX = GameMaster.readLong(hwnd, roomData + ADDRESS.OFFSET.CURR_ROOM_X);
             long startRoomY = GameMaster.readLong(hwnd, roomData + ADDRESS.OFFSET.CURR_ROOM_Y);
-            currRoom = new Point((int)startRoomX, (int)startRoomY);
+            currRoom = new Point2D((int)startRoomX, (int)startRoomY);
             System.out.println("CurrRoom: " + currRoom);
         }
 
@@ -497,10 +514,12 @@ public class DXF {
         String dirUD = (target.y > curr.y) ? "down" : "up";
         int xTime = 0, yTime = 0;
         int xDistance = Math.abs(curr.x - target.x);
+        System.out.println(xDistance);
         if (xDistance != 0) {
             xTime = (int)(xDistance / xSpeed);
         }
         int yDistance = Math.abs(curr.y - target.y);
+        System.out.println(yDistance);
         if (yDistance != 0) {
             yTime = (int)(yDistance / ySpeed);
         }
