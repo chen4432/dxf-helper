@@ -3,10 +3,13 @@ package com.dxf;
 import com.dxf.core.GameMaster;
 import com.dxf.model.坐标;
 import com.dxf.util.DXF;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.concurrent.*;
 
+
+@Slf4j
 public class 房间信息 {
 
     private final DXF dxf;
@@ -28,6 +31,7 @@ public class 房间信息 {
 
     public void update() {
         long 地图数据 = GameMaster.readLong(dxf.getHwnd(), 基址.人物基址, 偏移.地图偏移);
+        log.info("地图数据：{}", 地图数据);
         long 首地址 = GameMaster.readLong(dxf.getHwnd(), 地图数据 + 偏移.地图开始2);
         long 尾地址 = GameMaster.readLong(dxf.getHwnd(), 地图数据 + 偏移.地图结束2);
         门列表.clear();
@@ -53,6 +57,14 @@ public class 房间信息 {
                 HP = GameMaster.readInt(dxf.getHwnd(), 物品数据 + 偏移.怪物血量);
                 if (HP > 0) {
                     怪物列表.add(物品坐标);
+                    log.info("名称:{}\t类型1:{}\t类型2:{}\t阵营:{}\tHP:{}\t坐标:{}",
+                            物品名称,
+                            类型1,
+                            类型2,
+                            阵营,
+                            HP,
+                            物品坐标);
+                    /*
                     System.out.printf("名称:%s\t类型1:%s\t类型2:%s\t阵营:%s\tHP:%d\t坐标:%s\n",
                             物品名称,
                             类型1,
@@ -60,12 +72,13 @@ public class 房间信息 {
                             阵营,
                             HP,
                             物品坐标);
+                     *
+                     */
                 }
             }
             if (类型2 == 物品类型.地面物品) {
                 材料列表.add(物品坐标);
             }
-
         }
     }
 

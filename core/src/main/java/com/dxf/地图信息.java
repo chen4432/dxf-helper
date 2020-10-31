@@ -3,9 +3,12 @@ package com.dxf;
 import com.dxf.core.GameMaster;
 import com.dxf.model.坐标;
 import com.dxf.util.DXF;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 
+
+@Slf4j
 public class 地图信息 {
 
     private final DXF dxf;
@@ -19,12 +22,12 @@ public class 地图信息 {
     public 地图信息(DXF dxf) {
         this.dxf = dxf;
         long 地图数据 = GameMaster.readLong(dxf.getHwnd(), 基址.房间编号, 偏移.时间基址, 偏移.门型偏移);
-        System.out.printf("地图数据：%x\n", 地图数据);
+        log.info("地图数据：{}", 地图数据);
         int BOSS房间X = 基础功能.解密(dxf.getHwnd(), 地图数据 + 偏移.BOSS房间X);
         int BOSS房间Y = 基础功能.解密(dxf.getHwnd(), 地图数据 + 偏移.BOSS房间Y);
         BOSS房间 = new 坐标(BOSS房间X, BOSS房间Y);
         int 地图编号 = 基础功能.解密(dxf.getHwnd(), 地图数据 + 偏移.地图编码);
-        System.out.printf("地图编号：%d\n", 地图编号);
+        log.info("地图编号：{}", 地图编号);
         地图宽度 = GameMaster.readInt(dxf.getHwnd(), 地图数据 + 偏移.宽高偏移, 地图编号 * 8);
         地图高度 = GameMaster.readInt(dxf.getHwnd(), 地图数据 + 偏移.宽高偏移, 地图编号 * 8 + 4);
         地图通道 = new int[地图高度][地图宽度];
@@ -36,6 +39,7 @@ public class 地图信息 {
                 ++n;
             }
         }
+        /*
         System.out.println("BOSS房间： " + BOSS房间);
         System.out.printf("地图宽度：%d，地图高度：%d\n", 地图宽度, 地图高度);
         System.out.println("地图通道：");
@@ -45,6 +49,7 @@ public class 地图信息 {
             }
             System.out.println();
         }
+        */
         int 当前房间X = GameMaster.readInt(dxf.getHwnd(), 地图数据 + 偏移.当前房间X);
         int 当前房间Y = GameMaster.readInt(dxf.getHwnd(), 地图数据 + 偏移.当前房间Y);
         坐标 当前房间 = new 坐标(当前房间X, 当前房间Y);
@@ -145,5 +150,4 @@ public class 地图信息 {
         if (next.getY() < curr.getY()) return 方向.上;
         return 方向.未知;
     }
-
 }
