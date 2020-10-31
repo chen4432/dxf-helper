@@ -7,7 +7,7 @@ public class 基址 {
     public static final long 制裁基址 = 5548589320L;
     public static final long 评分基址 = 5548588568L;
     public static final long 加密基址 = 5551656248L;
-    public static final long 解密基址 = 5551656112L;;
+    public static final long 解密基址 = 5551656112L;
     public static final long 特殊解密 = 5516167696L;
     public static final long 帐号基址 = 5547275484L;
     public static final long 商店基址 = 5548595096L;

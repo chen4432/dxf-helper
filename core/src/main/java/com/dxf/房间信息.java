@@ -31,7 +31,8 @@ public class 房间信息 {
 
     public void update() {
         long 地图数据 = GameMaster.readLong(dxf.getHwnd(), 基址.人物基址, 偏移.地图偏移);
-        log.info("地图数据：{}", 地图数据);
+        log.info("房间数据：{}", 地图数据);
+        System.out.println("房间数据: " + 地图数据);
         long 首地址 = GameMaster.readLong(dxf.getHwnd(), 地图数据 + 偏移.地图开始2);
         long 尾地址 = GameMaster.readLong(dxf.getHwnd(), 地图数据 + 偏移.地图结束2);
         门列表.clear();

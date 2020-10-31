@@ -27,7 +27,7 @@ public class 地图信息 {
         int BOSS房间Y = 基础功能.解密(dxf.getHwnd(), 地图数据 + 偏移.BOSS房间Y);
         BOSS房间 = new 坐标(BOSS房间X, BOSS房间Y);
         int 地图编号 = 基础功能.解密(dxf.getHwnd(), 地图数据 + 偏移.地图编码);
-        log.info("地图编号：{}", 地图编号);
+        log.info("地图编号：{}", 地图编号); // 0\1\2\3
         地图宽度 = GameMaster.readInt(dxf.getHwnd(), 地图数据 + 偏移.宽高偏移, 地图编号 * 8);
         地图高度 = GameMaster.readInt(dxf.getHwnd(), 地图数据 + 偏移.宽高偏移, 地图编号 * 8 + 4);
         地图通道 = new int[地图高度][地图宽度];
