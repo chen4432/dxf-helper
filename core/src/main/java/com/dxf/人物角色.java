@@ -3,6 +3,8 @@ package com.dxf;
 import com.dxf.core.GameMaster;
 import com.dxf.model.坐标;
 import com.dxf.util.DXF;
+import com.dxf.util.刷图状态;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
 import java.util.List;
@@ -12,6 +14,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 
+@Slf4j
 public class 人物角色 {
 
     private final DXF dxf;
@@ -19,7 +22,7 @@ public class 人物角色 {
     private final int 等级;
     private final String 职业;
 
-    private CopyOnWriteArrayList<技能信息> 技能栏 = new CopyOnWriteArrayList<技能信息>();
+    private final CopyOnWriteArrayList<技能信息> 技能栏 = new CopyOnWriteArrayList<技能信息>();
 
     private final ScheduledExecutorService pool = Executors.newSingleThreadScheduledExecutor();
 
@@ -34,7 +37,6 @@ public class 人物角色 {
         读配置();
         //try {测试移动速度();} catch (Exception e) {e.printStackTrace();}
         pool.scheduleAtFixedRate(new Task(), 10, 1000, TimeUnit.MILLISECONDS);
-
     }
 
     public String 取名称() {
@@ -50,18 +52,22 @@ public class 人物角色 {
     }
 
     public void 读配置() {
-        技能栏.add(new 技能信息("A", 8, 技能信息.技能类型.攻击));
-        技能栏.add(new 技能信息("S", 3, 技能信息.技能类型.攻击));
-        技能栏.add(new 技能信息("D", 6, 技能信息.技能类型.攻击));
-        技能栏.add(new 技能信息("F", 10, 技能信息.技能类型.攻击));
-        技能栏.add(new 技能信息("G", 8, 技能信息.技能类型.攻击));
-        技能栏.add(new 技能信息("H", 6, 技能信息.技能类型.攻击));
-        技能栏.add(new 技能信息("Q", 7, 技能信息.技能类型.攻击));
-        技能栏.add(new 技能信息("W", 15, 技能信息.技能类型.攻击));
-        技能栏.add(new 技能信息("E", 20, 技能信息.技能类型.攻击));
-        技能栏.add(new 技能信息("R", 35, 技能信息.技能类型.攻击));
-        技能栏.add(new 技能信息("T", 5, 技能信息.技能类型.BUFF));
-        技能栏.add(new 技能信息("Y", 140, 技能信息.技能类型.攻击));
+        if ("大暗黑天".equals(职业)) {
+            技能栏.add(new 技能信息("波动爆发", "A", 8, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("地裂波动剑", "S", 3, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("鬼斩","D", 6, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("邪光斩","F", 10, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("裂波斩","G", 8, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("鬼印珠","H", 6, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("冰刃波动剑","Q", 7, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("爆炎波动剑","W", 15, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("极冰裂波剑","E", 20, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("极炎裂波剑","R", 35, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("杀意波动","T", 5, 技能信息.技能类型.BUFF));
+            技能栏.add(new 技能信息("暗天波动眼","Y", 140, 技能信息.技能类型.攻击));
+            移动速度X = 0.48;
+            移动速度Y = 0.17;
+        }
     }
 
     private static final int KEY_UP = 38;
@@ -157,14 +163,14 @@ public class 人物角色 {
     }
 
     public void 移动物品到脚下() {
-        GameMaster.keyPressChar("L");
+        GameMaster.keyPress(76);
     }
 
     public void 调整方向(方向 dir) {
         try {
             if (dir == 方向.右) GameMaster.keyPressChar("right");
             if (dir == 方向.左) GameMaster.keyPressChar("left");
-            Thread.sleep(500);
+            Thread.sleep(100);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -185,7 +191,6 @@ public class 人物角色 {
     class Task implements Runnable {
         @Override
         public void run() {
-            System.out.println("计算技能冷却");
             for (技能信息 技能 : 技能栏) {
                 技能.update();
             }
@@ -224,6 +229,12 @@ public class 人物角色 {
         }
     }
 
+    public void 自动刷图() throws Exception {
+        while (基础功能.取当前消耗疲劳值(dxf.getHwnd()) < 156) {
+            开始刷图();
+        }
+    }
+
     public void 开始刷图() throws Exception {
         if (基础功能.取游戏状态(dxf.getHwnd()) != 游戏状态.在副本中) return;
         地图信息 map = new 地图信息(dxf);
@@ -231,22 +242,97 @@ public class 人物角色 {
             房间信息 room = new 房间信息(dxf);
             if (room.判断是否通关()) {
                 System.out.println("已经通关");
-                Thread.sleep(3000); // 等待
+                log.info("通关成功.");
+                Thread.sleep(10000); // 等待
+                log.info("移动物品到脚下...");
                 移动物品到脚下();
                 Thread.sleep(500);
-                for (int i = 0; i < 7; ++i) {
+                room.update();
+                log.info("正在捡物...物品数量： {}", room.取材料列表().size());
+                for (int i = 0; i < room.取材料列表().size(); ++i) {
                     GameMaster.keyPressChar("X");
                     Thread.sleep(300);
+                }
+                Thread.sleep(3000);
+                if (基础功能.取当前消耗疲劳值(dxf.getHwnd()) < 156) {
+                    GameMaster.keyPressChar("F10");
+                    Thread.sleep(5000);
                 }
                 break;
             }
             房间清怪(room);
+            捡物(room);
             val dir = map.取过图方向(room.取当前房间坐标());
             if (dir == 方向.未知) continue;
             val door = room.取过图门坐标(dir);
-            移动到(door);
+            //移动到(door);
+            精确过门(door, dir);
             Thread.sleep(500);
         }
+    }
+
+    public void 精确过门(坐标 door, 方向 dir) {
+        boolean succeed = false;
+        for (int i = 0; i < 3; ++i) {
+            try {
+                val curr = new 房间信息(dxf).取当前房间坐标();
+                移动到(door);
+                Thread.sleep(500);
+                val next = new 房间信息(dxf).取当前房间坐标();
+                if (!curr.equals(next)) {
+                    succeed = true;
+                    System.out.printf("过门成功，门坐标：%s, 过门方向：%s\n", door, dir);
+                    break;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (!succeed) {
+            System.out.println("遇到卡门情况，正在调整...");
+            String key = "";
+            switch (dir) {
+                case 上:
+                    key  = "down";
+                    break;
+                case 下:
+                    key = "up";
+                    break;
+                case 左:
+                    key = "right";
+                    break;
+                case 右:
+                    key = "left";
+                    break;
+            }
+
+            GameMaster.keyDownChar(key);
+            try {Thread.sleep(1000);} catch (Exception e) {e.printStackTrace();}
+            GameMaster.keyUpChar(key);
+
+            精确过门(door, dir);
+        }
+    }
+
+    public void 捡物(房间信息 room) {
+        /*
+        room.update();
+        for (坐标 pos : room.取材料列表()) {
+            try {
+                移动到(pos);
+                Thread.sleep(500);
+                GameMaster.keyPressChar("x");
+                Thread.sleep(100);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        */
+        GameMaster.keyPressChar("v");
+    }
+
+    public void 刷图控制(刷图状态 state) {
+
     }
 
 

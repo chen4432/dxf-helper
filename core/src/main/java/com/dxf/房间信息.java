@@ -51,15 +51,21 @@ public class 房间信息 {
             int HP = 0;
             if (类型2 == 物品类型.怪物) {
                 HP = GameMaster.readInt(dxf.getHwnd(), 物品数据 + 偏移.怪物血量);
-                if (HP > 0) 怪物列表.add(物品坐标);
+                if (HP > 0) {
+                    怪物列表.add(物品坐标);
+                    System.out.printf("名称:%s\t类型1:%s\t类型2:%s\t阵营:%s\tHP:%d\t坐标:%s\n",
+                            物品名称,
+                            类型1,
+                            类型2,
+                            阵营,
+                            HP,
+                            物品坐标);
+                }
             }
-            System.out.printf("名称:%s\t类型1:%s\t类型2:%s\t阵营:%s\tHP:%d\t坐标:%s\n",
-                    物品名称,
-                    类型1,
-                    类型2,
-                    阵营,
-                    HP,
-                    物品坐标);
+            if (类型2 == 物品类型.地面物品) {
+                材料列表.add(物品坐标);
+            }
+
         }
     }
 

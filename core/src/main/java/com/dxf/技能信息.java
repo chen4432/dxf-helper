@@ -3,56 +3,60 @@ package com.dxf;
 
 
 public class 技能信息 {
-
     public enum 技能状态 {正常, 冷却中}
     public enum 技能类型 {攻击, BUFF}
-    private final String KEY;
+
+    private final String 名称;
+    private final String 按键;
     private final int CD;
     private int tick = 0;
-    private 技能状态 state;
-    private 技能类型 type;
+    private final 技能类型 类型;
+    private 技能状态 状态;
 
     public void update() {
         if (tick > 0) {
             tick--;
         } else {
-            state = 技能状态.正常;
+            状态 = 技能状态.正常;
         }
     }
 
     public String 使用技能() {
         tick = CD;
-        state = 技能状态.冷却中;
-        return KEY;
+        状态 = 技能状态.冷却中;
+        return 按键;
     }
 
     public 技能状态 取技能状态() {
-        return state;
+        return 状态;
     }
 
     public String 取技能按键() {
-        return KEY;
+        return 按键;
     }
 
-    public 技能信息(String KEY, int CD, 技能类型 type) {
-        this.KEY = KEY;
+    public 技能信息(String 名称, String 按键, int CD, 技能类型 类型) {
+        this.名称 = 名称;
+        this.按键 = 按键;
         this.CD = CD;
-        this.state = 技能状态.正常;
-        this.type = type;
+        this.状态 = 技能状态.正常;
+        this.类型 = 类型;
     }
 
     public 技能类型 取技能类型() {
-        return type;
+        return 类型;
     }
 
     @Override
     public String toString() {
         return "技能信息{" +
-                "按键='" + KEY + '\'' +
+                "名称='" + 名称 + '\'' +
+                ", 按键='" + 按键 + '\'' +
                 ", CD=" + CD +
                 ", tick=" + tick +
-                ", 状态=" + state +
-                ", 类型=" + type +
+                ", 状态=" + 状态 +
+                ", 类型=" + 类型 +
                 '}';
     }
+
 }
