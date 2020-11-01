@@ -37,6 +37,76 @@ public class AsmTest {
        // System.out.println(s1);
     }
 
+    /**
+     * 缓冲CALL
+     * sub rsp, 100
+     * mov rax, [14ac80e30]; 发包基址
+     * mov edx, 0
+     * mov rax, 14ac80e30; 缓冲CALL
+     * call rax
+     * add rsp, 100
+     *
+     * sub rsp, 100
+     * mov rax, [1]
+     * mov rcx, rax
+     * mov edx, 2
+     * add [rax], al
+     * add [rax], al
+     * mov rax, 3
+     * call rax
+     * add rsp, 100
+     */
+    @Test
+    public void 缓冲CALL_() {
+        String code = "";
+        code += "48 81 EC 00 01 00 00";
+        code += "48 A1 E0 C4 E6 4A 01 00 00 00"; // 发包基址 14AE6C4E0
+        code += "48 8B C8";
+        code += "BA 2A 00 00 00 00 00 00 00"; // 包头
+        code += "48 B8 40 72 25 45 01 00 00 00"; // 缓冲CALL
+        code += "FF D0";
+        code += "48 81 C4 00 01 00 00";
+        String s = GameMaster.disAssemble(code, 0, 1);
+        System.out.println(s);
+    }
+
+    @Test
+    public void 加密CALL() {
+        String code = "";
+        code += "48 81 EC 00 01 00 00";
+        code += "48 A1 01 00 00 00 00 00 00 00";
+        code += "48 8B C8";
+        code += "48 BA 02 00 00 00 00 00 00 00";
+        code += "48 B8 03 00 00 00 00 00 00 00";
+        code += "FF D0";
+        code += "48 81 C4 00 01 00 00";
+        String s = GameMaster.disAssemble(code, 0, 1);
+        System.out.println(s);
+    }
+
+    @Test
+    public void 发包CALL() {
+        String code = "";
+        code += "48 81 EC 00 01 00 00";
+        code += "48 B8 40 AA 35 45 01 00 00 00";
+        code += "FF D0";
+        code += "48 81 C4 00 01 00 00";
+        String s = GameMaster.disAssemble(code, 0, 1);
+        System.out.println(s);
+    }
+
+
+    /**
+     * 缓冲CALL
+     * sub rsp, 100
+     * mov rax, [14ac80e30]; 发包基址
+     * mov edx, 0
+     * mov rax, 14ac80e30; 缓冲CALL
+     * call rax
+     * add rsp, 100
+     *
+     */
+
     @Test
     public void test_2() {
         GameMaster.reg("suifengyunnuo5fe95058910f5da8bb59e01fb48b93d2", "83Y4N");

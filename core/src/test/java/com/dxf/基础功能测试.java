@@ -26,5 +26,19 @@ public class 基础功能测试 {
         System.out.println(基础功能.取当前消耗疲劳值(dxf.getHwnd()));
     }
 
+    @Test
+    public void 组包选角() {
+        基础功能.组包选角(dxf.getHwnd(), 1);
+    }
 
+    @Test
+    public void 组包出图() {
+        基础功能.组包出图(dxf.getHwnd());
+    }
+
+
+    @Test
+    public void 组包反角() {
+        基础功能.组包反角(dxf.getHwnd());
+    }
 }

@@ -2,6 +2,7 @@ package com.dxf;
 
 import com.dxf.core.GameMaster;
 import com.dxf.model.坐标;
+import com.google.common.base.Preconditions;
 
 import java.awt.*;
 
@@ -53,6 +54,118 @@ public class 基础功能 {
         int x = (int) GameMaster.readFloat(hwnd, addr);
         int y = (int) GameMaster.readFloat(hwnd, addr + 4);
         return new 坐标(x, y);
+    }
+
+    /**
+     * /**
+     *      * 缓冲CALL
+     *      * sub rsp, 100
+     *      * mov rax, [14ac80e30]; 发包基址
+     *      * mov edx, 包头
+     *      * mov rax, 14ac80e30; 缓冲CALL
+     *      * call rax
+     *      * add rsp, 100
+     *
+     *      sub rsp, 100
+     *      * mov rax, [1]
+     *      * mov rcx, rax
+     *      * mov edx, 2
+     *      * add [rax], al
+     *      * add [rax], al
+     *      * mov rax, 3
+     *      * call rax
+     *      * add rsp, 100
+     *
+     *      sub rsp, 100
+     *      mov rax, [14ae6c4e0]
+     *      mov rcx, rax
+     *      mov edx, 2a
+     *      add [rax], al
+     *      add [rax], al
+     *      mov rax, 145257240
+     *      call rax
+     *      add rsp, 100
+     *
+     * @param hwnd
+     * @param 包头
+     */
+    public static void 缓冲CALL(int hwnd, int 包头) {
+        GameMaster.asmClear();
+        GameMaster.asmAdd("sub rsp, 100");
+        GameMaster.asmAdd(String.format("mov rax, [%x]", 基址.发包基址));
+        GameMaster.asmAdd("mov rcx, rax");
+        GameMaster.asmAdd(String.format("mov edx, %x", 包头));
+        GameMaster.asmAdd("add [rax], al");
+        GameMaster.asmAdd("add [rax], al");
+        GameMaster.asmAdd(String.format("mov rax, %x", 基址.缓冲CALL));
+        GameMaster.asmAdd("call rax");
+        GameMaster.asmAdd("add rsp, 100");
+        System.out.println(GameMaster.assemble(0, 1));
+        GameMaster.asmCall(hwnd, 1);
+    }
+
+
+    /**
+     * sub rsp, 100
+     * mov rax, [1]; 发包基址
+     * mov rcx, rax
+     * mov rdx, 2; 参数
+     * mov rax, 3; CALL 地址
+     * call rax
+     * add rsp, 100
+     * @param hwnd
+     * @param 参数
+     * @param 长度
+     */
+    public static void 加密CALL(int hwnd, long 参数, int 长度) {
+        long CALL地址 = 0;
+        if (长度 == 1) {
+            CALL地址 = 基址.加密包CALL;
+        } else if (长度 == 2) {
+            CALL地址 = 基址.加密包CALL + 64;
+        } else if (长度 == 4) {
+            CALL地址 = 基址.加密包CALL + 128;
+        } else if (长度 == 8) {
+            CALL地址 = 基址.加密包CALL + 192;
+        }
+        GameMaster.asmClear();
+        GameMaster.asmAdd("sub rsp, 100");
+        GameMaster.asmAdd(String.format("mov rax, [%x]", 基址.发包基址));
+        GameMaster.asmAdd("mov rcx, rax");
+        GameMaster.asmAdd(String.format("mov rdx, %x", 参数));
+        GameMaster.asmAdd(String.format("mov rax, %x", CALL地址));
+        GameMaster.asmAdd("call rax");
+        GameMaster.asmAdd("add rsp, 100");
+        System.out.println(GameMaster.assemble(0, 1));
+        GameMaster.asmCall(hwnd, 1);
+    }
+
+    public static void 发包CALL(int hwnd) {
+        GameMaster.asmClear();
+        GameMaster.asmAdd("sub rsp, 100");
+        GameMaster.asmAdd(String.format("mov rax, %x", 基址.发包CALL));
+        GameMaster.asmAdd("call rax");
+        GameMaster.asmAdd("add rsp, 100");
+        System.out.println(GameMaster.assemble(0, 1));
+        GameMaster.asmCall(hwnd, 1);
+    }
+
+
+    public static void 组包反角(int hwnd) {
+        缓冲CALL(hwnd,7);
+        发包CALL(hwnd);
+    }
+
+    public static void 组包选角(int hwnd, int 位置) {
+        if (位置 < 0) return;
+        缓冲CALL(hwnd, 4);
+        加密CALL(hwnd, 位置, 2);
+        发包CALL(hwnd);
+    }
+
+    public static void 组包出图(int hwnd) {
+        缓冲CALL(hwnd,42);
+        发包CALL(hwnd);
     }
 
 
