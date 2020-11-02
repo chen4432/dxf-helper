@@ -20,7 +20,7 @@ public class 地图信息类 {
     private final 坐标类 BOSS房间;
     private final Map<坐标类, 坐标类> 下一个房间;
 
-    private final int[][] 地图通道;
+    //private final int[][] 地图通道;
 
     public 地图信息类(int 窗口句柄) {
         this.窗口句柄 = 窗口句柄;
@@ -33,7 +33,7 @@ public class 地图信息类 {
         log.info("地图编号：{}", 地图编号); // 0\1\2\3
         地图宽度 = GameMaster.readInt(窗口句柄, 地图数据 + 偏移类.宽高偏移, 地图编号 * 8);
         地图高度 = GameMaster.readInt(窗口句柄, 地图数据 + 偏移类.宽高偏移, 地图编号 * 8 + 4);
-        地图通道 = new int[地图高度][地图宽度];
+        int[][] 地图通道 = new int[地图高度][地图宽度];
         long 通道数据 = GameMaster.readLong(窗口句柄, 地图数据 + 偏移类.数组偏移, 地图编号 * 40 + 8);
         int n = 0;
         for (int i = 0; i < 地图高度; ++i) {
@@ -58,7 +58,7 @@ public class 地图信息类 {
         坐标类 当前房间 = new 坐标类(当前房间X, 当前房间Y);
 
         下一个房间 = new HashMap<>();
-        List<坐标类> 路径 = 生成通关路径(当前房间);
+        List<坐标类> 路径 = 生成通关路径(地图通道, 当前房间);
         if (路径.size() > 1) {
             for (int i = 1; i < 路径.size(); ++i) {
                 下一个房间.put(路径.get(i-1), 路径.get(i));
@@ -70,7 +70,7 @@ public class 地图信息类 {
         return 下一个房间.get(当前房间);
     }
 
-    public List<坐标类> 取当前可通行邻居房间坐标(坐标类 curr) {
+    public List<坐标类> 取当前可通行邻居房间坐标(int[][] 地图通道, 坐标类 curr) {
         List<坐标类> ret = new ArrayList<>();
         if ((地图通道[curr.Y()][curr.X()] & 8) != 0) {
             // 下方有门
@@ -91,7 +91,7 @@ public class 地图信息类 {
         return ret;
     }
 
-    public List<坐标类> 生成通关路径(坐标类 当前房间) {
+    public List<坐标类> 生成通关路径(int[][] 地图通道, 坐标类 当前房间) {
         LinkedList<坐标类> queue = new LinkedList<>();
         boolean[][] visited = new boolean[地图高度][地图宽度];
         Map<坐标类, 坐标类> pred = new HashMap<>();
@@ -108,7 +108,7 @@ public class 地图信息类 {
         queue.add(当前房间);
         while (!queue.isEmpty()) {
             坐标类 u = queue.remove();
-            for (坐标类 房间坐标 : 取当前可通行邻居房间坐标(u)) {
+            for (坐标类 房间坐标 : 取当前可通行邻居房间坐标(地图通道, u)) {
                 if (!visited[房间坐标.Y()][房间坐标.X()]) {
                     visited[房间坐标.Y()][房间坐标.X()] = true;
                     dist.put(房间坐标, dist.get(房间坐标) + 1);
@@ -152,5 +152,18 @@ public class 地图信息类 {
         if (next.Y() > curr.Y()) return 方向枚举.下;
         if (next.Y() < curr.Y()) return 方向枚举.上;
         return 方向枚举.未知;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        地图信息类 地图信息类 = (地图信息类) o;
+        return 窗口句柄 == 地图信息类.窗口句柄 && 地图数据 == 地图信息类.地图数据;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(窗口句柄, 地图数据);
     }
 }

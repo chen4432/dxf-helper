@@ -10,24 +10,21 @@ import com.dxf.constant.基址类;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.*;
 
 
 @Slf4j
 public class 房间信息类 {
 
-    //private final int 窗口句柄;
-    private final long 房间数据;
-    //private final DXF dxf;
     private final int 窗口句柄;
+    private final long 房间数据;
+
     private final CopyOnWriteArrayList<坐标类> 门列表;
     private final CopyOnWriteArrayList<坐标类> 怪物列表;
     private final CopyOnWriteArrayList<坐标类> 材料列表;
 
-    //private final ScheduledExecutorService es;
-
     public 房间信息类(int 窗口句柄) {
-        //this.dxf = dxf;
         this.窗口句柄 = 窗口句柄;
         门列表 = new CopyOnWriteArrayList<>();
         怪物列表 = new CopyOnWriteArrayList<>();
@@ -35,12 +32,9 @@ public class 房间信息类 {
         房间数据 = GameMaster.readLong(窗口句柄, 基址类.人物基址, 偏移类.地图偏移);
         log.info("房间数据：{}", 房间数据);
         update();
-        //es = Executors.newSingleThreadScheduledExecutor();
-        //es.scheduleAtFixedRate(this::update, 10, 100, TimeUnit.MILLISECONDS);
     }
 
     public void update() {
-
         System.out.println("房间数据: " + 房间数据);
         long 首地址 = GameMaster.readLong(窗口句柄, 房间数据 + 偏移类.地图开始2);
         long 尾地址 = GameMaster.readLong(窗口句柄, 房间数据 + 偏移类.地图结束2);
@@ -74,16 +68,6 @@ public class 房间信息类 {
                             阵营,
                             HP,
                             物品坐标);
-                    /*
-                    System.out.printf("名称:%s\t类型1:%s\t类型2:%s\t阵营:%s\tHP:%d\t坐标:%s\n",
-                            物品名称,
-                            类型1,
-                            类型2,
-                            阵营,
-                            HP,
-                            物品坐标);
-                     *
-                     */
                 }
             }
             if (类型2 == 物品类型枚举.地面物品) {
@@ -147,5 +131,16 @@ public class 房间信息类 {
         return 门列表.get(0);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        房间信息类 房间信息类 = (房间信息类) o;
+        return 窗口句柄 == 房间信息类.窗口句柄 && 房间数据 == 房间信息类.房间数据;
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(窗口句柄, 房间数据);
+    }
 }
