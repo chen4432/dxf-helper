@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class 人物角色类 {
 
-    private final DXF dxf;
+    private final int 窗口句柄;
     private final String 名称;
     private final int 等级;
     private final String 职业;
@@ -31,11 +31,11 @@ public class 人物角色类 {
     private Double 移动速度X = 0.48;
     private Double 移动速度Y = 0.17;
 
-    public 人物角色类(DXF dxf) {
-        this.dxf = dxf;
-        名称 = GameMaster.readStringAddr(dxf.get窗口句柄(), GameMaster.readLong(dxf.get窗口句柄(), 基址类.人物名称), 1, 50);
-        等级 = GameMaster.readInt(dxf.get窗口句柄(), 基址类.角色等级);
-        职业 = GameMaster.readStringAddr(dxf.get窗口句柄(), GameMaster.readLong(dxf.get窗口句柄(), 基址类.职业名称), 1, 50);
+    public 人物角色类(int 窗口句柄) {
+        this.窗口句柄 = 窗口句柄;
+        名称 = GameMaster.readStringAddr(窗口句柄, GameMaster.readLong(窗口句柄, 基址类.人物名称), 1, 50);
+        等级 = GameMaster.readInt(窗口句柄, 基址类.角色等级);
+        职业 = GameMaster.readStringAddr(窗口句柄, GameMaster.readLong(窗口句柄, 基址类.职业名称), 1, 50);
         读配置();
         //try {测试移动速度();} catch (Exception e) {e.printStackTrace();}
         线程池.scheduleAtFixedRate(new Task(), 10, 1000, TimeUnit.MILLISECONDS);
@@ -121,8 +121,8 @@ public class 人物角色类 {
     private static final int KEY_RR = 39;
 
     public 坐标类 取人物坐标() {
-        long 人物数据 = GameMaster.readLong(dxf.get窗口句柄(), 基址类.人物基址);
-        return 基础功能类.取人物坐标(dxf.get窗口句柄(), 人物数据);
+        long 人物数据 = GameMaster.readLong(窗口句柄, 基址类.人物基址);
+        return 基础功能类.取人物坐标(窗口句柄, 人物数据);
     }
 
     public void 测试移动速度() throws Exception {
@@ -325,18 +325,18 @@ public class 人物角色类 {
     }
 
     public void 自动刷图() throws Exception {
-        while (基础功能类.取当前消耗疲劳值(dxf.get窗口句柄()) < 184) {
+        while (基础功能类.取当前消耗疲劳值(窗口句柄) < 184) {
             开始刷图();
         }
         开始刷图();
     }
 
     public void 开始刷图() throws Exception {
-        if (基础功能类.取游戏状态(dxf.get窗口句柄()) != 游戏状态枚举.在副本中) return;
-        地图信息类 map = new 地图信息类(dxf.get窗口句柄());
+        if (基础功能类.取游戏状态(窗口句柄) != 游戏状态枚举.在副本中) return;
+        地图信息类 map = new 地图信息类(窗口句柄);
         加BUFF();
         while (true) {
-            房间信息类 room = new 房间信息类(dxf.get窗口句柄());
+            房间信息类 room = new 房间信息类(窗口句柄);
             if (room.判断是否通关()) {
                 log.info("通关成功.");
                 //Thread.sleep(10000); // 等待
@@ -350,16 +350,16 @@ public class 人物角色类 {
                 //    Thread.sleep(300);
                 //}
                 //Thread.sleep(3000);
-                if (基础功能类.取当前消耗疲劳值(dxf.get窗口句柄()) < 180) {
+                if (基础功能类.取当前消耗疲劳值(窗口句柄) < 180) {
                     //GameMaster.keyPressChar("F10");
-                    while (基础功能类.取游戏状态(dxf.get窗口句柄()) == 游戏状态枚举.在副本中 && room.取当前房间坐标().equals(map.取BOSS房间())) {
+                    while (基础功能类.取游戏状态(窗口句柄) == 游戏状态枚举.在副本中 && room.取当前房间坐标().equals(map.取BOSS房间())) {
                         GameMaster.keyPressChar("ESC");
                         Thread.sleep(500);
                         System.out.println("等待清算结束...");
                         GameMaster.keyPressChar("F10");
                         Thread.sleep(500);
                     }
-                    while (基础功能类.取游戏状态(dxf.get窗口句柄()) != 游戏状态枚举.在副本中) {
+                    while (基础功能类.取游戏状态(窗口句柄) != 游戏状态枚举.在副本中) {
                         Thread.sleep(500);
                         System.out.println("正在进入新地图！");
                     }
@@ -379,10 +379,10 @@ public class 人物角色类 {
         boolean succeed = false;
         for (int i = 0; i < 3; ++i) {
             try {
-                val curr = new 房间信息类(dxf.get窗口句柄()).取当前房间坐标();
+                val curr = new 房间信息类(窗口句柄).取当前房间坐标();
                 移动到(door);
                 Thread.sleep(800);
-                val next = new 房间信息类(dxf.get窗口句柄()).取当前房间坐标();
+                val next = new 房间信息类(窗口句柄).取当前房间坐标();
                 if (!curr.equals(next)) {
                     succeed = true;
                     log.info("过门成功，门坐标：{}, 过门方向：{}", door, dir);
@@ -442,6 +442,12 @@ public class 人物角色类 {
 
     public void 刷图控制(刷图状态 state) {
 
+    }
+
+    public int get剩余疲劳值() {
+        int 最大疲劳值 = 基础功能类.解密读取(窗口句柄, 基址类.最大疲劳);
+        int 消耗疲劳值 = 基础功能类.解密读取(窗口句柄, 基址类.当前疲劳);
+        return 最大疲劳值 - 消耗疲劳值;
     }
 
 

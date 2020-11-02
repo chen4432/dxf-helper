@@ -13,7 +13,7 @@ public class 人物角色测试 {
     public void setUp() {
         dxf = new DXF();
         dxf.setUp();
-        player = new 人物角色类(dxf);
+        player = new 人物角色类(dxf.get窗口句柄());
         基础功能类.开启无视地图障碍(dxf.get窗口句柄());
     }
 
