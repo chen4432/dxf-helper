@@ -278,7 +278,9 @@ public class 人物角色类 {
     }
 
     public void BOSS房间清怪(房间信息类 room) {
+        int cnt = 0;
         while (true) {
+            log.info("BOSS房间清怪中...次数：{}", ++cnt);
             room.update();
             List<坐标类> 怪物列表 = room.取怪物列表();
             坐标类 pos = 取人物坐标();
@@ -300,7 +302,9 @@ public class 人物角色类 {
     }
 
     public void 普通房间清怪(房间信息类 room) {
+        int cnt = 0;
         while (true) {
+            log.info("BOSS房间清怪中...次数：{}", ++cnt);
             room.update();
             List<坐标类> 怪物列表 = room.取怪物列表();
             坐标类 pos = 取人物坐标();
