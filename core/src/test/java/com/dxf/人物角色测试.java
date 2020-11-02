@@ -15,12 +15,12 @@ public class 人物角色测试 {
         dxf = new DXF();
         dxf.setUp();
         player = new 人物角色(dxf);
-        基础功能.开启无视地图障碍(dxf.getHwnd());
+        基础功能类.开启无视地图障碍(dxf.getHwnd());
     }
 
     @After
     public void cleanUp() {
-        基础功能.关闭无视地图障碍(dxf.getHwnd());
+        基础功能类.关闭无视地图障碍(dxf.getHwnd());
         dxf.cleanUp();
     }
 
@@ -44,7 +44,7 @@ public class 人物角色测试 {
 
     @Test
     public void 清理房间怪() throws Exception {
-        房间信息 room = new 房间信息(dxf);
+        房间信息类 room = new 房间信息类(dxf);
         player.房间清怪(room);
     }
 

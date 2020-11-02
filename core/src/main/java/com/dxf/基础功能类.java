@@ -1,13 +1,10 @@
 package com.dxf;
 
 import com.dxf.core.GameMaster;
-import com.dxf.model.坐标;
-import com.google.common.base.Preconditions;
-
-import java.awt.*;
+import com.dxf.model.坐标类;
 
 
-public class 基础功能 {
+public class 基础功能类 {
 
     private static int 地图穿透默认值;
     private static int 建筑穿透默认值;
@@ -20,8 +17,8 @@ public class 基础功能 {
         return GameMaster.readInt(hwnd, addr + 4) ^ (d | (d << 16));
     }
 
-    public static 游戏状态 取游戏状态(int hwnd) {
-        return 游戏状态.到游戏状态(GameMaster.readInt(hwnd, 基址.游戏状态));
+    public static 游戏状态枚举 取游戏状态(int hwnd) {
+        return 游戏状态枚举.到游戏状态(GameMaster.readInt(hwnd, 基址.游戏状态));
     }
 
     public static int 取当前消耗疲劳值(int hwnd) {
@@ -42,18 +39,18 @@ public class 基础功能 {
         GameMaster.writeInt(hwnd, addr + addr + 偏移.建筑穿透, 建筑穿透默认值);
     }
 
-    public static 坐标 取物品坐标(int hwnd, long 物品数据) {
+    public static 坐标类 取物品坐标(int hwnd, long 物品数据) {
         long addr = GameMaster.readLong(hwnd, 物品数据 + 312);
         int x = (int) GameMaster.readFloat(hwnd, addr + 32);
         int y = (int) GameMaster.readFloat(hwnd, addr + 36);
-        return new 坐标(x, y);
+        return new 坐标类(x, y);
     }
 
-    public static 坐标 取人物坐标(int hwnd, long 人物数据) {
+    public static 坐标类 取人物坐标(int hwnd, long 人物数据) {
         long addr = GameMaster.readLong(hwnd, 人物数据 + 848);
         int x = (int) GameMaster.readFloat(hwnd, addr);
         int y = (int) GameMaster.readFloat(hwnd, addr + 4);
-        return new 坐标(x, y);
+        return new 坐标类(x, y);
     }
 
     /**

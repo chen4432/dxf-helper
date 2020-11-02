@@ -2,7 +2,7 @@ package com.dxf;
 
 
 
-public class 技能信息 {
+public class 技能信息类 {
     public enum 技能状态 {正常, 冷却中}
     public enum 技能类型 {攻击, BUFF}
 
@@ -35,7 +35,7 @@ public class 技能信息 {
         return 按键;
     }
 
-    public 技能信息(String 名称, String 按键, int CD, 技能类型 类型) {
+    public 技能信息类(String 名称, String 按键, int CD, 技能类型 类型) {
         this.名称 = 名称;
         this.按键 = 按键;
         this.CD = CD;

@@ -1,12 +1,11 @@
 package com.dxf;
 
 import com.dxf.core.GameMaster;
-import com.dxf.model.坐标;
+import com.dxf.model.坐标类;
 import com.dxf.util.DXF;
 import com.dxf.util.刷图状态;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import sun.awt.windows.ThemeReader;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -23,7 +22,7 @@ public class 人物角色 {
     private final int 等级;
     private final String 职业;
 
-    private final CopyOnWriteArrayList<技能信息> 技能栏 = new CopyOnWriteArrayList<技能信息>();
+    private final CopyOnWriteArrayList<技能信息类> 技能栏 = new CopyOnWriteArrayList<技能信息类>();
 
     private final ScheduledExecutorService pool = Executors.newSingleThreadScheduledExecutor();
 
@@ -54,57 +53,57 @@ public class 人物角色 {
 
     public void 读配置() {
         if ("大暗黑天".equals(职业) || "天帝".equals(职业)) {
-            技能栏.add(new 技能信息("波动爆发", "A", 8, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("地裂波动剑", "S", 3, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("鬼斩","D", 6, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("邪光斩","F", 10, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("裂波斩","G", 8, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("鬼印珠","H", 6, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("冰刃波动剑","Q", 7, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("爆炎波动剑","W", 15, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("极冰裂波剑","E", 20, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("极炎裂波剑","R", 35, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("天雷降昏杵","T", 45, 技能信息.技能类型.BUFF));
-            技能栏.add(new 技能信息("雷神降世","Y", 140, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("杀意波动","ctrl", 5, 技能信息.技能类型.BUFF));
-            技能栏.add(new 技能信息("波动刻印", "alt", 20, 技能信息.技能类型.BUFF));
-            技能栏.add(new 技能信息("远古记忆", "space", 20, 技能信息.技能类型.BUFF));
+            技能栏.add(new 技能信息类("波动爆发", "A", 8, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("地裂波动剑", "S", 3, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("鬼斩","D", 6, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("邪光斩","F", 10, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("裂波斩","G", 8, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("鬼印珠","H", 6, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("冰刃波动剑","Q", 7, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("爆炎波动剑","W", 15, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("极冰裂波剑","E", 20, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("极炎裂波剑","R", 35, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("天雷降昏杵","T", 45, 技能信息类.技能类型.BUFF));
+            技能栏.add(new 技能信息类("雷神降世","Y", 140, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("杀意波动","ctrl", 5, 技能信息类.技能类型.BUFF));
+            技能栏.add(new 技能信息类("波动刻印", "alt", 20, 技能信息类.技能类型.BUFF));
+            技能栏.add(new 技能信息类("远古记忆", "space", 20, 技能信息类.技能类型.BUFF));
             移动速度X = 0.48;
             移动速度Y = 0.17;
         }
         else if ("重霄·弹药专家".equals(职业)) {
-            技能栏.add(new 技能信息("G-18C冰冻手雷", "A", 4, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("G-35L感电手雷", "S", 3, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("镭射狙击","D", 41, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("G-16重力手雷","F", 18, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("凝固汽油弹","G", 18, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("G-14手雷","H", 2, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("重火力支援","Q", 40, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("轻火力速射","W", 27, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("皇鹰特战队","E", 54, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("黑玫瑰特种部队","R", 145, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("超新星核爆","T", 180, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("赤魂风暴狙击","Y", 290, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息类("G-18C冰冻手雷", "A", 4, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("G-35L感电手雷", "S", 3, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("镭射狙击","D", 41, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("G-16重力手雷","F", 18, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("凝固汽油弹","G", 18, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("G-14手雷","H", 2, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("重火力支援","Q", 40, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("轻火力速射","W", 27, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("皇鹰特战队","E", 54, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("黑玫瑰特种部队","R", 145, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("超新星核爆","T", 180, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("赤魂风暴狙击","Y", 290, 技能信息类.技能类型.攻击));
             //技能栏.add(new 技能信息("杀意波动","ctrl", 5, 技能信息.技能类型.BUFF));
-            技能栏.add(new 技能信息("爆裂弹", "ctrl", 5, 技能信息.技能类型.BUFF));
-            技能栏.add(new 技能信息("远古记忆", "space", 20, 技能信息.技能类型.BUFF));
+            技能栏.add(new 技能信息类("爆裂弹", "ctrl", 5, 技能信息类.技能类型.BUFF));
+            技能栏.add(new 技能信息类("远古记忆", "space", 20, 技能信息类.技能类型.BUFF));
             //技能栏.add(new 技能信息("普通攻击", "X", 0, 技能信息.技能类型.攻击));
             移动速度X = 0.6;
             移动速度Y = 0.28;
         } else {
             // 通用
-            技能栏.add(new 技能信息("A", "A", 10, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("S", "S", 10, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("D","D", 10, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("F","F", 20, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("G","G", 20, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("H","H", 20, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("Q","Q", 40, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("W","W", 40, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("E","E", 40, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("R","R", 40, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("T","T", 40, 技能信息.技能类型.攻击));
-            技能栏.add(new 技能信息("Y","Y", 40, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息类("A", "A", 10, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("S", "S", 10, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("D","D", 10, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("F","F", 20, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("G","G", 20, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("H","H", 20, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("Q","Q", 40, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("W","W", 40, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("E","E", 40, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("R","R", 40, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("T","T", 40, 技能信息类.技能类型.攻击));
+            技能栏.add(new 技能信息类("Y","Y", 40, 技能信息类.技能类型.攻击));
             //技能栏.add(new 技能信息("杀意波动","ctrl", 5, 技能信息.技能类型.BUFF));
             //技能栏.add(new 技能信息("爆裂弹", "ctrl", 5, 技能信息.技能类型.BUFF));
             //技能栏.add(new 技能信息("远古记忆", "space", 20, 技能信息.技能类型.BUFF));
@@ -119,17 +118,17 @@ public class 人物角色 {
     private static final int KEY_LL = 37;
     private static final int KEY_RR = 39;
 
-    public 坐标 取人物坐标() {
+    public 坐标类 取人物坐标() {
         long addr = GameMaster.readLong(dxf.getHwnd(), 基址.人物基址);
-        return 基础功能.取人物坐标(dxf.getHwnd(), addr);
+        return 基础功能类.取人物坐标(dxf.getHwnd(), addr);
     }
 
     public void 测试移动速度() throws Exception {
-        移动到(new 坐标(0,0));
+        移动到(new 坐标类(0,0));
         Thread.sleep(1000);
-        调整方向(方向.右);
+        调整方向(方向枚举.右);
         Thread.sleep(1000);
-        坐标 起点 = 取人物坐标();
+        坐标类 起点 = 取人物坐标();
         GameMaster.keyPress(KEY_RR);
         try {
             Thread.sleep(30);
@@ -151,7 +150,7 @@ public class 人物角色 {
         }
         GameMaster.keyUp(KEY_RR);
         GameMaster.keyUp(KEY_DN);
-        坐标 终点 = 取人物坐标();
+        坐标类 终点 = 取人物坐标();
         int xDelta = 终点.getX() - 起点.getX();
         int yDelta = 终点.getY() - 起点.getY();
         移动速度X = xDelta * 1.0 / duration;
@@ -159,8 +158,8 @@ public class 人物角色 {
         System.out.printf("xSpeed: %f\tySpeed: %f\n", 移动速度X, 移动速度Y);
     }
 
-    public void 移动到(坐标 target) throws Exception {
-        坐标 curr = 取人物坐标();
+    public void 移动到(坐标类 target) throws Exception {
+        坐标类 curr = 取人物坐标();
         String dirLR = (target.getX() > curr.getX()) ? "right" : "left";
         String dirUD = (target.getY() > curr.getY()) ? "down" : "up";
         int xTime = 0, yTime = 0;
@@ -210,10 +209,10 @@ public class 人物角色 {
         GameMaster.keyPress(76);
     }
 
-    public void 调整方向(方向 dir) {
+    public void 调整方向(方向枚举 dir) {
         try {
-            if (dir == 方向.右) GameMaster.keyPressChar("right");
-            if (dir == 方向.左) GameMaster.keyPressChar("left");
+            if (dir == 方向枚举.右) GameMaster.keyPressChar("right");
+            if (dir == 方向枚举.左) GameMaster.keyPressChar("left");
             Thread.sleep(100);
         } catch (Exception e) {
             e.printStackTrace();
@@ -222,9 +221,9 @@ public class 人物角色 {
 
     public void 释放技能(int cnt) throws Exception {
         GameMaster.keyDownChar("X");
-        for (技能信息 技能 : 技能栏) {
+        for (技能信息类 技能 : 技能栏) {
             System.out.println(技能);
-            if (技能.取技能状态() == 技能信息.技能状态.正常 && 技能.取技能类型() == 技能信息.技能类型.攻击) {
+            if (技能.取技能状态() == 技能信息类.技能状态.正常 && 技能.取技能类型() == 技能信息类.技能类型.攻击) {
                 GameMaster.keyPressChar(技能.使用技能());
                 System.out.println("释放技能： " + 技能.取技能按键());
                 Thread.sleep(1000);
@@ -237,27 +236,27 @@ public class 人物角色 {
     class Task implements Runnable {
         @Override
         public void run() {
-            for (技能信息 技能 : 技能栏) {
+            for (技能信息类 技能 : 技能栏) {
                 技能.update();
             }
         }
     }
 
-    public void 房间清怪(房间信息 room) throws Exception {
+    public void 房间清怪(房间信息类 room) throws Exception {
         while (true) {
             room.update();
-            List<坐标> 怪物列表 = room.取怪物列表();
-            坐标 pos = 取人物坐标();
+            List<坐标类> 怪物列表 = room.取怪物列表();
+            坐标类 pos = 取人物坐标();
             if (怪物列表.isEmpty()) {
                 log.info("房间怪清理完毕！");
                 break;
             } else {
                 怪物列表.sort((a, b) -> {
-                    if (坐标.计算距离(pos, a) == 坐标.计算距离(pos, b)) return 0;
-                    return 坐标.计算距离(pos, a) > 坐标.计算距离(pos, b)? 1 : -1;
+                    if (坐标类.计算距离(pos, a) == 坐标类.计算距离(pos, b)) return 0;
+                    return 坐标类.计算距离(pos, a) > 坐标类.计算距离(pos, b)? 1 : -1;
                 });
             }
-            坐标 最近的怪物坐标 = 怪物列表.get(0);
+            坐标类 最近的怪物坐标 = 怪物列表.get(0);
             log.info("最近的怪物坐标： {}", 最近的怪物坐标);
             移动到(最近的怪物坐标);
             释放技能(1);
@@ -298,18 +297,18 @@ public class 人物角色 {
     }
 
     public void 自动刷图() throws Exception {
-        while (基础功能.取当前消耗疲劳值(dxf.getHwnd()) < 184) {
+        while (基础功能类.取当前消耗疲劳值(dxf.getHwnd()) < 184) {
             开始刷图();
         }
         开始刷图();
     }
 
     public void 开始刷图() throws Exception {
-        if (基础功能.取游戏状态(dxf.getHwnd()) != 游戏状态.在副本中) return;
-        地图信息 map = new 地图信息(dxf);
+        if (基础功能类.取游戏状态(dxf.getHwnd()) != 游戏状态枚举.在副本中) return;
+        地图信息类 map = new 地图信息类(dxf);
         加BUFF();
         while (true) {
-            房间信息 room = new 房间信息(dxf);
+            房间信息类 room = new 房间信息类(dxf);
             if (room.判断是否通关()) {
                 log.info("通关成功.");
                 //Thread.sleep(10000); // 等待
@@ -323,16 +322,16 @@ public class 人物角色 {
                 //    Thread.sleep(300);
                 //}
                 //Thread.sleep(3000);
-                if (基础功能.取当前消耗疲劳值(dxf.getHwnd()) < 180) {
+                if (基础功能类.取当前消耗疲劳值(dxf.getHwnd()) < 180) {
                     //GameMaster.keyPressChar("F10");
-                    while (基础功能.取游戏状态(dxf.getHwnd()) == 游戏状态.在副本中 && room.取当前房间坐标().equals(map.取BOSS房间())) {
+                    while (基础功能类.取游戏状态(dxf.getHwnd()) == 游戏状态枚举.在副本中 && room.取当前房间坐标().equals(map.取BOSS房间())) {
                         GameMaster.keyPressChar("ESC");
                         Thread.sleep(500);
                         System.out.println("等待清算结束...");
                         GameMaster.keyPressChar("F10");
                         Thread.sleep(500);
                     }
-                    while (基础功能.取游戏状态(dxf.getHwnd()) != 游戏状态.在副本中) {
+                    while (基础功能类.取游戏状态(dxf.getHwnd()) != 游戏状态枚举.在副本中) {
                         Thread.sleep(500);
                         System.out.println("正在进入新地图！");
                     }
@@ -342,20 +341,20 @@ public class 人物角色 {
             房间清怪(room);
             捡物(room);
             val dir = map.取过图方向(room.取当前房间坐标());
-            if (dir == 方向.未知) continue;
+            if (dir == 方向枚举.未知) continue;
             val door = room.取过图门坐标(dir);
             精确过门(door, dir);
         }
     }
 
-    public void 精确过门(坐标 door, 方向 dir) {
+    public void 精确过门(坐标类 door, 方向枚举 dir) {
         boolean succeed = false;
         for (int i = 0; i < 3; ++i) {
             try {
-                val curr = new 房间信息(dxf).取当前房间坐标();
+                val curr = new 房间信息类(dxf).取当前房间坐标();
                 移动到(door);
                 Thread.sleep(800);
-                val next = new 房间信息(dxf).取当前房间坐标();
+                val next = new 房间信息类(dxf).取当前房间坐标();
                 if (!curr.equals(next)) {
                     succeed = true;
                     log.info("过门成功，门坐标：{}, 过门方向：{}", door, dir);
@@ -389,7 +388,7 @@ public class 人物角色 {
         }
     }
 
-    public void 捡物(房间信息 room) {
+    public void 捡物(房间信息类 room) {
         /*
         room.update();
         for (坐标 pos : room.取材料列表()) {

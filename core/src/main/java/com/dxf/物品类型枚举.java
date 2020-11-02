@@ -1,6 +1,6 @@
 package com.dxf;
 
-public enum 物品类型 {
+public enum 物品类型枚举 {
     未知(-1),
     营火(4),
     建筑(33),
@@ -12,7 +12,7 @@ public enum 物品类型 {
 
     private int code;
 
-    物品类型(int code) {
+    物品类型枚举(int code) {
         this.code = code;
     }
 
@@ -20,9 +20,9 @@ public enum 物品类型 {
         return code;
     }
 
-    public static 物品类型 到物品类型(int code) {
-        物品类型[] 物品类型数组 = 物品类型.values();
-        for (物品类型 物品类型 : 物品类型数组) {
+    public static 物品类型枚举 到物品类型(int code) {
+        物品类型枚举[] 物品类型数组 = 物品类型枚举.values();
+        for (物品类型枚举 物品类型 : 物品类型数组) {
             if (物品类型.getCode() == code) {
                 return 物品类型;
             }

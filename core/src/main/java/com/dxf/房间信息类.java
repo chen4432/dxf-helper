@@ -1,7 +1,7 @@
 package com.dxf;
 
 import com.dxf.core.GameMaster;
-import com.dxf.model.坐标;
+import com.dxf.model.坐标类;
 import com.dxf.util.DXF;
 import lombok.extern.slf4j.Slf4j;
 
@@ -10,16 +10,16 @@ import java.util.concurrent.*;
 
 
 @Slf4j
-public class 房间信息 {
+public class 房间信息类 {
 
     private final DXF dxf;
-    private final CopyOnWriteArrayList<坐标> 门列表;
-    private final CopyOnWriteArrayList<坐标> 怪物列表;
-    private final CopyOnWriteArrayList<坐标> 材料列表;
+    private final CopyOnWriteArrayList<坐标类> 门列表;
+    private final CopyOnWriteArrayList<坐标类> 怪物列表;
+    private final CopyOnWriteArrayList<坐标类> 材料列表;
 
     //private final ScheduledExecutorService es;
 
-    public 房间信息(DXF dxf) {
+    public 房间信息类(DXF dxf) {
         this.dxf = dxf;
         门列表 = new CopyOnWriteArrayList<>();
         怪物列表 = new CopyOnWriteArrayList<>();
@@ -41,12 +41,12 @@ public class 房间信息 {
         for (long addr = 首地址; addr < 尾地址; addr += 8) {
             long 物品数据 = GameMaster.readLong(dxf.getHwnd(), addr);
             String 物品名称 = GameMaster.readStringAddr(dxf.getHwnd(), GameMaster.readLong(dxf.getHwnd(), 物品数据 + 偏移.名称偏移), 1, 50);
-            物品类型 类型1 = 物品类型.到物品类型(GameMaster.readInt(dxf.getHwnd(), 物品数据 + 偏移.类型偏移));
-            物品类型 类型2 = 物品类型.到物品类型(GameMaster.readInt(dxf.getHwnd(), 物品数据 + 偏移.类型偏移 + 4));
-            if (类型1 == 物品类型.人形 || 类型2 == 物品类型.人形) continue;
-            坐标 物品坐标 = 基础功能.取物品坐标(dxf.getHwnd(), 物品数据);
-            物品阵营 阵营 = 物品阵营.到物品阵营(GameMaster.readInt(dxf.getHwnd(), 物品数据 + 偏移.阵营偏移));
-            if (类型2 == 物品类型.门) {
+            物品类型枚举 类型1 = 物品类型枚举.到物品类型(GameMaster.readInt(dxf.getHwnd(), 物品数据 + 偏移.类型偏移));
+            物品类型枚举 类型2 = 物品类型枚举.到物品类型(GameMaster.readInt(dxf.getHwnd(), 物品数据 + 偏移.类型偏移 + 4));
+            if (类型1 == 物品类型枚举.人形 || 类型2 == 物品类型枚举.人形) continue;
+            坐标类 物品坐标 = 基础功能类.取物品坐标(dxf.getHwnd(), 物品数据);
+            物品阵营枚举 阵营 = 物品阵营枚举.到物品阵营(GameMaster.readInt(dxf.getHwnd(), 物品数据 + 偏移.阵营偏移));
+            if (类型2 == 物品类型枚举.门) {
                 int state = GameMaster.readInt(dxf.getHwnd(), 物品数据 + 3392);
                 if (state == 0 || state == 1) {
                     门列表.add(物品坐标);
@@ -54,7 +54,7 @@ public class 房间信息 {
                 }
             }
             int HP = 0;
-            if (类型2 == 物品类型.怪物) {
+            if (类型2 == 物品类型枚举.怪物) {
                 HP = GameMaster.readInt(dxf.getHwnd(), 物品数据 + 偏移.怪物血量);
                 if (HP > 0) {
                     怪物列表.add(物品坐标);
@@ -77,17 +77,17 @@ public class 房间信息 {
                      */
                 }
             }
-            if (类型2 == 物品类型.地面物品) {
+            if (类型2 == 物品类型枚举.地面物品) {
                 材料列表.add(物品坐标);
             }
         }
     }
 
-    public 坐标 取当前房间坐标() {
+    public 坐标类 取当前房间坐标() {
         long 地图数据 = GameMaster.readLong(dxf.getHwnd(), 基址.房间编号, 偏移.时间基址, 偏移.门型偏移);
         int startRoomX = GameMaster.readInt(dxf.getHwnd(), 地图数据 + 偏移.当前房间X);
         int startRoomY = GameMaster.readInt(dxf.getHwnd(), 地图数据 + 偏移.当前房间Y);
-        return new 坐标((int)startRoomX, (int)startRoomY);
+        return new 坐标类((int)startRoomX, (int)startRoomY);
     }
 
     public boolean 判断是否通关() {
@@ -96,19 +96,19 @@ public class 房间信息 {
         return val == 2 || val == 0;
     }
 
-    public List<坐标> 取怪物列表() {
+    public List<坐标类> 取怪物列表() {
         return 怪物列表;
     }
 
-    public List<坐标> 取材料列表() {
+    public List<坐标类> 取材料列表() {
         return 材料列表;
     }
 
-    public List<坐标> 取门列表() {
+    public List<坐标类> 取门列表() {
         return 门列表;
     }
 
-    public 坐标 取过图门坐标(方向 dir) {
+    public 坐标类 取过图门坐标(方向枚举 dir) {
         switch (dir) {
             case 上:
                 门列表.sort((a, b) -> {
