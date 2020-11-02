@@ -1,10 +1,12 @@
-package com.dxf;
+package com.dxf.component;
 
 import com.dxf.core.GameMaster;
 import com.dxf.model.坐标类;
 import com.dxf.model.方向枚举;
 import com.dxf.model.物品类型枚举;
 import com.dxf.model.物品阵营枚举;
+import com.dxf.constant.偏移类;
+import com.dxf.constant.基址类;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;

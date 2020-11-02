@@ -1,5 +1,7 @@
-package com.dxf;
+package com.dxf.component;
 
+import com.dxf.constant.偏移类;
+import com.dxf.constant.基址类;
 import com.dxf.core.GameMaster;
 import com.dxf.model.坐标类;
 import com.dxf.model.游戏状态枚举;

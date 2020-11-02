@@ -1,4 +1,4 @@
-package com.dxf;
+package com.dxf.constant;
 
 public class 偏移类 {
 

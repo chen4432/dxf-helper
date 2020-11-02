@@ -1,4 +1,4 @@
-package com.dxf;
+package com.dxf.component;
 
 
 import com.dxf.core.GameMaster;

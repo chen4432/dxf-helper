@@ -1,5 +1,7 @@
 package com.dxf;
 
+import com.dxf.component.技能信息类;
+
 import java.util.List;
 
 public class 配置项 {

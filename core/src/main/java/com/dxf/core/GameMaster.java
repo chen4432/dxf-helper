@@ -1,6 +1,6 @@
 package com.dxf.core;
 
-import com.dxf.基础功能类;
+import com.dxf.component.基础功能类;
 import com.google.common.base.Preconditions;
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Dispatch;

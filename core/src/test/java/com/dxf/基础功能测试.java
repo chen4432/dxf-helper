@@ -1,5 +1,6 @@
 package com.dxf;
 
+import com.dxf.component.基础功能类;
 import org.junit.Before;
 import org.junit.Test;
 

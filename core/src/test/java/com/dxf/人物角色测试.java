@@ -1,5 +1,8 @@
 package com.dxf;
 
+import com.dxf.component.人物角色类;
+import com.dxf.component.基础功能类;
+import com.dxf.component.房间信息类;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

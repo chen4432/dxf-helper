@@ -1,4 +1,4 @@
-package com.dxf;
+package com.dxf.constant;
 
 public class 基址类 {
     public static final long 人物基址 = 5551272976L;

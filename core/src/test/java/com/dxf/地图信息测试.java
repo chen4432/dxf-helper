@@ -1,5 +1,6 @@
 package com.dxf;
 
+import com.dxf.component.地图信息类;
 import com.dxf.model.坐标类;
 import org.junit.Before;
 import org.junit.Test;
