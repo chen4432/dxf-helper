@@ -54,6 +54,10 @@ public class 基础功能类 {
         return new 坐标类(x, y);
     }
 
+    public static void 延时(int 延时时间) {
+        try {Thread.sleep(延时时间);} catch (Exception e) {e.printStackTrace();}
+    }
+
     /**
      * 消耗品CLL
      * @param 物品代码 消耗品代码

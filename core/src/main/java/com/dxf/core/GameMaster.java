@@ -1,11 +1,13 @@
 package com.dxf.core;
 
+import com.dxf.基础功能类;
 import com.google.common.base.Preconditions;
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Dispatch;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 
+import java.util.List;
 
 
 public class GameMaster {
@@ -332,6 +334,21 @@ public class GameMaster {
 
     public static int keyPressChar(String keyStr) {
         return Dispatch.call(DM, "KeyPressChar", keyStr).getInt();
+    }
+
+    /**
+     * 按照序列依次Press按键
+     * @param keyStrList 按键序列
+     * @param delay 延迟时间
+     * @return
+     */
+    public static void keyPressCharList(List<String> keyStrList, int delay) {
+        if (keyStrList.isEmpty()) return;
+        keyPressChar(keyStrList.get(0));
+        for (int i = 1; i < keyStrList.size(); ++i) {
+            基础功能类.延时(delay);
+            keyPressChar(keyStrList.get(i));
+        }
     }
 
     public static int keyPressStr(String keyStr, int delay) {
