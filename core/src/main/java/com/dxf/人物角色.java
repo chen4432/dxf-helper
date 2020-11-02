@@ -6,6 +6,7 @@ import com.dxf.util.DXF;
 import com.dxf.util.刷图状态;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import sun.awt.windows.ThemeReader;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -70,6 +71,46 @@ public class 人物角色 {
             技能栏.add(new 技能信息("远古记忆", "space", 20, 技能信息.技能类型.BUFF));
             移动速度X = 0.48;
             移动速度Y = 0.17;
+        }
+        else if ("重霄·弹药专家".equals(职业)) {
+            技能栏.add(new 技能信息("G-18C冰冻手雷", "A", 4, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("G-35L感电手雷", "S", 3, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("镭射狙击","D", 41, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("G-16重力手雷","F", 18, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("凝固汽油弹","G", 18, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("G-14手雷","H", 2, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("重火力支援","Q", 40, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("轻火力速射","W", 27, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("皇鹰特战队","E", 54, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("黑玫瑰特种部队","R", 145, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("超新星核爆","T", 180, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("赤魂风暴狙击","Y", 290, 技能信息.技能类型.攻击));
+            //技能栏.add(new 技能信息("杀意波动","ctrl", 5, 技能信息.技能类型.BUFF));
+            技能栏.add(new 技能信息("爆裂弹", "ctrl", 5, 技能信息.技能类型.BUFF));
+            技能栏.add(new 技能信息("远古记忆", "space", 20, 技能信息.技能类型.BUFF));
+            //技能栏.add(new 技能信息("普通攻击", "X", 0, 技能信息.技能类型.攻击));
+            移动速度X = 0.6;
+            移动速度Y = 0.28;
+        } else {
+            // 通用
+            技能栏.add(new 技能信息("A", "A", 10, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("S", "S", 10, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("D","D", 10, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("F","F", 20, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("G","G", 20, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("H","H", 20, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("Q","Q", 40, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("W","W", 40, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("E","E", 40, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("R","R", 40, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("T","T", 40, 技能信息.技能类型.攻击));
+            技能栏.add(new 技能信息("Y","Y", 40, 技能信息.技能类型.攻击));
+            //技能栏.add(new 技能信息("杀意波动","ctrl", 5, 技能信息.技能类型.BUFF));
+            //技能栏.add(new 技能信息("爆裂弹", "ctrl", 5, 技能信息.技能类型.BUFF));
+            //技能栏.add(new 技能信息("远古记忆", "space", 20, 技能信息.技能类型.BUFF));
+            //技能栏.add(new 技能信息("普通攻击", "X", 0, 技能信息.技能类型.攻击));
+            移动速度X = 0.58;
+            移动速度Y = 0.21;
         }
     }
 
@@ -180,15 +221,17 @@ public class 人物角色 {
     }
 
     public void 释放技能(int cnt) throws Exception {
+        GameMaster.keyDownChar("X");
         for (技能信息 技能 : 技能栏) {
             System.out.println(技能);
             if (技能.取技能状态() == 技能信息.技能状态.正常 && 技能.取技能类型() == 技能信息.技能类型.攻击) {
                 GameMaster.keyPressChar(技能.使用技能());
                 System.out.println("释放技能： " + 技能.取技能按键());
-                Thread.sleep(500);
+                Thread.sleep(1000);
                 if (--cnt == 0) break;
             }
         }
+        GameMaster.keyUpChar("X");
     }
 
     class Task implements Runnable {
@@ -224,18 +267,41 @@ public class 人物角色 {
 
     public void 加BUFF() throws Exception {
         log.info("加BUFF");
+        /*
         for (技能信息 技能 : 技能栏) {
             if (技能.取技能状态() == 技能信息.技能状态.正常 && 技能.取技能类型() == 技能信息.技能类型.BUFF) {
                 GameMaster.keyPressChar(技能.使用技能());
                 Thread.sleep(1000);
             }
         }
+         */
+        GameMaster.keyPressChar("right");
+        Thread.sleep(200);
+        GameMaster.keyPressChar("right");
+        Thread.sleep(200);
+        GameMaster.keyPressChar("space");
+        Thread.sleep(200);
+
+        GameMaster.keyPressChar("up");
+        Thread.sleep(200);
+        GameMaster.keyPressChar("up");
+        Thread.sleep(200);
+        GameMaster.keyPressChar("space");
+        Thread.sleep(200);
+
+        GameMaster.keyPressChar("up");
+        Thread.sleep(200);
+        GameMaster.keyPressChar("down");
+        Thread.sleep(200);
+        GameMaster.keyPressChar("space");
+        Thread.sleep(200);
     }
 
     public void 自动刷图() throws Exception {
-        while (基础功能.取当前消耗疲劳值(dxf.getHwnd()) < 180) {
+        while (基础功能.取当前消耗疲劳值(dxf.getHwnd()) < 184) {
             开始刷图();
         }
+        开始刷图();
     }
 
     public void 开始刷图() throws Exception {
