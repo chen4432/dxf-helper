@@ -24,10 +24,10 @@ public class 地图信息类 {
         this.窗口句柄 = 窗口句柄;
         地图数据 = GameMaster.readLong(窗口句柄, 基址类.房间编号, 偏移类.时间基址, 偏移类.门型偏移);
         log.info("地图数据：{}", 地图数据);
-        int BOSS房间X = 基础功能类.解密(窗口句柄, 地图数据 + 偏移类.BOSS房间X);
-        int BOSS房间Y = 基础功能类.解密(窗口句柄, 地图数据 + 偏移类.BOSS房间Y);
+        int BOSS房间X = 基础功能类.解密读取(窗口句柄, 地图数据 + 偏移类.BOSS房间X);
+        int BOSS房间Y = 基础功能类.解密读取(窗口句柄, 地图数据 + 偏移类.BOSS房间Y);
         BOSS房间 = new 坐标类(BOSS房间X, BOSS房间Y);
-        int 地图编号 = 基础功能类.解密(窗口句柄, 地图数据 + 偏移类.地图编码);
+        int 地图编号 = 基础功能类.解密读取(窗口句柄, 地图数据 + 偏移类.地图编码);
         log.info("地图编号：{}", 地图编号); // 0\1\2\3
         地图宽度 = GameMaster.readInt(窗口句柄, 地图数据 + 偏移类.宽高偏移, 地图编号 * 8);
         地图高度 = GameMaster.readInt(窗口句柄, 地图数据 + 偏移类.宽高偏移, 地图编号 * 8 + 4);
@@ -56,7 +56,7 @@ public class 地图信息类 {
         坐标类 当前房间 = new 坐标类(当前房间X, 当前房间Y);
 
         下一个房间 = new HashMap<>();
-        List<坐标类> 路径 = 生成路径(当前房间);
+        List<坐标类> 路径 = 生成通关路径(当前房间);
         if (路径.size() > 1) {
             for (int i = 1; i < 路径.size(); ++i) {
                 下一个房间.put(路径.get(i-1), 路径.get(i));
@@ -89,7 +89,7 @@ public class 地图信息类 {
         return ret;
     }
 
-    public List<坐标类> 生成路径(坐标类 当前房间) {
+    public List<坐标类> 生成通关路径(坐标类 当前房间) {
         LinkedList<坐标类> queue = new LinkedList<>();
         boolean[][] visited = new boolean[地图高度][地图宽度];
         Map<坐标类, 坐标类> pred = new HashMap<>();
