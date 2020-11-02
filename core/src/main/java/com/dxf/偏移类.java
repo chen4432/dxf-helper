@@ -1,6 +1,6 @@
 package com.dxf;
 
-public class 偏移 {
+public class 偏移类 {
 
     public static final int 时间基址 = 2138192;
     public static final int 当前耐久 = 5872;

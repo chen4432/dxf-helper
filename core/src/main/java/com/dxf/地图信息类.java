@@ -21,17 +21,17 @@ public class 地图信息类 {
 
     public 地图信息类(int 窗口句柄) {
         this.窗口句柄 = 窗口句柄;
-        地图数据 = GameMaster.readLong(窗口句柄, 基址.房间编号, 偏移.时间基址, 偏移.门型偏移);
+        地图数据 = GameMaster.readLong(窗口句柄, 基址类.房间编号, 偏移类.时间基址, 偏移类.门型偏移);
         log.info("地图数据：{}", 地图数据);
-        int BOSS房间X = 基础功能类.解密(窗口句柄, 地图数据 + 偏移.BOSS房间X);
-        int BOSS房间Y = 基础功能类.解密(窗口句柄, 地图数据 + 偏移.BOSS房间Y);
+        int BOSS房间X = 基础功能类.解密(窗口句柄, 地图数据 + 偏移类.BOSS房间X);
+        int BOSS房间Y = 基础功能类.解密(窗口句柄, 地图数据 + 偏移类.BOSS房间Y);
         BOSS房间 = new 坐标类(BOSS房间X, BOSS房间Y);
-        int 地图编号 = 基础功能类.解密(窗口句柄, 地图数据 + 偏移.地图编码);
+        int 地图编号 = 基础功能类.解密(窗口句柄, 地图数据 + 偏移类.地图编码);
         log.info("地图编号：{}", 地图编号); // 0\1\2\3
-        地图宽度 = GameMaster.readInt(窗口句柄, 地图数据 + 偏移.宽高偏移, 地图编号 * 8);
-        地图高度 = GameMaster.readInt(窗口句柄, 地图数据 + 偏移.宽高偏移, 地图编号 * 8 + 4);
+        地图宽度 = GameMaster.readInt(窗口句柄, 地图数据 + 偏移类.宽高偏移, 地图编号 * 8);
+        地图高度 = GameMaster.readInt(窗口句柄, 地图数据 + 偏移类.宽高偏移, 地图编号 * 8 + 4);
         地图通道 = new int[地图高度][地图宽度];
-        long 通道数据 = GameMaster.readLong(窗口句柄, 地图数据 + 偏移.数组偏移, 地图编号 * 40 + 8);
+        long 通道数据 = GameMaster.readLong(窗口句柄, 地图数据 + 偏移类.数组偏移, 地图编号 * 40 + 8);
         int n = 0;
         for (int i = 0; i < 地图高度; ++i) {
             for (int j = 0; j < 地图宽度; ++j) {
@@ -50,8 +50,8 @@ public class 地图信息类 {
             System.out.println();
         }
         */
-        int 当前房间X = GameMaster.readInt(窗口句柄, 地图数据 + 偏移.当前房间X);
-        int 当前房间Y = GameMaster.readInt(窗口句柄, 地图数据 + 偏移.当前房间Y);
+        int 当前房间X = GameMaster.readInt(窗口句柄, 地图数据 + 偏移类.当前房间X);
+        int 当前房间Y = GameMaster.readInt(窗口句柄, 地图数据 + 偏移类.当前房间Y);
         坐标类 当前房间 = new 坐标类(当前房间X, 当前房间Y);
 
         下一个房间 = new HashMap<>();

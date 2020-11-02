@@ -31,9 +31,9 @@ public class 人物角色 {
 
     public 人物角色(DXF dxf) {
         this.dxf = dxf;
-        名称 = GameMaster.readStringAddr(dxf.get窗口句柄(), GameMaster.readLong(dxf.get窗口句柄(), 基址.人物名称), 1, 50);
-        等级 = GameMaster.readInt(dxf.get窗口句柄(), 基址.角色等级);
-        职业 = GameMaster.readStringAddr(dxf.get窗口句柄(), GameMaster.readLong(dxf.get窗口句柄(), 基址.职业名称), 1, 50);
+        名称 = GameMaster.readStringAddr(dxf.get窗口句柄(), GameMaster.readLong(dxf.get窗口句柄(), 基址类.人物名称), 1, 50);
+        等级 = GameMaster.readInt(dxf.get窗口句柄(), 基址类.角色等级);
+        职业 = GameMaster.readStringAddr(dxf.get窗口句柄(), GameMaster.readLong(dxf.get窗口句柄(), 基址类.职业名称), 1, 50);
         读配置();
         //try {测试移动速度();} catch (Exception e) {e.printStackTrace();}
         线程池.scheduleAtFixedRate(new Task(), 10, 1000, TimeUnit.MILLISECONDS);
@@ -119,7 +119,7 @@ public class 人物角色 {
     private static final int KEY_RR = 39;
 
     public 坐标类 取人物坐标() {
-        long addr = GameMaster.readLong(dxf.get窗口句柄(), 基址.人物基址);
+        long addr = GameMaster.readLong(dxf.get窗口句柄(), 基址类.人物基址);
         return 基础功能类.取人物坐标(dxf.get窗口句柄(), addr);
     }
 

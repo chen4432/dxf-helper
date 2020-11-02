@@ -1,6 +1,6 @@
 package com.dxf;
 
-public class 基址 {
+public class 基址类 {
     public static final long 人物基址 = 5551272976L;
     public static final long 角色等级 = 5548481952L;
     public static final long 鼠标基址 = 5551575720L;
