@@ -16,21 +16,21 @@ import java.util.concurrent.TimeUnit;
 
 
 @Slf4j
-public class 人物角色 {
+public class 人物角色类 {
 
     private final DXF dxf;
     private final String 名称;
     private final int 等级;
     private final String 职业;
 
-    private final CopyOnWriteArrayList<技能信息类> 技能栏 = new CopyOnWriteArrayList<技能信息类>();
+    private final CopyOnWriteArrayList<技能信息类> 技能栏 = new CopyOnWriteArrayList<>();
 
     private final ScheduledExecutorService 线程池 = Executors.newSingleThreadScheduledExecutor();
 
     private Double 移动速度X = 0.48;
     private Double 移动速度Y = 0.17;
 
-    public 人物角色(DXF dxf) {
+    public 人物角色类(DXF dxf) {
         this.dxf = dxf;
         名称 = GameMaster.readStringAddr(dxf.get窗口句柄(), GameMaster.readLong(dxf.get窗口句柄(), 基址类.人物名称), 1, 50);
         等级 = GameMaster.readInt(dxf.get窗口句柄(), 基址类.角色等级);

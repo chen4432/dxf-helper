@@ -7,13 +7,13 @@ import org.junit.Test;
 public class 人物角色测试 {
 
     private DXF dxf;
-    private 人物角色 player;
+    private 人物角色类 player;
 
     @Before
     public void setUp() {
         dxf = new DXF();
         dxf.setUp();
-        player = new 人物角色(dxf);
+        player = new 人物角色类(dxf);
         基础功能类.开启无视地图障碍(dxf.get窗口句柄());
     }
 
@@ -43,7 +43,7 @@ public class 人物角色测试 {
 
     @Test
     public void 清理房间怪() throws Exception {
-        房间信息类 room = new 房间信息类(dxf);
+        房间信息类 room = new 房间信息类(dxf.get窗口句柄());
         player.房间清怪(room);
     }
 
