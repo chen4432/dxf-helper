@@ -39,11 +39,23 @@ public class GameMaster {
         return Dispatch.call(DM, "Ver").getString();
     }
 
+    public static String 取版本号() {
+        return Dispatch.call(DM, "Ver").getString();
+    }
+
     public static int reg(String regCode, String verInfo) {
         return Dispatch.call(DM, "Reg", regCode, verInfo).getInt();
     }
 
+    public static int 注册(String 注册码, String 附加信息) {
+        return Dispatch.call(DM, "Reg", 注册码, 附加信息).getInt();
+    }
+
     public static int getLastError() {
+        return Dispatch.call(DM, "GetLastError").getInt();
+    }
+
+    public static int 取错误信息() {
         return Dispatch.call(DM, "GetLastError").getInt();
     }
 
@@ -61,11 +73,23 @@ public class GameMaster {
         return Dispatch.call(DM, "DmGuard", enable, type).getInt();
     }
 
+    public static int 设置保护盾(int 开关, String 类别) {
+        return Dispatch.call(DM, "DmGuard", 开关, 类别).getInt();
+    }
+
     public static int setPath(String path) {
         return Dispatch.call(DM, "SetPath", path).getInt();
     }
 
+    public static int 设置路径(String 路径) {
+        return Dispatch.call(DM, "SetPath", 路径).getInt();
+    }
+
     public static String getPath() {
+        return Dispatch.call(DM, "GetPath").getString();
+    }
+
+    public static String 读取路径() {
         return Dispatch.call(DM, "GetPath").getString();
     }
 
@@ -74,12 +98,24 @@ public class GameMaster {
         return Dispatch.call(DM, "ReadInt", hwnd, addr, type).getLong();
     }
 
+    public static long 读内存长整型(int 窗口句柄, String 内存地址) {
+        return Dispatch.call(DM, "ReadInt", 窗口句柄, 内存地址, 3).getLong();
+    }
+
     public static int readInt(int hwnd, String addr) {
         return (int) Dispatch.call(DM, "ReadInt", hwnd, addr, 0).getLong();
     }
 
+    public static int 读内存整数型(int 窗口句柄, String 内存地址) {
+        return (int) Dispatch.call(DM, "ReadInt", 窗口句柄, 内存地址, 0).getLong();
+    }
+
     public static int readInt(int hwnd, long addr) {
         return (int) Dispatch.call(DM, "ReadIntAddr", hwnd, addr, 0).getLong();
+    }
+
+    public static int 读内存整数型(int 窗口句柄, long 内存地址) {
+        return (int) Dispatch.call(DM, "ReadIntAddr", 窗口句柄, 内存地址, 0).getLong();
     }
 
     public static int readInt(int hwnd, long baseAddr, int offsetAddr) {
@@ -87,9 +123,19 @@ public class GameMaster {
         return readInt(hwnd, addr);
     }
 
+    public static int 读内存整数型(int 窗口句柄, long 基址, int 偏移) {
+        String 内存地址 = String.format("[%x]+%x", 基址, 偏移);
+        return 读内存整数型(窗口句柄, 内存地址);
+    }
+
     public static int readInt(int hwnd, long baseAddr, int offsetAddr1, int offsetAddr2) {
         String addr = String.format("[[%x]+%x]+%x", baseAddr, offsetAddr1, offsetAddr2);
         return readInt(hwnd, addr);
+    }
+
+    public static int 读内存整数型(int 窗口句柄, long 基址, int 一级偏移, int 二级偏移) {
+        String 内存地址 = String.format("[[%x]+%x]+%x", 基址, 一级偏移, 二级偏移);
+        return 读内存整数型(窗口句柄, 内存地址);
     }
 
     public static int readInt(int hwnd, long baseAddr, int offsetAddr1, int offsetAddr2, int offsetAddr3) {
