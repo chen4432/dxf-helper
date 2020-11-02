@@ -4,7 +4,6 @@ import com.dxf.core.GameMaster;
 import com.dxf.model.坐标类;
 import com.dxf.model.方向枚举;
 import com.dxf.model.游戏状态枚举;
-import com.dxf.util.DXF;
 import com.dxf.util.刷图状态;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -153,8 +152,8 @@ public class 人物角色 {
         GameMaster.keyUp(KEY_RR);
         GameMaster.keyUp(KEY_DN);
         坐标类 终点 = 取人物坐标();
-        int xDelta = 终点.getX() - 起点.getX();
-        int yDelta = 终点.getY() - 起点.getY();
+        int xDelta = 终点.X() - 起点.X();
+        int yDelta = 终点.Y() - 起点.Y();
         移动速度X = xDelta * 1.0 / duration;
         移动速度Y = yDelta * 1.0 / duration;
         System.out.printf("xSpeed: %f\tySpeed: %f\n", 移动速度X, 移动速度Y);
@@ -162,14 +161,14 @@ public class 人物角色 {
 
     public void 移动到(坐标类 target) throws Exception {
         坐标类 curr = 取人物坐标();
-        String dirLR = (target.getX() > curr.getX()) ? "right" : "left";
-        String dirUD = (target.getY() > curr.getY()) ? "down" : "up";
+        String dirLR = (target.X() > curr.X()) ? "right" : "left";
+        String dirUD = (target.Y() > curr.Y()) ? "down" : "up";
         int xTime = 0, yTime = 0;
-        int xDistance = Math.abs(curr.getX() - target.getX());
+        int xDistance = Math.abs(curr.X() - target.X());
         if (xDistance != 0) {
             xTime = (int)(xDistance / 移动速度X);
         }
-        int yDistance = Math.abs(curr.getY() - target.getY());
+        int yDistance = Math.abs(curr.Y() - target.Y());
         if (yDistance != 0) {
             yTime = (int)(yDistance / 移动速度Y);
         }

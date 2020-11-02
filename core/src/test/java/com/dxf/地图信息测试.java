@@ -1,7 +1,6 @@
 package com.dxf;
 
 import com.dxf.model.坐标类;
-import com.dxf.util.DXF;
 import org.junit.Before;
 import org.junit.Test;
 

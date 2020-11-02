@@ -2,7 +2,6 @@ package com.dxf;
 
 import com.dxf.model.坐标类;
 import com.dxf.model.方向枚举;
-import com.dxf.util.DXF;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

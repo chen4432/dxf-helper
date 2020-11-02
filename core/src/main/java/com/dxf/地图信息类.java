@@ -70,21 +70,21 @@ public class 地图信息类 {
 
     public List<坐标类> 取当前可通行邻居房间坐标(坐标类 curr) {
         List<坐标类> ret = new ArrayList<>();
-        if ((地图通道[curr.getY()][curr.getX()] & 8) != 0) {
+        if ((地图通道[curr.Y()][curr.X()] & 8) != 0) {
             // 下方有门
-            ret.add(new 坐标类(curr.getX(), curr.getY()+1));
+            ret.add(new 坐标类(curr.X(), curr.Y()+1));
         }
-        if ((地图通道[curr.getY()][curr.getX()] & 4) != 0) {
+        if ((地图通道[curr.Y()][curr.X()] & 4) != 0) {
             // 左边有门
-            ret.add(new 坐标类(curr.getX()-1, curr.getY()));
+            ret.add(new 坐标类(curr.X()-1, curr.Y()));
         }
-        if ((地图通道[curr.getY()][curr.getX()] & 2) != 0) {
+        if ((地图通道[curr.Y()][curr.X()] & 2) != 0) {
             // 上面有门
-            ret.add(new 坐标类(curr.getX(), curr.getY()-1));
+            ret.add(new 坐标类(curr.X(), curr.Y()-1));
         }
-        if ((地图通道[curr.getY()][curr.getX()] & 1) != 0) {
+        if ((地图通道[curr.Y()][curr.X()] & 1) != 0) {
             // 右边有门
-            ret.add(new 坐标类(curr.getX()+1, curr.getY()));
+            ret.add(new 坐标类(curr.X()+1, curr.Y()));
         }
         return ret;
     }
@@ -101,14 +101,14 @@ public class 地图信息类 {
                 pred.put(new 坐标类(j, i), null);
             }
         }
-        visited[当前房间.getY()][当前房间.getX()] = true;
+        visited[当前房间.Y()][当前房间.X()] = true;
         dist.put(当前房间, 0);
         queue.add(当前房间);
         while (!queue.isEmpty()) {
             坐标类 u = queue.remove();
             for (坐标类 房间坐标 : 取当前可通行邻居房间坐标(u)) {
-                if (!visited[房间坐标.getY()][房间坐标.getX()]) {
-                    visited[房间坐标.getY()][房间坐标.getX()] = true;
+                if (!visited[房间坐标.Y()][房间坐标.X()]) {
+                    visited[房间坐标.Y()][房间坐标.X()] = true;
                     dist.put(房间坐标, dist.get(房间坐标) + 1);
                     pred.put(房间坐标, u);
                     queue.add(房间坐标);
@@ -145,10 +145,10 @@ public class 地图信息类 {
     public 方向枚举 取过图方向(坐标类 curr) {
         坐标类 next = 取下一个房间坐标(curr);
         if (next == null) return 方向枚举.未知;
-        if (next.getX() > curr.getX()) return 方向枚举.右;
-        if (next.getX() < curr.getX()) return 方向枚举.左;
-        if (next.getY() > curr.getY()) return 方向枚举.下;
-        if (next.getY() < curr.getY()) return 方向枚举.上;
+        if (next.X() > curr.X()) return 方向枚举.右;
+        if (next.X() < curr.X()) return 方向枚举.左;
+        if (next.Y() > curr.Y()) return 方向枚举.下;
+        if (next.Y() < curr.Y()) return 方向枚举.上;
         return 方向枚举.未知;
     }
 }

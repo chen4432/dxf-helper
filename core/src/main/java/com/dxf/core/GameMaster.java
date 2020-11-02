@@ -305,11 +305,23 @@ public class GameMaster {
         return Dispatch.call(DM, "BindWindow", hwnd, display, mouse, keypad, mode).getInt();
     }
 
+    public static int 绑定窗口(int 窗口句柄, String 显示, String 鼠标, String 键盘, int 模式) {
+        return Dispatch.call(DM, "BindWindow", 窗口句柄, 显示, 鼠标, 键盘, 模式).getInt();
+    }
+
     public static int bindWindowEx(int hwnd, String display, String mouse, String keypad, String pub, int mode) {
         return Dispatch.call(DM, "BindWindowEx", hwnd, display, mouse, keypad, pub, mode).getInt();
     }
 
+    public static int 绑定窗口高级(int 窗口句柄, String 显示, String 鼠标, String 键盘, String 公共, int 模式) {
+        return Dispatch.call(DM, "BindWindowEx", 窗口句柄, 显示, 鼠标, 键盘, 公共, 模式).getInt();
+    }
+
     public static int unbindWindow() {
+        return Dispatch.call(DM, "UnBindWindow").getInt();
+    }
+
+    public static int 解除绑定窗口() {
         return Dispatch.call(DM, "UnBindWindow").getInt();
     }
 

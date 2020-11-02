@@ -55,6 +55,33 @@ public class 基础功能类 {
     }
 
     /**
+     * 消耗品CLL
+     * @param 物品代码 消耗品代码
+     *             2600021,    // 精神刺激 20冷却
+     *             2600561,    // 顶级175力量药
+     *             2600562,    // 顶级175智力药
+     */
+    public void 消耗物品(int 窗口句柄, int 物品代码) {
+        GameMaster.asmClear();
+        GameMaster.asmAdd("push rbx");
+        GameMaster.asmAdd("sub rsp, 28");
+        GameMaster.asmAdd("mov rax," + Long.toHexString(基址类.人物基址));
+        GameMaster.asmAdd("mov rax, [rax]");
+        GameMaster.asmAdd("mov r8, [rax]");
+        GameMaster.asmAdd("mov edx," + Integer.toHexString(物品代码));
+        GameMaster.asmAdd("add [rax], al");
+        GameMaster.asmAdd("add [rax], al");
+        GameMaster.asmAdd("mov rcx, rax");
+        GameMaster.asmAdd("call qword [r8+1280]");
+        GameMaster.asmAdd("add [rax], al");
+        GameMaster.asmAdd("add [rax], al");
+        GameMaster.asmAdd("add rsp, 28");
+        GameMaster.asmAdd("pop rbx");
+        GameMaster.asmAdd("ret");
+        GameMaster.asmCall(窗口句柄, 5);
+    }
+
+    /**
      * /**
      *      * 缓冲CALL
      *      * sub rsp, 100

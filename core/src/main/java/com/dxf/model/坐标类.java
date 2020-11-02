@@ -21,11 +21,11 @@ public class 坐标类 {
         this.y = y;
     }
 
-    public int getX() {
+    public int X() {
         return x;
     }
 
-    public int getY() {
+    public int Y() {
         return y;
     }
 
@@ -33,9 +33,13 @@ public class 坐标类 {
         return Math.sqrt(Math.pow((a.x-b.x), 2) + Math.pow((a.y-b.y), 2));
     }
 
+    public double 计算距离(坐标类 o) {
+        return Math.sqrt(Math.pow((x-o.x), 2) + Math.pow((y-o.y), 2));
+    }
+
     @Override
     public String toString() {
-        return "坐标{" + x + ", " + y + "}";
+        return "{" + x + ", " + y + "}";
     }
 
     @Override
@@ -51,7 +55,4 @@ public class 坐标类 {
         return Objects.hash(x, y);
     }
 
-    public static void main(String[] args) {
-        System.out.println(new 坐标类(12, 32));
-    }
 }

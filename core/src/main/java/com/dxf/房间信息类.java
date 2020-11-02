@@ -119,26 +119,26 @@ public class 房间信息类 {
         switch (dir) {
             case 上:
                 门列表.sort((a, b) -> {
-                    if (a.getY() == b.getY()) return 0;
-                    return a.getY() > b.getY() ? 1 : -1;
+                    if (a.Y() == b.Y()) return 0;
+                    return a.Y() > b.Y() ? 1 : -1;
                 });
                 break;
             case 下:
                 门列表.sort((a, b) -> {
-                    if (a.getY() == b.getY()) return 0;
-                    return a.getY() < b.getY() ? 1 : -1;
+                    if (a.Y() == b.Y()) return 0;
+                    return a.Y() < b.Y() ? 1 : -1;
                 });
                 break;
             case 左:
                 门列表.sort((a, b) -> {
-                    if (a.getX() == b.getX()) return 0;
-                    return a.getX() > b.getX() ? 1 : -1;
+                    if (a.X() == b.X()) return 0;
+                    return a.X() > b.X() ? 1 : -1;
                 });
                 break;
             case 右:
                 门列表.sort((a, b) -> {
-                    if (a.getX()== b.getX()) return 0;
-                    return a.getX() < b.getX() ? 1 : -1;
+                    if (a.X()== b.X()) return 0;
+                    return a.X() < b.X() ? 1 : -1;
                 });
                 break;
         }
