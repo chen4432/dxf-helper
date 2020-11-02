@@ -38,7 +38,7 @@ public class 技能信息类 {
     private final int           技能优先级_领主房间;
 
     private int                 tick;
-    private 技能状态枚举 状态;
+    private 技能状态枚举          状态;
 
 
     public void update() {
@@ -89,7 +89,7 @@ public class 技能信息类 {
     }
 
     public int get技能优先级_领主房间() {
-        return get技能优先级_领主房间();
+        return 技能优先级_领主房间;
     }
 
     public 技能状态枚举 取技能状态() {
