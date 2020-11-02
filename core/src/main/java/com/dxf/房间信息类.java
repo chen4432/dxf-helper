@@ -2,6 +2,9 @@ package com.dxf;
 
 import com.dxf.core.GameMaster;
 import com.dxf.model.坐标类;
+import com.dxf.model.方向枚举;
+import com.dxf.model.物品类型枚举;
+import com.dxf.model.物品阵营枚举;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;

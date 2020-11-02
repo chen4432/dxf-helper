@@ -2,6 +2,8 @@ package com.dxf;
 
 import com.dxf.core.GameMaster;
 import com.dxf.model.坐标类;
+import com.dxf.model.方向枚举;
+import com.dxf.model.游戏状态枚举;
 import com.dxf.util.DXF;
 import com.dxf.util.刷图状态;
 import lombok.extern.slf4j.Slf4j;

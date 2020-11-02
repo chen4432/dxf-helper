@@ -2,6 +2,7 @@ package com.dxf;
 
 import com.dxf.core.GameMaster;
 import com.dxf.model.坐标类;
+import com.dxf.model.游戏状态枚举;
 
 
 public class 基础功能类 {

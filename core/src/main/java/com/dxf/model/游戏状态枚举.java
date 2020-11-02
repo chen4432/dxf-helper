@@ -1,4 +1,4 @@
-package com.dxf;
+package com.dxf.model;
 
 public enum 游戏状态枚举 {
     未知(-1),
