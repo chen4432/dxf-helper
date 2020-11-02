@@ -1,5 +1,6 @@
 package com.dxf;
 
+import com.dxf.component.人物角色类;
 import com.dxf.core.GameMaster;
 import lombok.extern.slf4j.Slf4j;
 
@@ -51,7 +52,12 @@ public class DXF {
     public static void main(String[] args) {
         DXF dxf = new DXF();
         dxf.setUp();
-        // 执行
+
+        人物角色类 player = new 人物角色类(dxf.get窗口句柄());
+        log.info("人物角色信息: " + player);
+
+
+
         dxf.cleanUp();
     }
 

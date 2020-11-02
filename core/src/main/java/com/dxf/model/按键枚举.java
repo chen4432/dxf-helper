@@ -25,6 +25,10 @@ public enum 按键枚举 {
     int vkCode;
     String strCode;
 
+    public String getStrCode() {
+        return strCode;
+    }
+
     按键枚举(int vkCode, String strCode) {
         this.vkCode = vkCode;
         this.strCode = strCode;

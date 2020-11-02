@@ -5,6 +5,7 @@ import com.dxf.constant.基址类;
 import com.dxf.core.GameMaster;
 import com.dxf.model.坐标类;
 import com.dxf.model.游戏状态枚举;
+import com.dxf.util.回调函数接口;
 
 
 public class 基础功能类 {
@@ -199,5 +200,14 @@ public class 基础功能类 {
         发包CALL(hwnd);
     }
 
+
+
+    public static boolean 等待直到符合条件(回调函数接口 cb, int 最大轮询次数, int 轮询时间间隔) {
+        for (int i = 0; i < 最大轮询次数; ++i) {
+            延时(轮询时间间隔);
+            if (cb.callback()) return true;
+        }
+        return false;
+    }
 
 }

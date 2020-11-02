@@ -20,8 +20,6 @@ public class 地图信息类 {
     private final 坐标类 BOSS房间;
     private final Map<坐标类, 坐标类> 下一个房间;
 
-    //private final int[][] 地图通道;
-
     public 地图信息类(int 窗口句柄) {
         this.窗口句柄 = 窗口句柄;
         地图数据 = GameMaster.readLong(窗口句柄, 基址类.房间编号, 偏移类.时间基址, 偏移类.门型偏移);
@@ -42,21 +40,9 @@ public class 地图信息类 {
                 ++n;
             }
         }
-        /*
-        System.out.println("BOSS房间： " + BOSS房间);
-        System.out.printf("地图宽度：%d，地图高度：%d\n", 地图宽度, 地图高度);
-        System.out.println("地图通道：");
-        for (int i = 0; i < 地图通道.length; ++i) {
-            for (int j = 0; j < 地图通道[0].length; ++j) {
-                System.out.printf("%02d\t", 地图通道[i][j]);
-            }
-            System.out.println();
-        }
-        */
         int 当前房间X = GameMaster.readInt(窗口句柄, 地图数据 + 偏移类.当前房间X);
         int 当前房间Y = GameMaster.readInt(窗口句柄, 地图数据 + 偏移类.当前房间Y);
         坐标类 当前房间 = new 坐标类(当前房间X, 当前房间Y);
-
         下一个房间 = new HashMap<>();
         List<坐标类> 路径 = 生成通关路径(地图通道, 当前房间);
         if (路径.size() > 1) {
@@ -143,6 +129,13 @@ public class 地图信息类 {
     public 坐标类 取BOSS房间() {
         return BOSS房间;
     }
+
+    public 坐标类 取当前房间坐标() {
+        int startRoomX = GameMaster.readInt(窗口句柄, 地图数据 + 偏移类.当前房间X);
+        int startRoomY = GameMaster.readInt(窗口句柄, 地图数据 + 偏移类.当前房间Y);
+        return new 坐标类(startRoomX, startRoomY);
+    }
+
 
     public 方向枚举 取过图方向(坐标类 curr) {
         坐标类 next = 取下一个房间坐标(curr);
