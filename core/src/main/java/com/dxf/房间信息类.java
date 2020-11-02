@@ -12,42 +12,47 @@ import java.util.concurrent.*;
 @Slf4j
 public class 房间信息类 {
 
-    private final DXF dxf;
+    //private final int 窗口句柄;
+    private final long 房间数据;
+    //private final DXF dxf;
+    private final int 窗口句柄;
     private final CopyOnWriteArrayList<坐标类> 门列表;
     private final CopyOnWriteArrayList<坐标类> 怪物列表;
     private final CopyOnWriteArrayList<坐标类> 材料列表;
 
     //private final ScheduledExecutorService es;
 
-    public 房间信息类(DXF dxf) {
-        this.dxf = dxf;
+    public 房间信息类(int 窗口句柄) {
+        //this.dxf = dxf;
+        this.窗口句柄 = 窗口句柄;
         门列表 = new CopyOnWriteArrayList<>();
         怪物列表 = new CopyOnWriteArrayList<>();
         材料列表 = new CopyOnWriteArrayList<>();
+        房间数据 = GameMaster.readLong(窗口句柄, 基址.人物基址, 偏移.地图偏移);
+        log.info("房间数据：{}", 房间数据);
         update();
         //es = Executors.newSingleThreadScheduledExecutor();
         //es.scheduleAtFixedRate(this::update, 10, 100, TimeUnit.MILLISECONDS);
     }
 
     public void update() {
-        long 地图数据 = GameMaster.readLong(dxf.getHwnd(), 基址.人物基址, 偏移.地图偏移);
-        log.info("房间数据：{}", 地图数据);
-        System.out.println("房间数据: " + 地图数据);
-        long 首地址 = GameMaster.readLong(dxf.getHwnd(), 地图数据 + 偏移.地图开始2);
-        long 尾地址 = GameMaster.readLong(dxf.getHwnd(), 地图数据 + 偏移.地图结束2);
+
+        System.out.println("房间数据: " + 房间数据);
+        long 首地址 = GameMaster.readLong(窗口句柄, 房间数据 + 偏移.地图开始2);
+        long 尾地址 = GameMaster.readLong(窗口句柄, 房间数据 + 偏移.地图结束2);
         门列表.clear();
         怪物列表.clear();
         材料列表.clear();
         for (long addr = 首地址; addr < 尾地址; addr += 8) {
-            long 物品数据 = GameMaster.readLong(dxf.getHwnd(), addr);
-            String 物品名称 = GameMaster.readStringAddr(dxf.getHwnd(), GameMaster.readLong(dxf.getHwnd(), 物品数据 + 偏移.名称偏移), 1, 50);
-            物品类型枚举 类型1 = 物品类型枚举.到物品类型(GameMaster.readInt(dxf.getHwnd(), 物品数据 + 偏移.类型偏移));
-            物品类型枚举 类型2 = 物品类型枚举.到物品类型(GameMaster.readInt(dxf.getHwnd(), 物品数据 + 偏移.类型偏移 + 4));
+            long 物品数据 = GameMaster.readLong(窗口句柄, addr);
+            String 物品名称 = GameMaster.readStringAddr(窗口句柄, GameMaster.readLong(窗口句柄, 物品数据 + 偏移.名称偏移), 1, 50);
+            物品类型枚举 类型1 = 物品类型枚举.到物品类型(GameMaster.readInt(窗口句柄, 物品数据 + 偏移.类型偏移));
+            物品类型枚举 类型2 = 物品类型枚举.到物品类型(GameMaster.readInt(窗口句柄, 物品数据 + 偏移.类型偏移 + 4));
             if (类型1 == 物品类型枚举.人形 || 类型2 == 物品类型枚举.人形) continue;
-            坐标类 物品坐标 = 基础功能类.取物品坐标(dxf.getHwnd(), 物品数据);
-            物品阵营枚举 阵营 = 物品阵营枚举.到物品阵营(GameMaster.readInt(dxf.getHwnd(), 物品数据 + 偏移.阵营偏移));
+            坐标类 物品坐标 = 基础功能类.取物品坐标(窗口句柄, 物品数据);
+            物品阵营枚举 阵营 = 物品阵营枚举.到物品阵营(GameMaster.readInt(窗口句柄, 物品数据 + 偏移.阵营偏移));
             if (类型2 == 物品类型枚举.门) {
-                int state = GameMaster.readInt(dxf.getHwnd(), 物品数据 + 3392);
+                int state = GameMaster.readInt(窗口句柄, 物品数据 + 3392);
                 if (state == 0 || state == 1) {
                     门列表.add(物品坐标);
                     continue;
@@ -55,7 +60,7 @@ public class 房间信息类 {
             }
             int HP = 0;
             if (类型2 == 物品类型枚举.怪物) {
-                HP = GameMaster.readInt(dxf.getHwnd(), 物品数据 + 偏移.怪物血量);
+                HP = GameMaster.readInt(窗口句柄, 物品数据 + 偏移.怪物血量);
                 if (HP > 0) {
                     怪物列表.add(物品坐标);
                     log.info("名称:{}\t类型1:{}\t类型2:{}\t阵营:{}\tHP:{}\t坐标:{}",
@@ -84,15 +89,15 @@ public class 房间信息类 {
     }
 
     public 坐标类 取当前房间坐标() {
-        long 地图数据 = GameMaster.readLong(dxf.getHwnd(), 基址.房间编号, 偏移.时间基址, 偏移.门型偏移);
-        int startRoomX = GameMaster.readInt(dxf.getHwnd(), 地图数据 + 偏移.当前房间X);
-        int startRoomY = GameMaster.readInt(dxf.getHwnd(), 地图数据 + 偏移.当前房间Y);
-        return new 坐标类((int)startRoomX, (int)startRoomY);
+        long 地图数据 = GameMaster.readLong(窗口句柄, 基址.房间编号, 偏移.时间基址, 偏移.门型偏移);
+        int startRoomX = GameMaster.readInt(窗口句柄, 地图数据 + 偏移.当前房间X);
+        int startRoomY = GameMaster.readInt(窗口句柄, 地图数据 + 偏移.当前房间Y);
+        return new 坐标类(startRoomX, startRoomY);
     }
 
     public boolean 判断是否通关() {
-        long 地图数据 = GameMaster.readLong(dxf.getHwnd(), 基址.房间编号, 偏移.时间基址, 偏移.门型偏移);
-        int val = GameMaster.readInt(dxf.getHwnd(), 地图数据 + 偏移.篝火判断);
+        long 地图数据 = GameMaster.readLong(窗口句柄, 基址.房间编号, 偏移.时间基址, 偏移.门型偏移);
+        int val = GameMaster.readInt(窗口句柄, 地图数据 + 偏移.篝火判断);
         return val == 2 || val == 0;
     }
 

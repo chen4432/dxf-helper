@@ -24,7 +24,7 @@ public class 人物角色 {
 
     private final CopyOnWriteArrayList<技能信息类> 技能栏 = new CopyOnWriteArrayList<技能信息类>();
 
-    private final ScheduledExecutorService pool = Executors.newSingleThreadScheduledExecutor();
+    private final ScheduledExecutorService 线程池 = Executors.newSingleThreadScheduledExecutor();
 
     private Double 移动速度X = 0.48;
     private Double 移动速度Y = 0.17;
@@ -36,7 +36,7 @@ public class 人物角色 {
         职业 = GameMaster.readStringAddr(dxf.getHwnd(), GameMaster.readLong(dxf.getHwnd(), 基址.职业名称), 1, 50);
         读配置();
         //try {测试移动速度();} catch (Exception e) {e.printStackTrace();}
-        pool.scheduleAtFixedRate(new Task(), 10, 1000, TimeUnit.MILLISECONDS);
+        线程池.scheduleAtFixedRate(new Task(), 10, 1000, TimeUnit.MILLISECONDS);
     }
 
     public String 取名称() {
@@ -308,7 +308,7 @@ public class 人物角色 {
         地图信息类 map = new 地图信息类(dxf);
         加BUFF();
         while (true) {
-            房间信息类 room = new 房间信息类(dxf);
+            房间信息类 room = new 房间信息类(dxf.getHwnd());
             if (room.判断是否通关()) {
                 log.info("通关成功.");
                 //Thread.sleep(10000); // 等待
@@ -351,10 +351,10 @@ public class 人物角色 {
         boolean succeed = false;
         for (int i = 0; i < 3; ++i) {
             try {
-                val curr = new 房间信息类(dxf).取当前房间坐标();
+                val curr = new 房间信息类(dxf.getHwnd()).取当前房间坐标();
                 移动到(door);
                 Thread.sleep(800);
-                val next = new 房间信息类(dxf).取当前房间坐标();
+                val next = new 房间信息类(dxf.getHwnd()).取当前房间坐标();
                 if (!curr.equals(next)) {
                     succeed = true;
                     log.info("过门成功，门坐标：{}, 过门方向：{}", door, dir);
