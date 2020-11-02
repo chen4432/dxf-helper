@@ -65,10 +65,12 @@ public class 技能信息类 {
                 break;
             case 攻击:
                 if (按键时间 > 0) {
+                    log.info("攻击技能名称: {}, 按键时间: {}", 名称, 按键时间);
                     GameMaster.keyDownChar(按键);
                     基础功能类.延时(按键时间);
                     GameMaster.keyUpChar(按键);
                 } else {
+                    log.info("攻击技能名称: {}, 按键时间: {}, 按键次数: {}", 名称, 按键时间, 按键次数);
                     GameMaster.keyPressChar(按键);
                     if (按键次数 > 1) {
                         for (int i = 1; i < 按键次数; ++i) {

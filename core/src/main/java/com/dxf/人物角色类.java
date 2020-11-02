@@ -8,6 +8,7 @@ import com.dxf.util.刷图状态;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
@@ -120,8 +121,8 @@ public class 人物角色类 {
     private static final int KEY_RR = 39;
 
     public 坐标类 取人物坐标() {
-        long addr = GameMaster.readLong(dxf.get窗口句柄(), 基址类.人物基址);
-        return 基础功能类.取人物坐标(dxf.get窗口句柄(), addr);
+        long 人物数据 = GameMaster.readLong(dxf.get窗口句柄(), 基址类.人物基址);
+        return 基础功能类.取人物坐标(dxf.get窗口句柄(), 人物数据);
     }
 
     public void 测试移动速度() throws Exception {
@@ -217,6 +218,32 @@ public class 人物角色类 {
             Thread.sleep(100);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void 普通房间释放技能() {
+        技能栏.sort(Comparator.comparingInt(技能信息类::get技能优先级_普通房间));
+        for (技能信息类 技能 : 技能栏) {
+            if (技能.取技能状态() == 技能信息类.技能状态枚举.正常 && 技能.取技能类型() == 技能信息类.技能类型枚举.攻击) {
+                if (技能.释放技能()) break;
+            }
+        }
+    }
+
+    public void 领主房间释放技能() {
+        技能栏.sort(Comparator.comparingInt(技能信息类::get技能优先级_领主房间));
+        for (技能信息类 技能 : 技能栏) {
+            if (技能.取技能状态() == 技能信息类.技能状态枚举.正常 && 技能.取技能类型() == 技能信息类.技能类型枚举.攻击) {
+                if (技能.释放技能()) break;
+            }
+        }
+    }
+
+    public void 释放BUF技能() {
+        for (技能信息类 技能 : 技能栏) {
+            if (技能.取技能状态() == 技能信息类.技能状态枚举.正常 && 技能.取技能类型() == 技能信息类.技能类型枚举.BUFF) {
+                技能.释放技能();
+            }
         }
     }
 
