@@ -1,6 +1,6 @@
-package com.dxf.util;
+package com.dxf.model;
 
-public enum 刷图状态 {
+public enum 刷图状态枚举 {
 
     在城中,
 

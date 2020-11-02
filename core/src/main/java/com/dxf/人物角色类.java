@@ -4,7 +4,7 @@ import com.dxf.core.GameMaster;
 import com.dxf.model.坐标类;
 import com.dxf.model.方向枚举;
 import com.dxf.model.游戏状态枚举;
-import com.dxf.util.刷图状态;
+import com.dxf.model.刷图状态枚举;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
@@ -440,7 +440,7 @@ public class 人物角色类 {
 
     }
 
-    public void 刷图控制(刷图状态 state) {
+    public void 刷图控制(刷图状态枚举 state) {
 
     }
 
