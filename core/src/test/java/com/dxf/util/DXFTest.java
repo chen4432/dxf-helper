@@ -1,14 +1,11 @@
 package com.dxf.util;
 
-import com.dxf.model.Point2D;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.awt.*;
 import java.util.Optional;
-
-import static org.junit.Assert.*;
 
 public class DXFTest {
 

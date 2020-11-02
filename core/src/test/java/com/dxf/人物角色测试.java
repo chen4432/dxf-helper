@@ -15,12 +15,12 @@ public class 人物角色测试 {
         dxf = new DXF();
         dxf.setUp();
         player = new 人物角色(dxf);
-        基础功能类.开启无视地图障碍(dxf.getHwnd());
+        基础功能类.开启无视地图障碍(dxf.get窗口句柄());
     }
 
     @After
     public void cleanUp() {
-        基础功能类.关闭无视地图障碍(dxf.getHwnd());
+        基础功能类.关闭无视地图障碍(dxf.get窗口句柄());
         dxf.cleanUp();
     }
 

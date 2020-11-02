@@ -17,21 +17,21 @@ public class 刷图测试 {
     public void setUp() {
         dxf = new DXF();
         dxf.setUp();
-        基础功能类.开启无视地图障碍(dxf.getHwnd());
+        基础功能类.开启无视地图障碍(dxf.get窗口句柄());
     }
 
     @After
     public void cleanUp() {
-        基础功能类.关闭无视地图障碍(dxf.getHwnd());
+        基础功能类.关闭无视地图障碍(dxf.get窗口句柄());
         dxf.cleanUp();
     }
 
     @Test
     public void 刷图测试() throws Exception {
-        地图信息类 map = new 地图信息类(dxf);
+        地图信息类 map = new 地图信息类(dxf.get窗口句柄());
         人物角色 player = new 人物角色(dxf);
         player.测试移动速度();
-        房间信息类 room = new 房间信息类(dxf);
+        房间信息类 room = new 房间信息类(dxf.get窗口句柄());
         List<坐标类> 怪物列表 = room.取怪物列表();
         if (怪物列表.isEmpty()) {
             System.out.println("怪物已经被清理完毕");
