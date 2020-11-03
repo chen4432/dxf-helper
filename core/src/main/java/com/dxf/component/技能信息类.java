@@ -38,7 +38,7 @@ public class 技能信息类 {
     private final int           技能优先级_领主房间;
 
     private int                 tick;
-    private 技能状态枚举          状态;
+    private 技能状态枚举          状态 = 技能状态枚举.正常;
 
 
     public void update() {
@@ -61,7 +61,7 @@ public class 技能信息类 {
             case BUFF:
                 List<String> 按键序列 = Arrays.stream(按键.split("\\|")).collect(Collectors.toList());
                 log.info("BUFF技能名称：{}, 按键序列：{}", 名称, 按键序列);
-                GameMaster.keyPressCharList(按键序列, 100);
+                GameMaster.keyPressCharList(按键序列, 20);
                 break;
             case 攻击:
                 if (按键时间 > 0) {
@@ -79,6 +79,8 @@ public class 技能信息类 {
                         }
                     }
                 }
+                tick = 冷却时间;
+                状态 = 技能状态枚举.冷却中;
                 break;
         }
         return true;
@@ -102,6 +104,14 @@ public class 技能信息类 {
 
     public 技能信息类(String 名称, String 按键, int 冷却时间, 技能类型枚举 类型) {
         this(名称, 按键, 冷却时间, 类型, 默认按键时间, 默认按键次数, 默认按键间隔时间, 默认辅助按键, 默认辅助按键次数, 默认辅助按键间隔, 默认优先级_普通房间, 默认优先级_领主房间);
+    }
+
+    public 技能信息类(String 名称, String 按键, int 冷却时间, 技能类型枚举 类型, int 技能优先级_普通房间, int 技能优先级_领主房间) {
+        this(名称, 按键, 冷却时间, 类型, 默认按键时间, 默认按键次数, 默认按键间隔时间, 默认辅助按键, 默认辅助按键次数, 默认辅助按键间隔, 技能优先级_普通房间, 技能优先级_领主房间);
+    }
+
+    public 技能信息类(String 名称, String 按键, int 冷却时间, 技能类型枚举 类型, int 按键时间, int 技能优先级_普通房间, int 技能优先级_领主房间) {
+        this(名称, 按键, 冷却时间, 类型, 按键时间, 默认按键次数, 默认按键间隔时间, 默认辅助按键, 默认辅助按键次数, 默认辅助按键间隔, 技能优先级_普通房间, 技能优先级_领主房间);
     }
 
     public 技能信息类(String 名称, String 按键, int 冷却时间, 技能类型枚举 类型, int 按键时间, int 按键次数, int 按键间隔时间, String 辅助按键, int 辅助按键次数, int 辅助按键间隔, int 技能优先级_普通房间, int 技能优先级_领主房间) {

@@ -35,7 +35,6 @@ public class 房间信息类 {
     }
 
     public void update() {
-        System.out.println("房间数据: " + 房间数据);
         long 首地址 = GameMaster.readLong(窗口句柄, 房间数据 + 偏移类.地图开始2);
         long 尾地址 = GameMaster.readLong(窗口句柄, 房间数据 + 偏移类.地图结束2);
         门列表.clear();

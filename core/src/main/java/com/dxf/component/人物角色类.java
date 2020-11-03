@@ -1,9 +1,10 @@
 package com.dxf.component;
 
-import com.dxf.config.配置项;
+import com.dxf.config.配置项类;
 import com.dxf.constant.基址类;
 import com.dxf.core.GameMaster;
 import com.dxf.model.坐标类;
+import com.dxf.model.按键枚举;
 import com.dxf.model.方向枚举;
 import com.dxf.model.游戏状态枚举;
 import lombok.extern.slf4j.Slf4j;
@@ -29,8 +30,8 @@ public class 人物角色类 {
 
     private final ScheduledExecutorService 线程池 = Executors.newSingleThreadScheduledExecutor();
 
-    private Double 移动速度X = 0.48;
-    private Double 移动速度Y = 0.17;
+    private Double 移动速度X = 0.66;
+    private Double 移动速度Y = 0.24;
 
     public 人物角色类(int 窗口句柄) {
         this.窗口句柄 = 窗口句柄;
@@ -53,7 +54,13 @@ public class 人物角色类 {
     }
 
     public void 设置技能配置() {
-        技能栏 = new CopyOnWriteArrayList(配置项.读取技能栏(名称));
+        技能栏 = new CopyOnWriteArrayList(配置项类.读取技能栏(名称));
+    }
+
+    public void 设置移动速度() {
+        val 移动速度 = 配置项类.读取移动速度(名称);
+        移动速度X = 移动速度.getKey();
+        移动速度Y = 移动速度.getValue();
     }
 
     public String 取名称() {
@@ -239,7 +246,10 @@ public class 人物角色类 {
         技能栏.sort(Comparator.comparingInt(技能信息类::get技能优先级_领主房间));
         for (技能信息类 技能 : 技能栏) {
             if (技能.取技能状态() == 技能信息类.技能状态枚举.正常 && 技能.取技能类型() == 技能信息类.技能类型枚举.攻击) {
-                if (技能.释放技能()) break;
+                if (技能.释放技能()) {
+                    基础功能类.延时(500);
+                    break;
+                }
             }
         }
     }
@@ -249,6 +259,7 @@ public class 人物角色类 {
         for (技能信息类 技能 : 技能栏) {
             if (技能.取技能状态() == 技能信息类.技能状态枚举.正常 && 技能.取技能类型() == 技能信息类.技能类型枚举.BUFF) {
                 技能.释放技能();
+                基础功能类.延时(1000);
             }
         }
         log.info("释放BUFF技能完成!");
@@ -344,7 +355,7 @@ public class 人物角色类 {
             移动到(最近的怪物坐标);
             释放技能(1);
         }
-        基础功能类.延时(1000);
+        基础功能类.延时(500);
     }
 
     public void 加BUFF() throws Exception {
@@ -515,6 +526,21 @@ public class 人物角色类 {
         int 最大疲劳值 = 基础功能类.解密读取(窗口句柄, 基址类.最大疲劳);
         int 消耗疲劳值 = 基础功能类.解密读取(窗口句柄, 基址类.当前疲劳);
         return 最大疲劳值 - 消耗疲劳值;
+    }
+
+    public void 进图_根特皇宫() {
+        if (基础功能类.取游戏状态(窗口句柄) != 游戏状态枚举.城镇) return;
+        基础功能类.等待直到符合条件(() -> {
+            GameMaster.keyDownChar(按键枚举.方向左.getStrCode());
+            return 基础功能类.取游戏状态(窗口句柄) == 游戏状态枚举.选择副本;
+        }, 30, 1000);
+        GameMaster.keyUpChar(按键枚举.方向左.getStrCode());
+        基础功能类.等待直到符合条件(() -> {
+            GameMaster.keyPressChar("right");
+            基础功能类.延时(500);
+            GameMaster.keyPressChar("space");
+            return 基础功能类.取游戏状态(窗口句柄) == 游戏状态枚举.在副本中;
+        }, 30, 1000);
     }
 
 }

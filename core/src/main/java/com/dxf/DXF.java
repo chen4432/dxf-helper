@@ -1,6 +1,9 @@
 package com.dxf;
 
 import com.dxf.component.人物角色类;
+import com.dxf.component.地图信息类;
+import com.dxf.component.基础功能类;
+import com.dxf.component.房间信息类;
 import com.dxf.core.GameMaster;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,6 +29,7 @@ public class DXF {
     }
 
     public void setUp() {
+        /*
         int ret = GameMaster.bindWindowEx(
                 窗口句柄,
                 "dx.graphic.2d",
@@ -35,14 +39,10 @@ public class DXF {
                 0
                 );
         System.out.println("BindWindowState:" + ret);
-        try {
-            Thread.sleep(1000);
-            GameMaster.setWindowState(窗口句柄, 1);
-            Thread.sleep(1000);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        基础功能类.延时(1000);
+         */
+        GameMaster.setWindowState(窗口句柄, 1);
+        基础功能类.延时(1000);
     }
 
     public void cleanUp() {
@@ -52,13 +52,14 @@ public class DXF {
     public static void main(String[] args) {
         DXF dxf = new DXF();
         dxf.setUp();
-
         人物角色类 player = new 人物角色类(dxf.get窗口句柄());
         log.info("人物角色信息: " + player);
-
-
-
+        while (player.get剩余疲劳值() > 8) {
+            player.进图_根特皇宫();
+            player.刷一次图();
+        }
         dxf.cleanUp();
+        System.exit(0);
     }
 
 }
