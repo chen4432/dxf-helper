@@ -5,6 +5,7 @@ import com.dxf.component.地图信息类;
 import com.dxf.component.基础功能类;
 import com.dxf.component.房间信息类;
 import com.dxf.core.GameMaster;
+import com.dxf.model.游戏状态枚举;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -54,6 +55,9 @@ public class DXF {
         dxf.setUp();
         人物角色类 player = new 人物角色类(dxf.get窗口句柄());
         log.info("人物角色信息: " + player);
+        if (基础功能类.取游戏状态(dxf.get窗口句柄()) == 游戏状态枚举.在副本中) {
+            player.刷一次图();
+        }
         while (player.get剩余疲劳值() > 8) {
             player.进图_根特皇宫();
             player.刷一次图();

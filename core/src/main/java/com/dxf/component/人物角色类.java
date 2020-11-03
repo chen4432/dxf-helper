@@ -30,8 +30,8 @@ public class 人物角色类 {
 
     private final ScheduledExecutorService 线程池 = Executors.newSingleThreadScheduledExecutor();
 
-    private Double 移动速度X = 0.66;
-    private Double 移动速度Y = 0.24;
+    private Double 移动速度X = 0.44;
+    private Double 移动速度Y = 0.21;
 
     public 人物角色类(int 窗口句柄) {
         this.窗口句柄 = 窗口句柄;
