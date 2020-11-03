@@ -407,7 +407,7 @@ public class 人物角色类 {
         释放BUF技能();
         基础功能类.延时(1000);
         坐标类 BOSS房间坐标 = map.取BOSS房间();
-        while (true) {
+        while (!Thread.currentThread().isInterrupted()) {
             坐标类 当前房间坐标 = map.取当前房间坐标();
             房间信息类 room = new 房间信息类(窗口句柄);
             if (当前房间坐标.equals(BOSS房间坐标)) {
