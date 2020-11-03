@@ -33,6 +33,7 @@ public class DXF {
     }
 
     public void setUp() {
+        /*
         int ret = GameMaster.bindWindowEx(
                 窗口句柄,
                 "dx.graphic.2d",
@@ -46,6 +47,7 @@ public class DXF {
         } else {
             System.out.println("绑定窗口成功！");
         }
+        */
         基础功能类.延时(1000);
         激活窗口();
     }
