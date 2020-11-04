@@ -66,7 +66,7 @@ public class DXF {
     
     public void 执行循环刷根特皇宫任务() {
         System.out.println("执行循环刷根特皇宫任务~");
-        while (基础功能类.取角色剩余疲劳值(窗口句柄) >= 8) {
+        while (running && 基础功能类.取角色剩余疲劳值(窗口句柄) >= 8) {
             try {
                 long 计时开始 = System.currentTimeMillis();
                 刷图任务句柄 = 线程池.submit(new 根特皇宫刷图任务());
@@ -103,6 +103,14 @@ public class DXF {
         }
     }
 
+    public void 停止() {
+        running = false;
+        if (刷图任务句柄 != null) {
+            刷图任务句柄.cancel(true);
+            刷图任务句柄 = null;
+        }
+    }
+
     private boolean running = false;
 
     enum 刷图任务状态枚举 {完成, 被中断, 异常退出}
@@ -116,10 +124,7 @@ public class DXF {
                 if (基础功能类.取游戏状态(窗口句柄) == 游戏状态枚举.城镇) {
                     player.进图_根特皇宫();
                 }
-                //计时开始 = System.currentTimeMillis();
                 player.执行刷图任务();
-                //计时结束 = System.currentTimeMillis();
-                //System.out.println("刷图完成，耗时：" + (计时结束-计时开始)/1000 + "秒");
                 return 刷图任务状态枚举.完成;
             } catch (InterruptedException e) {
                 System.out.println("刷图任务被中断！");
@@ -134,34 +139,10 @@ public class DXF {
         @Override
         public void run() {
             try {
-                激活窗口();
-                人物角色类 player = new 人物角色类(窗口句柄);
-                log.info("人物角色信息: " + player);
-                long 计时开始, 计时结束;
-                if (基础功能类.取游戏状态(窗口句柄) == 游戏状态枚举.在副本中 && running) {
-                    计时开始 = System.currentTimeMillis();
-                    player.执行刷图任务();
-                    计时结束 = System.currentTimeMillis();
-                    System.out.println("刷图耗时：" + (计时结束-计时开始)/1000 + "秒");
-                }
-                while (player.get剩余疲劳值() > 8 && running) {
-                    player.进图_根特皇宫();
-                    计时开始 = System.currentTimeMillis();
-                    player.执行刷图任务();
-                    计时结束 = System.currentTimeMillis();
-                    System.out.println("刷图耗时：" + (计时结束-计时开始)/1000 + "秒");
-                }
-            } catch (InterruptedException e) {
-                System.out.println("终止刷图工作～");
+                执行循环刷根特皇宫任务();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        }
-    }
-
-    public void 停止() {
-        running = false;
-        if (thread != null) {
-            thread.interrupt();
-            thread = null;
         }
     }
 
