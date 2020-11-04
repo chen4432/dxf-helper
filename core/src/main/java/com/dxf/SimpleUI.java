@@ -36,16 +36,16 @@ public class SimpleUI {
         按键_开始运行.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //dxf.开始();
-                dxf.执行循环刷根特皇宫任务();
+                dxf.开始();
+                //dxf.执行循环刷根特皇宫任务();
                 标签_运行状态.setText("运行中");
             }
         });
         按键_停止运行.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //dxf.停止();
-                dxf.停止循环刷根特皇宫任务();
+                dxf.停止();
+                //dxf.停止循环刷根特皇宫任务();
                 标签_运行状态.setText("已停止");
             }
         });
