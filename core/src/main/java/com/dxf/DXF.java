@@ -4,12 +4,8 @@ import com.dxf.component.人物角色类;
 import com.dxf.component.基础功能类;
 import com.dxf.core.GameMaster;
 import com.dxf.model.游戏状态枚举;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 @Slf4j
 public class DXF {
@@ -33,7 +29,6 @@ public class DXF {
     }
 
     public void setUp() {
-        /*
         int ret = GameMaster.bindWindowEx(
                 窗口句柄,
                 "dx.graphic.2d",
@@ -47,24 +42,24 @@ public class DXF {
         } else {
             System.out.println("绑定窗口成功！");
         }
-        */
         基础功能类.延时(1000);
         激活窗口();
     }
 
     public void cleanUp() {
-        GameMaster.unbindWindow();
+        if (GameMaster.unbindWindow() != 1) {
+            System.out.println("解绑窗口失败！");
+        } else {
+            System.out.println("解绑窗口成功！");
+        }
     }
 
-    private ExecutorService 线程池 = Executors.newSingleThreadExecutor();
-    private Future<?> future;
 
     private Thread thread = null;
 
     public void 开始() {
         if (thread == null) {
             激活窗口();
-            //future = 线程池.submit(new Task());
             thread = new TaskThread();
             thread.start();
             running = true;
@@ -73,35 +68,25 @@ public class DXF {
 
     private boolean running = false;
 
-    @Data
-    class Task implements Runnable {
-        @Override
-        public void run() {
-            激活窗口();
-            人物角色类 player = new 人物角色类(窗口句柄);
-            log.info("人物角色信息: " + player);
-            if (基础功能类.取游戏状态(窗口句柄) == 游戏状态枚举.在副本中 && running) {
-                player.刷一次图();
-            }
-            while (player.get剩余疲劳值() > 8 && running) {
-                player.进图_根特皇宫();
-                player.刷一次图();
-            }
-        }
-    }
-
     class TaskThread extends Thread {
         @Override
         public void run() {
             激活窗口();
             人物角色类 player = new 人物角色类(窗口句柄);
             log.info("人物角色信息: " + player);
+            long 计时开始, 计时结束;
             if (基础功能类.取游戏状态(窗口句柄) == 游戏状态枚举.在副本中 && running) {
+                计时开始 = System.currentTimeMillis();
                 player.刷一次图();
+                计时结束 = System.currentTimeMillis();
+                System.out.println("刷图耗时：" + (计时结束-计时开始)/1000 + "秒");
             }
             while (player.get剩余疲劳值() > 8 && running) {
                 player.进图_根特皇宫();
+                计时开始 = System.currentTimeMillis();
                 player.刷一次图();
+                计时结束 = System.currentTimeMillis();
+                System.out.println("刷图耗时：" + (计时结束-计时开始)/1000 + "秒");
             }
         }
     }
@@ -112,13 +97,6 @@ public class DXF {
             thread.interrupt();
             thread = null;
         }
-
-        /*
-        if (future != null) {
-            future.cancel(true);
-            future = null;
-        }
-         */
     }
 
     public void 绑定窗口() {

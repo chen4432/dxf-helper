@@ -6,17 +6,18 @@
       <xy x="20" y="20" width="500" height="400"/>
     </constraints>
     <properties>
-      <maximumSize width="200" height="60"/>
-      <minimumSize width="200" height="60"/>
+      <maximumSize width="400" height="60"/>
+      <minimumSize width="400" height="60"/>
+      <preferredSize width="400" height="60"/>
     </properties>
     <border type="none"/>
     <children>
       <component id="be13f" class="javax.swing.JButton" binding="按键_绑定窗口">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
-            <minimum-size width="60" height="20"/>
-            <preferred-size width="60" height="20"/>
-            <maximum-size width="60" height="20"/>
+            <minimum-size width="100" height="20"/>
+            <preferred-size width="100" height="20"/>
+            <maximum-size width="100" height="20"/>
           </grid>
         </constraints>
         <properties>
@@ -26,9 +27,9 @@
       <component id="2ac48" class="javax.swing.JButton" binding="按键_解绑窗口">
         <constraints>
           <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
-            <minimum-size width="60" height="20"/>
-            <preferred-size width="60" height="20"/>
-            <maximum-size width="60" height="20"/>
+            <minimum-size width="100" height="20"/>
+            <preferred-size width="100" height="20"/>
+            <maximum-size width="100" height="20"/>
           </grid>
         </constraints>
         <properties>
@@ -38,9 +39,9 @@
       <component id="d28cd" class="javax.swing.JButton" binding="按键_开始运行">
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
-            <minimum-size width="60" height="20"/>
-            <preferred-size width="60" height="20"/>
-            <maximum-size width="60" height="20"/>
+            <minimum-size width="100" height="20"/>
+            <preferred-size width="100" height="20"/>
+            <maximum-size width="100" height="20"/>
           </grid>
         </constraints>
         <properties>
@@ -50,9 +51,9 @@
       <component id="e2382" class="javax.swing.JButton" binding="按键_停止运行">
         <constraints>
           <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
-            <minimum-size width="60" height="20"/>
-            <preferred-size width="60" height="20"/>
-            <maximum-size width="60" height="20"/>
+            <minimum-size width="100" height="20"/>
+            <preferred-size width="100" height="20"/>
+            <maximum-size width="100" height="20"/>
           </grid>
         </constraints>
         <properties>
@@ -62,9 +63,9 @@
       <component id="7df4" class="javax.swing.JLabel" binding="标签_绑定状态">
         <constraints>
           <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false">
-            <minimum-size width="60" height="20"/>
-            <preferred-size width="60" height="20"/>
-            <maximum-size width="60" height="20"/>
+            <minimum-size width="80" height="20"/>
+            <preferred-size width="80" height="20"/>
+            <maximum-size width="80" height="20"/>
           </grid>
         </constraints>
         <properties>
@@ -74,9 +75,9 @@
       <component id="1aca0" class="javax.swing.JLabel" binding="标签_运行状态">
         <constraints>
           <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false">
-            <minimum-size width="60" height="20"/>
-            <preferred-size width="60" height="20"/>
-            <maximum-size width="60" height="20"/>
+            <minimum-size width="80" height="20"/>
+            <preferred-size width="80" height="20"/>
+            <maximum-size width="80" height="20"/>
           </grid>
         </constraints>
         <properties>
