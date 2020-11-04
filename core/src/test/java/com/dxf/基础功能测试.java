@@ -28,7 +28,7 @@ public class 基础功能测试 {
 
     @Test
     public void 组包选角() {
-        基础功能类.组包选角(dxf.get窗口句柄(), 1);
+        基础功能类.组包选角(dxf.get窗口句柄(), 2);
     }
 
     @Test
@@ -38,7 +38,7 @@ public class 基础功能测试 {
 
 
     @Test
-    public void 组包反角() {
-        基础功能类.组包反角(dxf.get窗口句柄());
+    public void 组包返回角色列表() {
+        基础功能类.组包返回角色列表(dxf.get窗口句柄());
     }
 }
