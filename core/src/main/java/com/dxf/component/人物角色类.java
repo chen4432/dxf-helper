@@ -85,7 +85,7 @@ public class 人物角色类 {
         return 基础功能类.取人物坐标(窗口句柄, 人物数据);
     }
 
-    public void 测试移动速度() {
+    public void 测试移动速度() throws InterruptedException {
         移动到(new 坐标类(0,0));
         基础功能类.延时(1000);
         调整方向(方向枚举.右);
@@ -108,7 +108,7 @@ public class 人物角色类 {
         System.out.printf("xSpeed: %f\tySpeed: %f\n", 移动速度X, 移动速度Y);
     }
 
-    public void 移动到(坐标类 target) {
+    public void 移动到(坐标类 target) throws InterruptedException {
         坐标类 curr = 取人物坐标();
         String dirLR = (target.X() > curr.X()) ? "right" : "left";
         String dirUD = (target.Y() > curr.Y()) ? "down" : "up";
@@ -178,7 +178,7 @@ public class 人物角色类 {
         }
     }
 
-    public void 领主房间释放技能() {
+    public void 领主房间释放技能() throws InterruptedException {
         技能栏.sort(Comparator.comparingInt(技能信息类::get技能优先级_领主房间));
         for (技能信息类 技能 : 技能栏) {
             if (技能.取技能状态() == 技能信息类.技能状态枚举.正常 && 技能.取技能类型() == 技能信息类.技能类型枚举.攻击) {
@@ -190,7 +190,7 @@ public class 人物角色类 {
         }
     }
 
-    public void 释放BUF技能() {
+    public void 释放BUF技能() throws InterruptedException {
         log.info("开始释放BUFF技能...");
         for (技能信息类 技能 : 技能栏) {
             if (技能.取技能状态() == 技能信息类.技能状态枚举.正常 && 技能.取技能类型() == 技能信息类.技能类型枚举.BUFF) {
@@ -201,7 +201,7 @@ public class 人物角色类 {
         log.info("释放BUFF技能完成!");
     }
 
-    public void 释放技能(int cnt) {
+    public void 释放技能(int cnt) throws InterruptedException {
         GameMaster.keyDownChar("X");
         for (技能信息类 技能 : 技能栏) {
             System.out.println(技能);
@@ -224,7 +224,7 @@ public class 人物角色类 {
         }
     }
 
-    public void BOSS房间清怪(房间信息类 room) {
+    public void BOSS房间清怪(房间信息类 room) throws InterruptedException {
         int cnt = 0;
         while (true) {
             log.info("BOSS房间清怪中...次数：{}", ++cnt);
@@ -248,7 +248,7 @@ public class 人物角色类 {
         基础功能类.延时(1000);
     }
 
-    public void 普通房间清怪(房间信息类 room) {
+    public void 普通房间清怪(房间信息类 room) throws InterruptedException {
         int cnt = 0;
         while (true) {
             log.info("BOSS房间清怪中...次数：{}", ++cnt);
@@ -272,7 +272,7 @@ public class 人物角色类 {
         基础功能类.延时(1000);
     }
 
-    public void 房间清怪(房间信息类 room) {
+    public void 房间清怪(房间信息类 room) throws InterruptedException {
         while (true) {
             room.update();
             List<坐标类> 怪物列表 = room.取怪物列表();
@@ -294,46 +294,7 @@ public class 人物角色类 {
         基础功能类.延时(500);
     }
 
-    public void 加BUFF() throws Exception {
-        log.info("加BUFF");
-        /*
-        for (技能信息 技能 : 技能栏) {
-            if (技能.取技能状态() == 技能信息.技能状态.正常 && 技能.取技能类型() == 技能信息.技能类型.BUFF) {
-                GameMaster.keyPressChar(技能.使用技能());
-                Thread.sleep(1000);
-            }
-        }
-         */
-        GameMaster.keyPressChar("right");
-        Thread.sleep(200);
-        GameMaster.keyPressChar("right");
-        Thread.sleep(200);
-        GameMaster.keyPressChar("space");
-        Thread.sleep(200);
-
-        GameMaster.keyPressChar("up");
-        Thread.sleep(200);
-        GameMaster.keyPressChar("up");
-        Thread.sleep(200);
-        GameMaster.keyPressChar("space");
-        Thread.sleep(200);
-
-        GameMaster.keyPressChar("up");
-        Thread.sleep(200);
-        GameMaster.keyPressChar("down");
-        Thread.sleep(200);
-        GameMaster.keyPressChar("space");
-        Thread.sleep(200);
-    }
-
-    public void 自动刷图() throws Exception {
-        while (基础功能类.取当前消耗疲劳值(窗口句柄) < 184) {
-            开始刷图();
-        }
-        开始刷图();
-    }
-
-    public void 刷一次图() {
+    public void 刷一次图() throws InterruptedException {
         if (基础功能类.取游戏状态(窗口句柄) != 游戏状态枚举.在副本中) {
             log.info("未在副本中，退出。");
             return;
@@ -373,44 +334,7 @@ public class 人物角色类 {
         }
     }
 
-    public void 开始刷图() throws Exception {
-        if (基础功能类.取游戏状态(窗口句柄) != 游戏状态枚举.在副本中) {
-            log.info("未在副本中，退出。");
-            return;
-        }
-        地图信息类 map = new 地图信息类(窗口句柄);
-        log.info("地图信息： " + map);
-        加BUFF();
-        while (true) {
-            房间信息类 room = new 房间信息类(窗口句柄);
-            if (room.判断是否通关()) {
-                log.info("通关成功.");
-                if (基础功能类.取当前消耗疲劳值(窗口句柄) < 180) {
-                    //GameMaster.keyPressChar("F10");
-                    while (基础功能类.取游戏状态(窗口句柄) == 游戏状态枚举.在副本中 && room.取当前房间坐标().equals(map.取BOSS房间())) {
-                        GameMaster.keyPressChar("ESC");
-                        Thread.sleep(500);
-                        System.out.println("等待清算结束...");
-                        GameMaster.keyPressChar("F10");
-                        Thread.sleep(500);
-                    }
-                    while (基础功能类.取游戏状态(窗口句柄) != 游戏状态枚举.在副本中) {
-                        Thread.sleep(500);
-                        System.out.println("正在进入新地图！");
-                    }
-                }
-                break;
-            }
-            房间清怪(room);
-            捡物(room);
-            val dir = map.取过图方向(room.取当前房间坐标());
-            if (dir == 方向枚举.未知) continue;
-            val door = room.取过图门坐标(dir);
-            精确过门(door, dir);
-        }
-    }
-
-    public void 精确过门(坐标类 door, 方向枚举 dir) {
+    public void 精确过门(坐标类 door, 方向枚举 dir) throws InterruptedException {
         boolean succeed = false;
         for (int i = 0; i < 3; ++i) {
             val curr = new 房间信息类(窗口句柄).取当前房间坐标();
@@ -463,7 +387,7 @@ public class 人物角色类 {
         return 最大疲劳值 - 消耗疲劳值;
     }
 
-    public void 进图_根特皇宫() {
+    public void 进图_根特皇宫() throws InterruptedException {
         if (基础功能类.取游戏状态(窗口句柄) != 游戏状态枚举.城镇) return;
         基础功能类.等待直到符合条件(() -> {
             GameMaster.keyDownChar(按键枚举.方向左.getStrCode());
