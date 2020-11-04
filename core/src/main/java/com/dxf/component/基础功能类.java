@@ -59,8 +59,8 @@ public class 基础功能类 {
         return new 坐标类(x, y);
     }
 
-    public static void 延时(int 延时时间) {
-        try {Thread.sleep(延时时间);} catch (Exception e) {e.printStackTrace();}
+    public static void 延时(int 延时时间) throws InterruptedException {
+        Thread.sleep(延时时间);
     }
 
     /**
@@ -205,7 +205,7 @@ public class 基础功能类 {
 
 
 
-    public static boolean 等待直到符合条件(回调函数接口 cb, int 最大轮询次数, int 轮询时间间隔) {
+    public static boolean 等待直到符合条件(回调函数接口 cb, int 最大轮询次数, int 轮询时间间隔) throws InterruptedException {
         for (int i = 0; i < 最大轮询次数; ++i) {
             延时(轮询时间间隔);
             if (cb.callback()) return true;
