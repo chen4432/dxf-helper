@@ -60,64 +60,61 @@ public class DXF {
 
     private Thread thread = null;
 
-    private Future<刷图任务状态枚举> 刷图任务句柄 = null;
+    private class 循环执行任务线程 extends Thread {
+        private final ExecutorService 线程池;
+        private final Runnable 任务;
+        private Future<?> 任务句柄;
 
-    private int 计次 = 0;
-    
-    public void 执行循环刷根特皇宫任务() {
-        System.out.println("执行循环刷根特皇宫任务~");
-        while (running && 基础功能类.取角色剩余疲劳值(窗口句柄) >= 8) {
-            try {
-                long 计时开始 = System.currentTimeMillis();
-                刷图任务句柄 = 线程池.submit(new 根特皇宫刷图任务());
-                刷图任务状态枚举 状态 = 刷图任务句柄.get(3 * 60, TimeUnit.SECONDS);
-                long 计时结束 = System.currentTimeMillis();
-                System.out.printf("刷图状态： %s, 次数： %d, 耗时： %d 秒。", 状态, ++计次, (计时结束-计时开始)/1000);
-            } catch (TimeoutException e) {
-                e.printStackTrace();
-                System.out.println("任务超时： " + e.getMessage());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                System.out.println("任务中断异常：" + e.getMessage());
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-                System.out.println("任务执行异常: " + e.getMessage());
-            }
+        public 循环执行任务线程(Runnable 任务) {
+            线程池 = Executors.newSingleThreadExecutor();
+            this.任务 = 任务;
         }
-    }
 
-    public void 停止循环刷根特皇宫任务() {
-        System.out.println("停止循环刷根特皇宫任务");
-        if (刷图任务句柄 != null) {
-            刷图任务句柄.cancel(true);
-            刷图任务句柄 = null;
+        @Override
+        public void run() {
+            int cnt = 0;
+            while (!Thread.currentThread().isInterrupted() && 基础功能类.取角色剩余疲劳值(窗口句柄) >= 8) {
+                try {
+                    long 开始时间 = System.currentTimeMillis();
+                    任务句柄 = 线程池.submit(任务);
+                    任务句柄.get(3*60, TimeUnit.SECONDS);
+                    long 结束时间 = System.currentTimeMillis();
+                    System.out.printf("任务执行完成！次数：%d, 耗时：%d\n", cnt, (结束时间-开始时间) / 1000);
+                } catch (InterruptedException | ExecutionException e) {
+                    System.out.printf("任务执行失败！原因：%s\n", e.getMessage());
+                    break;
+                } catch (TimeoutException e) {
+                    System.out.println("检测任务超时，继续执行~");
+                }
+                cnt++;
+            }
+            任务句柄.cancel(true);
+            线程池.shutdown();
+            System.out.println("循环执行任务线程停止~");
         }
     }
 
     public void 开始() {
+        绑定窗口();
         if (thread == null) {
             激活窗口();
-            thread = new TaskThread();
+            //thread = new TaskThread();
+            thread = new 循环执行任务线程(new 根特皇宫刷图任务());
             thread.start();
-            running = true;
         }
     }
 
     public void 停止() {
-        running = false;
-        if (刷图任务句柄 != null) {
-            刷图任务句柄.cancel(true);
-            刷图任务句柄 = null;
+        if (thread != null) {
+            thread.interrupt();
+            thread = null;
         }
+        解绑窗口();
     }
 
-    private boolean running = false;
-
-    enum 刷图任务状态枚举 {完成, 被中断, 异常退出}
-
-    private class 根特皇宫刷图任务 implements Callable<刷图任务状态枚举> {
+    private class 根特皇宫刷图任务 implements Runnable {
         @Override
-        public 刷图任务状态枚举 call() throws Exception {
+        public void run() {
             try {
                 激活窗口();
                 人物角色类 player = new 人物角色类(窗口句柄);
@@ -125,23 +122,8 @@ public class DXF {
                     player.进图_根特皇宫();
                 }
                 player.执行刷图任务();
-                return 刷图任务状态枚举.完成;
             } catch (InterruptedException e) {
                 System.out.println("刷图任务被中断！");
-                return 刷图任务状态枚举.被中断;
-            } catch (Exception e) {
-                return 刷图任务状态枚举.异常退出;
-            }
-        }
-    }
-
-    class TaskThread extends Thread {
-        @Override
-        public void run() {
-            try {
-                执行循环刷根特皇宫任务();
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
     }
