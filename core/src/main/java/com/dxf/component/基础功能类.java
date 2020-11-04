@@ -7,6 +7,8 @@ import com.dxf.model.坐标类;
 import com.dxf.model.游戏状态枚举;
 import com.dxf.util.回调函数接口;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 
 public class 基础功能类 {
 
@@ -209,6 +211,10 @@ public class 基础功能类 {
             if (cb.callback()) return true;
         }
         return false;
+    }
+
+    public static int 取随机数(int 最小值, int 最大值) {
+        return ThreadLocalRandom.current().nextInt(最小值, 最大值);
     }
 
 }
