@@ -55,7 +55,7 @@ public class 技能信息类 {
         return 按键;
     }
 
-    public boolean 释放技能() {
+    public boolean 释放技能() throws InterruptedException {
         if (状态 == 技能状态枚举.冷却中) return false;
         switch (类型) {
             case BUFF:

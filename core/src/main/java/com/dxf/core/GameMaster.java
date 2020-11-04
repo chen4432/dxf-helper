@@ -342,7 +342,7 @@ public class GameMaster {
      * @param delay 延迟时间
      * @return
      */
-    public static void keyPressCharList(List<String> keyStrList, int delay) {
+    public static void keyPressCharList(List<String> keyStrList, int delay) throws InterruptedException {
         if (keyStrList.isEmpty()) return;
         keyPressChar(keyStrList.get(0));
         for (int i = 1; i < keyStrList.size(); ++i) {

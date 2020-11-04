@@ -169,7 +169,7 @@ public class 人物角色类 {
         }
     }
 
-    public void 普通房间释放技能() {
+    public void 普通房间释放技能() throws InterruptedException {
         技能栏.sort(Comparator.comparingInt(技能信息类::get技能优先级_普通房间));
         for (技能信息类 技能 : 技能栏) {
             if (技能.取技能状态() == 技能信息类.技能状态枚举.正常 && 技能.取技能类型() == 技能信息类.技能类型枚举.攻击) {
@@ -294,7 +294,7 @@ public class 人物角色类 {
         基础功能类.延时(500);
     }
 
-    public void 刷一次图() throws InterruptedException {
+    public void 执行刷图任务() throws InterruptedException {
         if (基础功能类.取游戏状态(窗口句柄) != 游戏状态枚举.在副本中) {
             log.info("未在副本中，退出。");
             return;
@@ -371,14 +371,10 @@ public class 人物角色类 {
         }
     }
 
-    public void 捡物(房间信息类 room) {
-        try {
-            Thread.sleep(500);
-            GameMaster.keyPressChar("v");
-            Thread.sleep(500);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void 捡物(房间信息类 room) throws InterruptedException {
+        Thread.sleep(500);
+        GameMaster.keyPressChar("v");
+        Thread.sleep(500);
     }
 
     public int get剩余疲劳值() {

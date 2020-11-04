@@ -55,9 +55,4 @@ public class 人物角色测试 {
         player.移动物品到脚下();
     }
 
-    @Test
-    public void 自动刷图() throws Exception {
-        player.自动刷图();
-    }
-
 }

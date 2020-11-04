@@ -59,6 +59,12 @@ public class 基础功能类 {
         return new 坐标类(x, y);
     }
 
+    public static int 取角色剩余疲劳值(int 窗口句柄) {
+        int 最大疲劳值 = 基础功能类.解密读取(窗口句柄, 基址类.最大疲劳);
+        int 消耗疲劳值 = 基础功能类.解密读取(窗口句柄, 基址类.当前疲劳);
+        return 最大疲劳值 - 消耗疲劳值;
+    }
+
     public static void 延时(int 延时时间) throws InterruptedException {
         Thread.sleep(延时时间);
     }
