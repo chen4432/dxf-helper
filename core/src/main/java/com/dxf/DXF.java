@@ -80,11 +80,19 @@ public class DXF {
                     任务句柄.get(3*60, TimeUnit.SECONDS);
                     long 结束时间 = System.currentTimeMillis();
                     System.out.printf("任务执行完成！次数：%d, 耗时：%d\n", cnt, (结束时间-开始时间) / 1000);
-                } catch (InterruptedException | ExecutionException e) {
-                    System.out.printf("任务执行失败！原因：%s\n", e.getMessage());
-                    break;
                 } catch (TimeoutException e) {
-                    System.out.println("检测任务超时，继续执行~");
+                    // 工作任务长时间没有返回，则[任务句柄.get]会抛出TimeoutException异常
+                    System.out.println("检测任务超时，杀死任务，重启开启新任务~");
+                    任务句柄.cancel(true);
+                } catch (ExecutionException e) {
+                    // 工作任务抛出任何异常的话，则[任务句柄.get]会抛出ExecutionException异常
+                    System.out.println("工作任务抛出任何异常~");
+                    break;
+                }
+                catch (InterruptedException e) {
+                    // 当前线程被中断的话，则[任务句柄.get]InterruptedException异常
+                    System.out.println("循环执行任务线程被中断~");
+                    break;
                 }
                 cnt++;
             }
@@ -98,7 +106,6 @@ public class DXF {
         绑定窗口();
         if (thread == null) {
             激活窗口();
-            //thread = new TaskThread();
             thread = new 循环执行任务线程(new 根特皇宫刷图任务());
             thread.start();
         }
