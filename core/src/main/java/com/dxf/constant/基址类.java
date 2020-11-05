@@ -1,13 +1,13 @@
 package com.dxf.constant;
 
 public class 基址类 {
-    public static final long 人物基址 = 5551272976L;
-    public static final long 角色等级 = 5548481952L;
+    public static final long 人物基址 = 5551281168L;
+    public static final long 角色等级 = 5548490144L;
     public static final long 鼠标基址 = 5551575720L;
     public static final long 制裁基址 = 5548589320L;
     public static final long 评分基址 = 5548588568L;
     public static final long 加密基址 = 5551656248L;
-    public static final long 解密基址 = 5551656112L;
+    public static final long 解密基址 = 5551664304L;
     public static final long 特殊解密 = 5516167696L;
     public static final long 帐号基址 = 5547275484L;
     public static final long 商店基址 = 5548595096L;
@@ -21,9 +21,9 @@ public class 基址类 {
     public static final long 金库金币 = 5551587168L;
     public static final long 角色基址 = 5548589720L;
     public static final long 角色指针 = 5548592536L;
-    public static final long 人物名称 = 5548481904L;
+    public static final long 人物名称 = 5548490096L;
     public static final long 基本职业 = 5548481896L;
-    public static final long 职业名称 = 5548481912L;
+    public static final long 职业名称 = 5548490104L;
     public static final long 角色类型 = 5548481920L;
     public static final long 转职判断 = 5548481924L;
     public static final long 觉醒次数 = 5548481928L;
@@ -35,15 +35,15 @@ public class 基址类 {
     public static final long 城镇坐标Y = 5548598556L;
     public static final long 城镇坐标 = 5551272992L;
     public static final long 抗魔基址 = 5548463348L;
-    public static final long 游戏状态 = 5547147684L;
+    public static final long 游戏状态 = 5547155876L;
     public static final long 金币判断 = 5548488132L;
     public static final long 全局空白 = 5594161632L;
     public static final long 副本名称 = 5548831296L;
     public static final long 副本编号 = 5548481832L;
     public static final long 副本难度 = 5548589720L;
-    public static final long 房间编号 = 5548595080L;
-    public static final long 最大疲劳 = 5551273248L;
-    public static final long 当前疲劳 = 5551273240L;
+    public static final long 房间编号 = 5548603272L;
+    public static final long 最大疲劳 = 5551281440L;
+    public static final long 当前疲劳 = 5551281432L;
     public static final long 房间数据 = 5548393848L;
     public static final long 进图次数 = 5548459828L;
     public static final long 通关次数 = 5551580488L;
