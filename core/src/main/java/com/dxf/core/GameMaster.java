@@ -1,13 +1,16 @@
 package com.dxf.core;
 
 import com.dxf.component.基础功能类;
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Dispatch;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class GameMaster {
@@ -96,6 +99,14 @@ public class GameMaster {
     }
 
     //==================================================== 内存 =========================================================
+    public static int 写内存字节集(int 窗口句柄, long 内存地址, String 字节集) {
+        return Dispatch.call(DM, "WriteDataAddr", 窗口句柄, 内存地址, 字节集).getInt();
+    }
+
+    public static String 读内存字节集(int 窗口句柄, long 内存地址, int 长度) {
+        return Dispatch.call(DM, "ReadDataAddr", 窗口句柄, 内存地址, 长度).getString();
+    }
+
     public static long readInt(int hwnd, String addr, int type) {
         return Dispatch.call(DM, "ReadInt", hwnd, addr, type).getLong();
     }

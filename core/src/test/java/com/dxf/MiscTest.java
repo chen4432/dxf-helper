@@ -1,11 +1,13 @@
 package com.dxf;
 
+import com.google.common.base.Joiner;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author GuJun
@@ -103,6 +105,18 @@ public class MiscTest {
         }
 
         System.out.println(path);
+    }
+
+
+    String 转字节集字符串(List<Byte> 字节集) {
+        List<String> s = 字节集.stream().map(Integer::toHexString).collect(Collectors.toList());
+        return Joiner.on(" ").join(s);
+    }
+
+    @Test
+    public void test2() {
+        List<Byte> bytes = Arrays.asList((byte)123, (byte)127, (byte)48);
+        System.out.println(转字节集字符串(bytes));
     }
 
 }
