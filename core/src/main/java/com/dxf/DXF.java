@@ -2,7 +2,7 @@ package com.dxf;
 
 import com.dxf.component.人物角色类;
 import com.dxf.component.基础功能类;
-import com.dxf.core.GameMaster;
+import com.dxf.core.TP;
 import com.dxf.model.游戏状态枚举;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,7 +17,7 @@ public class DXF {
     private final int 窗口句柄;
 
     public DXF() {
-        窗口句柄 = GameMaster.findWindow("地下城与勇士", "地下城与勇士");
+        窗口句柄 = TP.findWindow("地下城与勇士", "地下城与勇士");
         if (窗口句柄 == 0) {
             System.out.println("地下城与勇士游戏未启动！");
             System.exit(-1);
@@ -29,11 +29,11 @@ public class DXF {
     }
 
     public void 激活窗口() {
-        GameMaster.setWindowState(窗口句柄, 1);
+        TP.setWindowState(窗口句柄, 1);
     }
 
     public void setUp() {
-        int ret = GameMaster.bindWindowEx(
+        int ret = TP.bindWindowEx(
                 窗口句柄,
                 "dx.graphic.2d",
                 "dx.mouse.position.lock.api|dx.mouse.position.lock.message|dx.mouse.clip.lock.api|dx.mouse.input.lock.api|dx.mouse.state.api|dx.mouse.api|dx.mouse.cursor",
@@ -50,7 +50,7 @@ public class DXF {
     }
 
     public void cleanUp() {
-        int ret = GameMaster.unbindWindow();
+        int ret = TP.unbindWindow();
         if (ret != 1) {
             System.out.println("解绑窗口失败！错误码：" + ret);
         } else {

@@ -2,7 +2,7 @@ package com.dxf.component;
 
 import com.dxf.config.配置项类;
 import com.dxf.constant.基址类;
-import com.dxf.core.GameMaster;
+import com.dxf.core.TP;
 import com.dxf.model.坐标类;
 import com.dxf.model.按键枚举;
 import com.dxf.model.方向枚举;
@@ -35,10 +35,11 @@ public class 人物角色类 {
 
     public 人物角色类(int 窗口句柄) {
         this.窗口句柄 = 窗口句柄;
-        名称 = GameMaster.readStringAddr(窗口句柄, GameMaster.readLong(窗口句柄, 基址类.人物名称), 1, 50);
-        等级 = GameMaster.readInt(窗口句柄, 基址类.角色等级);
-        职业 = GameMaster.readStringAddr(窗口句柄, GameMaster.readLong(窗口句柄, 基址类.职业名称), 1, 50);
+        名称 = TP.readStringAddr(窗口句柄, TP.readLong(窗口句柄, 基址类.人物名称), 1, 50);
+        等级 = TP.readInt(窗口句柄, 基址类.角色等级);
+        职业 = TP.readStringAddr(窗口句柄, TP.readLong(窗口句柄, 基址类.职业名称), 1, 50);
         设置技能配置();
+        设置移动速度();
         线程池.scheduleAtFixedRate(new Task(), 10, 1000, TimeUnit.MILLISECONDS);
     }
 
@@ -81,7 +82,7 @@ public class 人物角色类 {
     private static final int KEY_RR = 39;
 
     public 坐标类 取人物坐标() {
-        long 人物数据 = GameMaster.readLong(窗口句柄, 基址类.人物基址);
+        long 人物数据 = TP.readLong(窗口句柄, 基址类.人物基址);
         return 基础功能类.取人物坐标(窗口句柄, 人物数据);
     }
 
@@ -91,15 +92,15 @@ public class 人物角色类 {
         调整方向(方向枚举.右);
         基础功能类.延时(1000);
         坐标类 起点 = 取人物坐标();
-        GameMaster.keyPress(KEY_RR);
+        TP.keyPress(KEY_RR);
         基础功能类.延时(30);
-        GameMaster.keyDown(KEY_RR);
+        TP.keyDown(KEY_RR);
         基础功能类.延时(30);
-        GameMaster.keyDown(KEY_DN);
+        TP.keyDown(KEY_DN);
         int duration = 500;
         基础功能类.延时(duration);
-        GameMaster.keyUp(KEY_RR);
-        GameMaster.keyUp(KEY_DN);
+        TP.keyUp(KEY_RR);
+        TP.keyUp(KEY_DN);
         坐标类 终点 = 取人物坐标();
         int xDelta = 终点.X() - 起点.X();
         int yDelta = 终点.Y() - 起点.Y();
@@ -123,46 +124,46 @@ public class 人物角色类 {
         }
         System.out.printf("xTime: %d\tyTime: %d\n", xTime, yTime);
         if (xDistance == 0) {
-            GameMaster.keyDownChar(dirUD);
+            TP.keyDownChar(dirUD);
             基础功能类.延时(yTime);
-            GameMaster.keyUpChar(dirUD);
+            TP.keyUpChar(dirUD);
             return;
         }
         if (yDistance == 0) {
-            GameMaster.keyPressChar(dirLR);
+            TP.keyPressChar(dirLR);
             基础功能类.延时(30);
-            GameMaster.keyDownChar(dirLR);
+            TP.keyDownChar(dirLR);
             基础功能类.延时(xTime);
-            GameMaster.keyUpChar(dirLR);
+            TP.keyUpChar(dirLR);
             return;
         }
-        GameMaster.keyPressChar(dirLR);
+        TP.keyPressChar(dirLR);
         基础功能类.延时(30);
-        GameMaster.keyDownChar(dirLR);
+        TP.keyDownChar(dirLR);
         基础功能类.延时(30);
-        GameMaster.keyDownChar(dirUD);
+        TP.keyDownChar(dirUD);
         if (xTime > yTime) {
             基础功能类.延时(yTime);
-            GameMaster.keyUpChar(dirUD);
+            TP.keyUpChar(dirUD);
             基础功能类.延时(xTime - yTime);
-            GameMaster.keyUpChar(dirLR);
+            TP.keyUpChar(dirLR);
         } else {
             基础功能类.延时(xTime);
-            GameMaster.keyUpChar(dirLR);
+            TP.keyUpChar(dirLR);
             基础功能类.延时(yTime - xTime);
-            GameMaster.keyUpChar(dirUD);
+            TP.keyUpChar(dirUD);
         }
         基础功能类.延时(100);
     }
 
     public void 移动物品到脚下() {
-        GameMaster.keyPress(76);
+        TP.keyPress(76);
     }
 
     public void 调整方向(方向枚举 dir) {
         try {
-            if (dir == 方向枚举.右) GameMaster.keyPressChar("right");
-            if (dir == 方向枚举.左) GameMaster.keyPressChar("left");
+            if (dir == 方向枚举.右) TP.keyPressChar("right");
+            if (dir == 方向枚举.左) TP.keyPressChar("left");
             Thread.sleep(100);
         } catch (Exception e) {
             e.printStackTrace();
@@ -202,17 +203,17 @@ public class 人物角色类 {
     }
 
     public void 释放技能(int cnt) throws InterruptedException {
-        GameMaster.keyDownChar("X");
+        TP.keyDownChar("X");
         for (技能信息类 技能 : 技能栏) {
             System.out.println(技能);
             if (技能.取技能状态() == 技能信息类.技能状态枚举.正常 && 技能.取技能类型() == 技能信息类.技能类型枚举.攻击) {
-                GameMaster.keyPressChar(技能.使用技能());
+                TP.keyPressChar(技能.使用技能());
                 System.out.println("释放技能： " + 技能.取技能按键());
                 基础功能类.延时(1000);
                 if (--cnt == 0) break;
             }
         }
-        GameMaster.keyUpChar("X");
+        TP.keyUpChar("X");
     }
 
     class Task implements Runnable {
@@ -312,10 +313,10 @@ public class 人物角色类 {
                     log.info("通关完成...");
                     捡物(room);
                     基础功能类.等待直到符合条件(() -> {
-                        GameMaster.keyPressChar("ESC");
+                        TP.keyPressChar("ESC");
                         基础功能类.延时(500);
                         System.out.println("等待清算结束，返回城镇中...");
-                        GameMaster.keyPressChar("F12");
+                        TP.keyPressChar("F12");
                         基础功能类.延时(500);
                         return 基础功能类.取游戏状态(窗口句柄) == 游戏状态枚举.城镇;
                     }, 10, 1000);
@@ -364,16 +365,16 @@ public class 人物角色类 {
                     key = "left";
                     break;
             }
-            GameMaster.keyDownChar(key);
+            TP.keyDownChar(key);
             基础功能类.延时(1000);
-            GameMaster.keyUpChar(key);
+            TP.keyUpChar(key);
             //精确过门(door, dir);
         }
     }
 
     public void 捡物(房间信息类 room) throws InterruptedException {
         Thread.sleep(500);
-        GameMaster.keyPressChar("v");
+        TP.keyPressChar("v");
         Thread.sleep(500);
     }
 
@@ -386,14 +387,14 @@ public class 人物角色类 {
     public void 进图_根特皇宫() throws InterruptedException {
         if (基础功能类.取游戏状态(窗口句柄) != 游戏状态枚举.城镇) return;
         基础功能类.等待直到符合条件(() -> {
-            GameMaster.keyDownChar(按键枚举.方向左.getStrCode());
+            TP.keyDownChar(按键枚举.方向左.getStrCode());
             return 基础功能类.取游戏状态(窗口句柄) == 游戏状态枚举.选择副本;
         }, 30, 1000);
-        GameMaster.keyUpChar(按键枚举.方向左.getStrCode());
+        TP.keyUpChar(按键枚举.方向左.getStrCode());
         基础功能类.等待直到符合条件(() -> {
-            GameMaster.keyPressChar("right");
+            TP.keyPressChar("right");
             基础功能类.延时(500);
-            GameMaster.keyPressChar("space");
+            TP.keyPressChar("space");
             return 基础功能类.取游戏状态(窗口句柄) == 游戏状态枚举.在副本中;
         }, 30, 1000);
     }

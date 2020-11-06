@@ -1,7 +1,7 @@
 package com.dxf.component;
 
 
-import com.dxf.core.GameMaster;
+import com.dxf.core.TP;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
@@ -61,21 +61,21 @@ public class 技能信息类 {
             case BUFF:
                 List<String> 按键序列 = Arrays.stream(按键.split("\\|")).collect(Collectors.toList());
                 log.info("BUFF技能名称：{}, 按键序列：{}", 名称, 按键序列);
-                GameMaster.keyPressCharList(按键序列, 20);
+                TP.keyPressCharList(按键序列, 20);
                 break;
             case 攻击:
                 if (按键时间 > 0) {
                     log.info("攻击技能名称: {}, 按键时间: {}", 名称, 按键时间);
-                    GameMaster.keyDownChar(按键);
+                    TP.keyDownChar(按键);
                     基础功能类.延时(按键时间);
-                    GameMaster.keyUpChar(按键);
+                    TP.keyUpChar(按键);
                 } else {
                     log.info("攻击技能名称: {}, 按键时间: {}, 按键次数: {}", 名称, 按键时间, 按键次数);
-                    GameMaster.keyPressChar(按键);
+                    TP.keyPressChar(按键);
                     if (按键次数 > 1) {
                         for (int i = 1; i < 按键次数; ++i) {
                             基础功能类.延时(按键间隔时间);
-                            GameMaster.keyUpChar(按键);
+                            TP.keyUpChar(按键);
                         }
                     }
                 }

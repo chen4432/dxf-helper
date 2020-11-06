@@ -1,6 +1,6 @@
 package com.dxf.component;
 
-import com.dxf.core.GameMaster;
+import com.dxf.core.TP;
 import com.dxf.model.坐标类;
 import com.dxf.model.方向枚举;
 import com.dxf.constant.偏移类;
@@ -22,26 +22,26 @@ public class 地图信息类 {
 
     public 地图信息类(int 窗口句柄) {
         this.窗口句柄 = 窗口句柄;
-        地图数据 = GameMaster.readLong(窗口句柄, 基址类.房间编号, 偏移类.时间基址, 偏移类.门型偏移);
+        地图数据 = TP.readLong(窗口句柄, 基址类.房间编号, 偏移类.时间基址, 偏移类.门型偏移);
         log.info("地图数据：{}", 地图数据);
         int BOSS房间X = 基础功能类.解密读取(窗口句柄, 地图数据 + 偏移类.BOSS房间X);
         int BOSS房间Y = 基础功能类.解密读取(窗口句柄, 地图数据 + 偏移类.BOSS房间Y);
         BOSS房间 = new 坐标类(BOSS房间X, BOSS房间Y);
         int 地图编号 = 基础功能类.解密读取(窗口句柄, 地图数据 + 偏移类.地图编码);
         log.info("地图编号：{}", 地图编号); // 0\1\2\3
-        地图宽度 = GameMaster.readInt(窗口句柄, 地图数据 + 偏移类.宽高偏移, 地图编号 * 8);
-        地图高度 = GameMaster.readInt(窗口句柄, 地图数据 + 偏移类.宽高偏移, 地图编号 * 8 + 4);
+        地图宽度 = TP.readInt(窗口句柄, 地图数据 + 偏移类.宽高偏移, 地图编号 * 8);
+        地图高度 = TP.readInt(窗口句柄, 地图数据 + 偏移类.宽高偏移, 地图编号 * 8 + 4);
         int[][] 地图通道 = new int[地图高度][地图宽度];
-        long 通道数据 = GameMaster.readLong(窗口句柄, 地图数据 + 偏移类.数组偏移, 地图编号 * 40 + 8);
+        long 通道数据 = TP.readLong(窗口句柄, 地图数据 + 偏移类.数组偏移, 地图编号 * 40 + 8);
         int n = 0;
         for (int i = 0; i < 地图高度; ++i) {
             for (int j = 0; j < 地图宽度; ++j) {
-                地图通道[i][j] = GameMaster.readInt(窗口句柄, 通道数据 + n * 4);
+                地图通道[i][j] = TP.readInt(窗口句柄, 通道数据 + n * 4);
                 ++n;
             }
         }
-        int 当前房间X = GameMaster.readInt(窗口句柄, 地图数据 + 偏移类.当前房间X);
-        int 当前房间Y = GameMaster.readInt(窗口句柄, 地图数据 + 偏移类.当前房间Y);
+        int 当前房间X = TP.readInt(窗口句柄, 地图数据 + 偏移类.当前房间X);
+        int 当前房间Y = TP.readInt(窗口句柄, 地图数据 + 偏移类.当前房间Y);
         坐标类 当前房间 = new 坐标类(当前房间X, 当前房间Y);
         下一个房间 = new HashMap<>();
         List<坐标类> 路径 = 生成通关路径(地图通道, 当前房间);
@@ -131,8 +131,8 @@ public class 地图信息类 {
     }
 
     public 坐标类 取当前房间坐标() {
-        int startRoomX = GameMaster.readInt(窗口句柄, 地图数据 + 偏移类.当前房间X);
-        int startRoomY = GameMaster.readInt(窗口句柄, 地图数据 + 偏移类.当前房间Y);
+        int startRoomX = TP.readInt(窗口句柄, 地图数据 + 偏移类.当前房间X);
+        int startRoomY = TP.readInt(窗口句柄, 地图数据 + 偏移类.当前房间Y);
         return new 坐标类(startRoomX, startRoomY);
     }
 

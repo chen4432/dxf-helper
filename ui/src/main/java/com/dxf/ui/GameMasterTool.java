@@ -1,7 +1,5 @@
 package com.dxf.ui;
 
-import com.dxf.core.GameMaster;
-
 import javax.swing.*;
 
 /**

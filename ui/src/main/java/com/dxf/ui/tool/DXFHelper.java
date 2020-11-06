@@ -1,13 +1,12 @@
 package com.dxf.ui.tool;
 
 
-import com.dxf.core.GameMaster;
+import com.dxf.core.TP;
 import com.google.common.base.Joiner;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,12 +43,13 @@ public class DXFHelper {
                     List<String> hexBytes;
                     if (source.contains(",")) {
                         String[] fields = source.split(",", -1);
-                        hexBytes = Arrays.stream(fields).map(Byte::new).map(Integer::toHexString).collect(Collectors.toList());
+                        hexBytes = Arrays.stream(fields).map(String::trim).map(Integer::new).map(Integer::toHexString).collect(Collectors.toList());
                     } else {
                         String[] fields = source.split(" ", -1);
                         hexBytes = Arrays.stream(fields).collect(Collectors.toList());
                     }
-                    taTarget.setText(GameMaster.disAssemble(Joiner.on(" ").join(hexBytes), 0,1));
+                    System.out.println(hexBytes);
+                    taTarget.setText(TP.disAssemble(Joiner.on(" ").join(hexBytes), 0,1));
                 }
             }
         });

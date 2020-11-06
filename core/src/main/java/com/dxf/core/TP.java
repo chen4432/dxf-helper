@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-public class GameMaster {
+public class TP {
 
     private static ActiveXComponent DM;
 
@@ -29,9 +29,9 @@ public class GameMaster {
             //Dll.INSTANCE.SetDllPathA("src/main/resources/dm.dll", 0);
             DM = new ActiveXComponent("dm.dmsoft");
             Preconditions.checkNotNull(DM);
-            GameMaster.reg("suifengyunnuo5fe95058910f5da8bb59e01fb48b93d2", "83Y4N");
-            GameMaster.dmGuard(1, "memory2");       // 破读写
-            GameMaster.dmGuard(1, "hm dm.dll 1");   // 隐藏模块
+            TP.reg("suifengyunnuo5fe95058910f5da8bb59e01fb48b93d2", "83Y4N");
+            TP.dmGuard(1, "memory2");       // 破读写
+            TP.dmGuard(1, "hm dm.dll 1");   // 隐藏模块
             //GameMaster.dmGuard(1, "b2");            // 保护指定进程不被非法访问
             Thread.sleep(1000);
         } catch (Exception e) {
@@ -398,5 +398,8 @@ public class GameMaster {
     public static String findColorE(int x1, int y1, int x2, int y2, String color, double sim, int dir) {
         return Dispatch.call(DM, "FindColorE", x1, y1, x2, y2, color, sim, dir).getString();
     }
-    
+
+    public static String findPicE(int x1, int y1, int x2, int y2, String picName, String deltaColor, double sim, int dir) {
+        return Dispatch.call(DM, "FindPicE", x1, y1, x2, y2, picName, deltaColor, sim, dir).getString();
+    }
 }

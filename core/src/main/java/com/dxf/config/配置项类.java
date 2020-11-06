@@ -41,6 +41,29 @@ public class 配置项类 {
 
         ));
 
+        技能栏配置列表.put("南山、敬老院", Arrays.asList(
+                //new 技能信息类("X", 按键枚举.X.getStrCode(), 2, 技能信息类.技能类型枚举.攻击, 1000, 10, 20),
+
+                //new 技能信息类("A", 按键枚举.A.getStrCode(), 5, 技能信息类.技能类型枚举.攻击, 0, 10, 20),
+                new 技能信息类("S", 按键枚举.S.getStrCode(), 1, 技能信息类.技能类型枚举.攻击, 1000, 11, 21),
+                //new 技能信息类("D", 按键枚举.D.getStrCode(), 5, 技能信息类.技能类型枚举.攻击, 0, 10, 20),
+                new 技能信息类("F", 按键枚举.F.getStrCode(), 9, 技能信息类.技能类型枚举.攻击, 0, 10, 20),
+                new 技能信息类("G", 按键枚举.G.getStrCode(), 13, 技能信息类.技能类型枚举.攻击, 0, 10, 20),
+                //new 技能信息类("H", 按键枚举.H.getStrCode(), 15, 技能信息类.技能类型枚举.攻击, 0, 10, 20),
+
+                new 技能信息类("Q", 按键枚举.Q.getStrCode(), 21, 技能信息类.技能类型枚举.攻击, 0, 20, 6),
+                new 技能信息类("W", 按键枚举.W.getStrCode(), 17, 技能信息类.技能类型枚举.攻击, 0, 20, 5),
+                new 技能信息类("E", 按键枚举.E.getStrCode(), 37, 技能信息类.技能类型枚举.攻击, 0, 20, 4),
+                //new 技能信息类("R", 按键枚举.R.getStrCode(), 40, 技能信息类.技能类型枚举.攻击, 0, 20, 3),
+                //new 技能信息类("T", 按键枚举.T.getStrCode(), 40, 技能信息类.技能类型枚举.攻击, 0, 20, 2),
+                new 技能信息类("Y", 按键枚举.Y.getStrCode(), 120, 技能信息类.技能类型枚举.攻击, 0, 100, 1),
+
+                new 技能信息类("S", "space", 5, 技能信息类.技能类型枚举.BUFF),
+                new 技能信息类("破击", "right|right|space", 5, 技能信息类.技能类型枚举.BUFF),
+                new 技能信息类("流星狂", "a|space|a", 5, 技能信息类.技能类型枚举.BUFF)
+
+        ));
+
         技能栏配置列表.put("修罗花弄影", Arrays.asList(
                 new 技能信息类("普通攻击", 按键枚举.X.getStrCode(), 2, 技能信息类.技能类型枚举.攻击),
 
@@ -213,8 +236,6 @@ public class 配置项类 {
                 new 技能信息类("UDS", "up|down|space", 5, 技能信息类.技能类型枚举.BUFF),
                 new 技能信息类("LDRS", "left|down|right|space", 5, 技能信息类.技能类型枚举.BUFF),
                 new 技能信息类("URS", "up|right|space", 5, 技能信息类.技能类型枚举.BUFF)
-
-
         ));
 
         移动速度列表 = new HashMap<>();
@@ -230,6 +251,8 @@ public class 配置项类 {
         移动速度列表.put("CodeTheWorld", new Pair<>(0.54, 0.18));
         移动速度列表.put("jay俊", new Pair<>(0.52, 0.18));
         移动速度列表.put("MoreEffect", new Pair<>(0.49, 0.18));
+
+        移动速度列表.put("南山、敬老院", new Pair<>(0.46, 0.17));
     }
 
     public static List<技能信息类> 读取技能栏(String 角色名称) {

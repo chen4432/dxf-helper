@@ -24,7 +24,7 @@ public class AsmTest {
         // pop rbx
         // ret
 
-        System.out.println(GameMaster.ver());
+        System.out.println(TP.ver());
         String code = "";
         code += "53 48 83 EC 28 48 B8";
         code += "300EC84A01000000"; // 14AC80E30
@@ -66,7 +66,7 @@ public class AsmTest {
         code += "48 B8 40 72 25 45 01 00 00 00"; // 缓冲CALL
         code += "FF D0";
         code += "48 81 C4 00 01 00 00";
-        String s = GameMaster.disAssemble(code, 0, 1);
+        String s = TP.disAssemble(code, 0, 1);
         System.out.println(s);
     }
 
@@ -80,7 +80,7 @@ public class AsmTest {
         code += "48 B8 03 00 00 00 00 00 00 00";
         code += "FF D0";
         code += "48 81 C4 00 01 00 00";
-        String s = GameMaster.disAssemble(code, 0, 1);
+        String s = TP.disAssemble(code, 0, 1);
         System.out.println(s);
     }
 
@@ -91,7 +91,7 @@ public class AsmTest {
         code += "48 B8 40 AA 35 45 01 00 00 00";
         code += "FF D0";
         code += "48 81 C4 00 01 00 00";
-        String s = GameMaster.disAssemble(code, 0, 1);
+        String s = TP.disAssemble(code, 0, 1);
         System.out.println(s);
     }
 
@@ -109,54 +109,54 @@ public class AsmTest {
 
     @Test
     public void test_2() {
-        GameMaster.reg("suifengyunnuo5fe95058910f5da8bb59e01fb48b93d2", "83Y4N");
-        GameMaster.dmGuard(1, "memory2");
-        GameMaster.dmGuard(1, "hm dm.dll 1");
-        int hwnd = GameMaster.findWindow("地下城与勇士", "地下城与勇士");
+        TP.reg("suifengyunnuo5fe95058910f5da8bb59e01fb48b93d2", "83Y4N");
+        TP.dmGuard(1, "memory2");
+        TP.dmGuard(1, "hm dm.dll 1");
+        int hwnd = TP.findWindow("地下城与勇士", "地下城与勇士");
         System.out.println(hwnd);
-        GameMaster.asmClear();
-        GameMaster.asmAdd("push rbx");
-        GameMaster.asmAdd("sub rsp, 28");
-        GameMaster.asmAdd("mov rax, 14ac80e30");
-        GameMaster.asmAdd("mov rax, [rax]");
-        GameMaster.asmAdd("mov r8, [rax]");
+        TP.asmClear();
+        TP.asmAdd("push rbx");
+        TP.asmAdd("sub rsp, 28");
+        TP.asmAdd("mov rax, 14ac80e30");
+        TP.asmAdd("mov rax, [rax]");
+        TP.asmAdd("mov r8, [rax]");
         //GameMaster.asmAdd("mov edx, 1d3f93ef"); // 1d3f93ef: 春之祝福2000力智
         //GameMaster.asmAdd("mov edx, 1d3503e0"); // 1d3503e0: 雪人药 14000力智, 三速50%
-        GameMaster.asmAdd("mov edx, 27AC56"); // 27AC56: 霸体
-        GameMaster.asmAdd("add [rax], al");
-        GameMaster.asmAdd("add [rax], al");
-        GameMaster.asmAdd("mov rcx, rax");
-        GameMaster.asmAdd("call qword [r8+1280]");
-        GameMaster.asmAdd("add [rax], al");
-        GameMaster.asmAdd("add [rax], al");
-        GameMaster.asmAdd("add rsp, 28");
-        GameMaster.asmAdd("pop rbx");
-        GameMaster.asmAdd("ret");
-        GameMaster.asmCall(hwnd, 1);
+        TP.asmAdd("mov edx, 27AC56"); // 27AC56: 霸体
+        TP.asmAdd("add [rax], al");
+        TP.asmAdd("add [rax], al");
+        TP.asmAdd("mov rcx, rax");
+        TP.asmAdd("call qword [r8+1280]");
+        TP.asmAdd("add [rax], al");
+        TP.asmAdd("add [rax], al");
+        TP.asmAdd("add rsp, 28");
+        TP.asmAdd("pop rbx");
+        TP.asmAdd("ret");
+        TP.asmCall(hwnd, 1);
     }
 
     @Test
     public void drug() {
         String drug = "1D3F93EF";
-        int hwnd = GameMaster.findWindow("地下城与勇士", "地下城与勇士");
+        int hwnd = TP.findWindow("地下城与勇士", "地下城与勇士");
         System.out.println(hwnd);
-        GameMaster.asmClear();
-        GameMaster.asmAdd("push rbx");
-        GameMaster.asmAdd("sub rsp, 28");
-        GameMaster.asmAdd("mov rax, 14ac80e30");
-        GameMaster.asmAdd("mov rax, [rax]");
-        GameMaster.asmAdd("mov r8, [rax]");
+        TP.asmClear();
+        TP.asmAdd("push rbx");
+        TP.asmAdd("sub rsp, 28");
+        TP.asmAdd("mov rax, 14ac80e30");
+        TP.asmAdd("mov rax, [rax]");
+        TP.asmAdd("mov r8, [rax]");
         //GameMaster.asmAdd("mov edx, 1d3f93ef"); // 1d3f93ef: 春之祝福2000力智
-        GameMaster.asmAdd("mov edx," + drug); // 1d3503e0: 雪人药 14000力智, 三速50%
-        GameMaster.asmAdd("add [rax], al");
-        GameMaster.asmAdd("add [rax], al");
-        GameMaster.asmAdd("mov rcx, rax");
-        GameMaster.asmAdd("call qword [r8+1280]");
-        GameMaster.asmAdd("add [rax], al");
-        GameMaster.asmAdd("add [rax], al");
-        GameMaster.asmAdd("add rsp, 28");
-        GameMaster.asmAdd("pop rbx");
-        GameMaster.asmAdd("ret");
-        GameMaster.asmCall(hwnd, 1);
+        TP.asmAdd("mov edx," + drug); // 1d3503e0: 雪人药 14000力智, 三速50%
+        TP.asmAdd("add [rax], al");
+        TP.asmAdd("add [rax], al");
+        TP.asmAdd("mov rcx, rax");
+        TP.asmAdd("call qword [r8+1280]");
+        TP.asmAdd("add [rax], al");
+        TP.asmAdd("add [rax], al");
+        TP.asmAdd("add rsp, 28");
+        TP.asmAdd("pop rbx");
+        TP.asmAdd("ret");
+        TP.asmCall(hwnd, 1);
     }
 }
