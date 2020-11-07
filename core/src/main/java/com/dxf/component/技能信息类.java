@@ -17,13 +17,10 @@ public class 技能信息类 {
     public static final int 技能状态_正常  = 0;
     public static final int 技能状态_冷却  = 1;
 
-    private static final int    默认优先级_普通房间 = 100;
-    private static final int    默认优先级_领主房间 = 100;
-    private static final int    默认按键时间 = 0;
-
     private final String        名称;
     private final String        按键;
     private final int           冷却时间;
+    private final int           持续时间;
     private final int           类型;
     private final int           按键时间;               // 毫秒
     private final int           技能优先级_普通房间;
@@ -65,6 +62,9 @@ public class 技能信息类 {
                     log.info("攻击技能名称: {}, 按键时间: {}", 名称, 按键时间);
                     TP.keyPressChar(按键);
                 }
+                if (持续时间 > 0) {
+                    基础功能类.延时(持续时间);
+                }
                 tick = 冷却时间;
                 状态 = 技能状态_冷却;
                 break;
@@ -88,14 +88,15 @@ public class 技能信息类 {
         return 状态 == 技能状态_冷却;
     }
 
-    public 技能信息类(String 名称, String 按键, int 冷却时间, int 类型, int 按键时间, int 技能优先级_普通房间, int 技能优先级_领主房间) {
-        this.名称                     = 名称;
-        this.按键                     = 按键;
-        this.冷却时间                  = 冷却时间;
-        this.类型                     = 类型;
-        this.按键时间                  = 按键时间;
-        this.技能优先级_普通房间         = 技能优先级_普通房间;
-        this.技能优先级_领主房间         = 技能优先级_领主房间;
+    public 技能信息类(String 名称, String 按键, int 冷却时间, int 持续时间, int 类型, int 按键时间, int 技能优先级_普通房间, int 技能优先级_领主房间) {
+        this.名称 = 名称;
+        this.按键 = 按键;
+        this.冷却时间 = 冷却时间;
+        this.持续时间 = 持续时间;
+        this.类型 = 类型;
+        this.按键时间 = 按键时间;
+        this.技能优先级_普通房间 = 技能优先级_普通房间;
+        this.技能优先级_领主房间 = 技能优先级_领主房间;
     }
 
     public int 取技能类型() {
