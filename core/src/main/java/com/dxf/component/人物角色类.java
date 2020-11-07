@@ -28,8 +28,6 @@ public class 人物角色类 {
 
     private CopyOnWriteArrayList<技能信息类> 技能栏;
 
-    private final ScheduledExecutorService 线程池 = Executors.newSingleThreadScheduledExecutor();
-
     private Double 移动速度X = 0.44;
     private Double 移动速度Y = 0.18;
 
@@ -40,7 +38,8 @@ public class 人物角色类 {
         职业 = TP.readStringAddr(窗口句柄, TP.readLong(窗口句柄, 基址类.职业名称), 1, 50);
         设置技能配置();
         设置移动速度();
-        线程池.scheduleAtFixedRate(new Task(), 10, 1000, TimeUnit.MILLISECONDS);
+        ScheduledExecutorService 线程池 = Executors.newSingleThreadScheduledExecutor();
+        线程池.scheduleAtFixedRate(new Task(), 1, 1000, TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -92,25 +91,27 @@ public class 人物角色类 {
         调整方向(方向枚举.右);
         基础功能类.延时(1000);
         坐标类 起点 = 取人物坐标();
+        long 计时开始 = System.currentTimeMillis();
         TP.keyPress(KEY_RR);
         基础功能类.延时(30);
         TP.keyDown(KEY_RR);
         基础功能类.延时(30);
         TP.keyDown(KEY_DN);
-        int duration = 500;
-        基础功能类.延时(duration);
+        基础功能类.延时(888);
         TP.keyUp(KEY_RR);
         TP.keyUp(KEY_DN);
+        long 计时结束 = System.currentTimeMillis();
         坐标类 终点 = 取人物坐标();
         int xDelta = 终点.X() - 起点.X();
         int yDelta = 终点.Y() - 起点.Y();
-        移动速度X = xDelta * 1.0 / duration;
-        移动速度Y = yDelta * 1.0 / duration;
+        移动速度X = xDelta * 1.0 / (计时结束-计时开始);
+        移动速度Y = yDelta * 1.0 / (计时结束-计时开始);
         System.out.printf("xSpeed: %f\tySpeed: %f\n", 移动速度X, 移动速度Y);
     }
 
     public void 移动到(坐标类 target) throws InterruptedException {
         坐标类 curr = 取人物坐标();
+        long 计时开始 = System.currentTimeMillis();
         String dirLR = (target.X() > curr.X()) ? "right" : "left";
         String dirUD = (target.Y() > curr.Y()) ? "down" : "up";
         int xTime = 0, yTime = 0;
@@ -153,7 +154,13 @@ public class 人物角色类 {
             基础功能类.延时(yTime - xTime);
             TP.keyUpChar(dirUD);
         }
-        基础功能类.延时(100);
+        long 计时结束 = System.currentTimeMillis();
+        int xDelta = Math.abs(target.X() - curr.X());
+        int yDelta = Math.abs(target.Y() - curr.Y());
+        double x = xDelta * 1.0 / (计时结束-计时开始);
+        double y = yDelta * 1.0 / (计时结束-计时开始);
+        System.out.printf("xSpeed: %f\tySpeed: %f\n", x, y);
+
     }
 
     public void 移动物品到脚下() {
@@ -171,49 +178,38 @@ public class 人物角色类 {
     }
 
     public void 普通房间释放技能() throws InterruptedException {
-        技能栏.sort(Comparator.comparingInt(技能信息类::get技能优先级_普通房间));
+        技能栏.sort(Comparator.comparingInt(技能信息类::取技能优先级_普通房间));
         for (技能信息类 技能 : 技能栏) {
-            if (技能.取技能状态() == 技能信息类.技能状态枚举.正常 && 技能.取技能类型() == 技能信息类.技能类型枚举.攻击) {
-                if (技能.释放技能()) break;
-            }
-        }
-    }
-
-    public void 领主房间释放技能() throws InterruptedException {
-        技能栏.sort(Comparator.comparingInt(技能信息类::get技能优先级_领主房间));
-        for (技能信息类 技能 : 技能栏) {
-            if (技能.取技能状态() == 技能信息类.技能状态枚举.正常 && 技能.取技能类型() == 技能信息类.技能类型枚举.攻击) {
+            if (!技能.是否冷却中() && 技能.是否攻击类型()) {
                 if (技能.释放技能()) {
-                    基础功能类.延时(500);
+                    基础功能类.延时(888);
                     break;
                 }
             }
         }
     }
 
-    public void 释放BUF技能() throws InterruptedException {
+    public void 领主房间释放技能() throws InterruptedException {
+        技能栏.sort(Comparator.comparingInt(技能信息类::取技能优先级_领主房间));
+        for (技能信息类 技能 : 技能栏) {
+            if (!技能.是否冷却中() && 技能.是否攻击类型()) {
+                if (技能.释放技能()) {
+                    基础功能类.延时(888);
+                    break;
+                }
+            }
+        }
+    }
+
+    public void 释放状态技能() throws InterruptedException {
         log.info("开始释放BUFF技能...");
         for (技能信息类 技能 : 技能栏) {
-            if (技能.取技能状态() == 技能信息类.技能状态枚举.正常 && 技能.取技能类型() == 技能信息类.技能类型枚举.BUFF) {
+            if (!技能.是否冷却中() && 技能.是否状态技能()) {
                 技能.释放技能();
                 基础功能类.延时(1000);
             }
         }
         log.info("释放BUFF技能完成!");
-    }
-
-    public void 释放技能(int cnt) throws InterruptedException {
-        TP.keyDownChar("X");
-        for (技能信息类 技能 : 技能栏) {
-            System.out.println(技能);
-            if (技能.取技能状态() == 技能信息类.技能状态枚举.正常 && 技能.取技能类型() == 技能信息类.技能类型枚举.攻击) {
-                TP.keyPressChar(技能.使用技能());
-                System.out.println("释放技能： " + 技能.取技能按键());
-                基础功能类.延时(1000);
-                if (--cnt == 0) break;
-            }
-        }
-        TP.keyUpChar("X");
     }
 
     class Task implements Runnable {
@@ -273,28 +269,6 @@ public class 人物角色类 {
         基础功能类.延时(1000);
     }
 
-    public void 房间清怪(房间信息类 room) throws InterruptedException {
-        while (true) {
-            room.update();
-            List<坐标类> 怪物列表 = room.取怪物列表();
-            坐标类 pos = 取人物坐标();
-            if (怪物列表.isEmpty()) {
-                log.info("房间怪清理完毕！");
-                break;
-            } else {
-                怪物列表.sort((a, b) -> {
-                    if (坐标类.计算距离(pos, a) == 坐标类.计算距离(pos, b)) return 0;
-                    return 坐标类.计算距离(pos, a) > 坐标类.计算距离(pos, b)? 1 : -1;
-                });
-            }
-            坐标类 最近的怪物坐标 = 怪物列表.get(0);
-            log.info("最近的怪物坐标： {}", 最近的怪物坐标);
-            移动到(最近的怪物坐标);
-            释放技能(1);
-        }
-        基础功能类.延时(500);
-    }
-
     public void 执行刷图任务() throws InterruptedException {
         if (基础功能类.取游戏状态(窗口句柄) != 游戏状态枚举.在副本中) {
             log.info("未在副本中，退出。");
@@ -302,7 +276,7 @@ public class 人物角色类 {
         }
         地图信息类 map = new 地图信息类(窗口句柄);
         log.info("地图信息： " + map);
-        释放BUF技能();
+        释放状态技能();
         坐标类 BOSS房间坐标 = map.取BOSS房间();
         while (!Thread.currentThread().isInterrupted()) {
             坐标类 当前房间坐标 = map.取当前房间坐标();
@@ -373,9 +347,9 @@ public class 人物角色类 {
     }
 
     public void 捡物(房间信息类 room) throws InterruptedException {
-        Thread.sleep(500);
+        //Thread.sleep(500);
         TP.keyPressChar("v");
-        Thread.sleep(500);
+        //Thread.sleep(500);
     }
 
     public int get剩余疲劳值() {

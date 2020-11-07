@@ -1,6 +1,5 @@
 package com.dxf.component;
 
-import com.dxf.DXF;
 import com.dxf.constant.偏移类;
 import com.dxf.constant.基址类;
 import com.dxf.core.TP;
