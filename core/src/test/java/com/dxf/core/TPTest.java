@@ -205,5 +205,15 @@ public class TPTest {
         }
     }
 
+    @Test
+    public void 判断_赛利亚房间() throws Exception {
+        TP.setPath("C:\\Users\\jun\\Desktop\\lib");
+        for (int i = 0; i <10000; ++i) {
+            String ret = TP.findPicE(421-5, 194-5, 460+5, 210+5, "赛利亚.bmp", "202020", 0.9, 0);
+            System.out.println(ret);
+            Thread.sleep(1000);
+        }
+    }
+
 
 }

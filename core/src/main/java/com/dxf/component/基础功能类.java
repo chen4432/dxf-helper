@@ -301,4 +301,81 @@ public class 基础功能类 {
         TP.leftClick();
     }
 
+    public static void 下一个角色() throws InterruptedException {
+        等待直到符合条件(()->{
+            TP.keyPressChar("esc");
+            延时(500);
+            String res = TP.findPicE(355-5, 462-5, 402+5, 476+5, "选择角色.bmp", "202020", 0.9, 0);
+            System.out.println(res);
+            return !"-1|-1|-1".equals(res);
+        }, 10, 1000);
+        String[] fields = TP.findPicE(355-5, 462-5, 402+5, 476+5, "选择角色.bmp", "202020", 0.9, 0).split("\\|");
+        int x = Integer.parseInt(fields[1]);
+        int y = Integer.parseInt(fields[2]);
+        等待直到符合条件(()->{
+            TP.moveTo(x, y);
+            TP.leftClick();
+            Thread.sleep(500);
+            return !"-1|-1|-1".equals(TP.findPicE(575-5, 565-5, 624+5, 579+5, "结束游戏.bmp", "202020", 0.9, 0));
+        }, 10, 1000);
+        延时(1000);
+        TP.keyPressChar("right");
+        延时(1000);
+        TP.keyPressChar("space");
+        基础功能类.延时(5000);
+    }
+
+    public static void 进入根特皇宫门口() throws InterruptedException {
+        基础功能类.等待直到符合条件(()-> {
+            TP.keyPressChar("6");
+            基础功能类.延时(500);
+            return !"-1|-1|-1".equals(TP.findPicE(0, 0, 800, 600, "选择地图.bmp", "202020", 0.9, 0));
+        }, 10, 1000);
+        String[] fields = TP.findPicE(0, 0, 800, 600, "选择地图.bmp", "202020", 0.9, 0).split("\\|");
+        final int x1 = Integer.parseInt(fields[1]);
+        final int y1 = Integer.parseInt(fields[2]);
+        等待直到符合条件(()->{
+            TP.moveTo(x1, y1);
+            TP.leftClick();
+            Thread.sleep(500);
+            return !"-1|-1|-1".equals(TP.findPicE(0, 0, 800, 600, "世界.bmp", "202020", 0.9, 0));
+        }, 10, 1000);
+        fields = TP.findPicE(0, 0, 800, 600, "世界.bmp", "202020", 0.9, 0).split("\\|");
+        final int x2 = Integer.parseInt(fields[1]);
+        final int y2 = Integer.parseInt(fields[2]);
+        等待直到符合条件(()->{
+            TP.moveTo(x2, y2);
+            TP.leftClick();
+            Thread.sleep(500);
+            return !"-1|-1|-1".equals(TP.findPicE(0, 0, 800, 600, "皇都.bmp", "202020", 0.9, 0));
+        }, 10, 1000);
+        fields = TP.findPicE(0, 0, 800, 600, "皇都.bmp", "202020", 0.9, 0).split("\\|");
+        final int x3 = Integer.parseInt(fields[1]);
+        final int y3 = Integer.parseInt(fields[2]);
+        等待直到符合条件(()->{
+            TP.moveTo(x3, y3);
+            TP.leftClick();
+            Thread.sleep(500);
+            return !"-1|-1|-1".equals(TP.findPicE(0, 0, 800, 600, "根特皇宫.bmp", "202020", 0.9, 0));
+        }, 10, 1000);
+        fields = TP.findPicE(0, 0, 800, 600, "根特皇宫.bmp", "202020", 0.9, 0).split("\\|");
+        final int x4 = Integer.parseInt(fields[1]) + 70;
+        final int y4 = Integer.parseInt(fields[2]) + 20;
+        等待直到符合条件(()->{
+            TP.moveTo(x4, y4);
+            TP.leftClick();
+            Thread.sleep(500);
+            return !"-1|-1|-1".equals(TP.findPicE(0, 0, 800, 600, "传送.bmp", "202020", 0.9, 0));
+        }, 10, 1000);
+        fields = TP.findPicE(0, 0, 800, 600, "传送.bmp", "202020", 0.9, 0).split("\\|");
+        final int x5 = Integer.parseInt(fields[1]);
+        final int y5 = Integer.parseInt(fields[2]);
+        TP.moveTo(x5, y5);
+        TP.leftClick();
+    }
+
+    public static boolean 是否在赛利亚房间() {
+        return !"-1|-1|-1".equals(TP.findPicE(421-5, 194-5, 460+5, 210+5, "赛利亚.bmp", "202020", 0.9, 0));
+    }
+
 }

@@ -33,29 +33,31 @@ public class DXF {
     }
 
     public void setUp() {
-        int ret = TP.bindWindowEx(
-                窗口句柄,
-                "dx.graphic.2d",
-                "dx.mouse.position.lock.api|dx.mouse.position.lock.message|dx.mouse.clip.lock.api|dx.mouse.input.lock.api|dx.mouse.state.api|dx.mouse.api|dx.mouse.cursor",
-                "dx.keypad.input.lock.api|dx.keypad.state.api|dx.keypad.api",
-                "dx.public.active.api|dx.public.active.message",
-                0
-                );
-        if (ret != 1) {
-            System.out.println("绑定窗口失败！错误码：" + ret);
-        } else {
-            System.out.println("绑定窗口成功！");
-        }
+//        int ret = TP.bindWindowEx(
+//                窗口句柄,
+//                "dx.graphic.2d",
+//                "dx.mouse.position.lock.api|dx.mouse.position.lock.message|dx.mouse.clip.lock.api|dx.mouse.input.lock.api|dx.mouse.state.api|dx.mouse.api|dx.mouse.cursor",
+//                "dx.keypad.input.lock.api|dx.keypad.state.api|dx.keypad.api",
+//                "dx.public.active.api|dx.public.active.message",
+//                0
+//                );
+//        if (ret != 1) {
+//            System.out.println("绑定窗口失败！错误码：" + ret);
+//        } else {
+//            System.out.println("绑定窗口成功！");
+//        }
+        TP.moveWindow(窗口句柄, 0,0);
         激活窗口();
+        TP.setPath("C:\\Users\\jun\\Desktop\\lib");
     }
 
     public void cleanUp() {
-        int ret = TP.unbindWindow();
-        if (ret != 1) {
-            System.out.println("解绑窗口失败！错误码：" + ret);
-        } else {
-            System.out.println("解绑窗口成功！");
-        }
+//        int ret = TP.unbindWindow();
+//        if (ret != 1) {
+//            System.out.println("解绑窗口失败！错误码：" + ret);
+//        } else {
+//            System.out.println("解绑窗口成功！");
+//        }
     }
 
     private Thread thread = null;
@@ -124,6 +126,10 @@ public class DXF {
         public void run() {
             try {
                 激活窗口();
+                if (基础功能类.是否在赛利亚房间()) {
+                    基础功能类.进入根特皇宫门口();
+                    基础功能类.延时(1000);
+                }
                 人物角色类 player = new 人物角色类(窗口句柄);
                 if (基础功能类.取游戏状态(窗口句柄) == 游戏状态枚举.城镇) {
                     player.进图_根特皇宫();
