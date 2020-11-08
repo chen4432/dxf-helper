@@ -50,7 +50,10 @@ public class 技能信息类 {
             case 技能类型_状态:
                 List<String> 按键序列 = Arrays.stream(按键.split("\\|")).collect(Collectors.toList());
                 log.info("BUFF技能名称：{}, 按键序列：{}", 名称, 按键序列);
-                TP.keyPressCharList(按键序列, 20);
+                TP.keyPressCharList(按键序列, 30);
+                if (持续时间 > 0) {
+                    基础功能类.延时(持续时间);
+                }
                 break;
             case 技能类型_攻击:
                 if (按键时间 > 0) {

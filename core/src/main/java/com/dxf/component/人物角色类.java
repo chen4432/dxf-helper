@@ -182,7 +182,6 @@ public class 人物角色类 {
         for (技能信息类 技能 : 技能栏) {
             if (!技能.是否冷却中() && 技能.是否攻击类型()) {
                 if (技能.释放技能()) {
-                    基础功能类.延时(888);
                     break;
                 }
             }
@@ -194,7 +193,6 @@ public class 人物角色类 {
         for (技能信息类 技能 : 技能栏) {
             if (!技能.是否冷却中() && 技能.是否攻击类型()) {
                 if (技能.释放技能()) {
-                    基础功能类.延时(888);
                     break;
                 }
             }
@@ -242,7 +240,7 @@ public class 人物角色类 {
             移动到(最近的怪物坐标);
             领主房间释放技能();
         }
-        基础功能类.延时(1000);
+        //基础功能类.延时(1000);
     }
 
     public void 普通房间清怪(房间信息类 room) throws InterruptedException {
@@ -266,7 +264,7 @@ public class 人物角色类 {
             移动到(最近的怪物坐标);
             普通房间释放技能();
         }
-        基础功能类.延时(1000);
+        //基础功能类.延时(1000);
     }
 
     public void 执行刷图任务() throws InterruptedException {
@@ -276,6 +274,7 @@ public class 人物角色类 {
         }
         地图信息类 map = new 地图信息类(窗口句柄);
         log.info("地图信息： " + map);
+        基础功能类.延时(1500);
         释放状态技能();
         坐标类 BOSS房间坐标 = map.取BOSS房间();
         while (!Thread.currentThread().isInterrupted()) {
