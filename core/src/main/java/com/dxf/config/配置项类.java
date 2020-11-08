@@ -38,25 +38,19 @@ public class 配置项类 {
         移动速度列表.put("剑圣花弄影", new Pair<>(0.80, 0.25));
 
         技能栏配置列表.put("南山、敬老院", Arrays.asList(
-                //new 技能信息类("X", 按键枚举.X.getStrCode(), 2, 技能信息类.技能类型枚举.攻击, 1000, 10, 20),
 
-                //new 技能信息类("A", 按键枚举.A.getStrCode(), 5, 技能信息类.技能类型枚举.攻击, 0, 10, 20),
-                new 技能信息类("S", 按键枚举.S.getStrCode(), 1, 0,0, 1000, 11, 21),
-                //new 技能信息类("D", 按键枚举.D.getStrCode(), 5, 技能信息类.技能类型枚举.攻击, 0, 10, 20),
-                new 技能信息类("F", 按键枚举.F.getStrCode(), 9, 0,0, 0, 10, 20),
-                new 技能信息类("G", 按键枚举.G.getStrCode(), 13, 0,0, 0, 10, 20),
-                //new 技能信息类("H", 按键枚举.H.getStrCode(), 15, 技能信息类.技能类型枚举.攻击, 0, 10, 20),
+                new 技能信息类("S", 按键枚举.S.getStrCode(), 1, 500,0, 1000, 11, 21),
+                new 技能信息类("F", 按键枚举.F.getStrCode(), 9, 1000,0, 0, 10, 20),
+                new 技能信息类("G", 按键枚举.G.getStrCode(), 13, 1000,0, 0, 10, 20),
 
-                new 技能信息类("Q", 按键枚举.Q.getStrCode(), 21, 0,0, 0, 20, 6),
-                new 技能信息类("W", 按键枚举.W.getStrCode(), 17, 0,0, 0, 20, 5),
-                new 技能信息类("E", 按键枚举.E.getStrCode(), 37, 0,0, 0, 20, 4),
-                //new 技能信息类("R", 按键枚举.R.getStrCode(), 40, 技能信息类.技能类型枚举.攻击, 0, 20, 3),
-                //new 技能信息类("T", 按键枚举.T.getStrCode(), 40, 技能信息类.技能类型枚举.攻击, 0, 20, 2),
-                new 技能信息类("Y", 按键枚举.Y.getStrCode(), 120, 0,0, 0, 100, 1),
+                new 技能信息类("Q", 按键枚举.Q.getStrCode(), 21, 1500,0, 0, 20, 6),
+                new 技能信息类("W", 按键枚举.W.getStrCode(), 17, 1000,0, 0, 20, 5),
+                new 技能信息类("E", 按键枚举.E.getStrCode(), 37, 5000,0, 0, 20, 4),
+                new 技能信息类("Y", 按键枚举.Y.getStrCode(), 120, 8000,0, 0, 100, 1),
 
-                new 技能信息类("破极兵刃", "right|right|space", 20, 0,1, 0, 0, 0),
-                new 技能信息类("自动格挡", "up|down|space", 20, 0,1, 0, 0, 0),
-                new 技能信息类("流行狂", "a|space|a", 20, 0,1, 0, 0, 0)
+                new 技能信息类("破极兵刃", "right|right|space", 20, 500,1, 0, 0, 0),
+                new 技能信息类("自动格挡", "up|down|space", 20, 500,1, 0, 0, 0),
+                new 技能信息类("流行狂", "a|space|a", 20, 500,1, 0, 0, 0)
 
         ));
 
@@ -92,6 +86,18 @@ public class 配置项类 {
                 new 技能信息类("嗜血", "up|down|space", 20, 0,1, 0, 0, 0)
 
         ));
+
+        技能栏配置列表.put("shouldbe", Arrays.asList(
+                new 技能信息类("X", 按键枚举.X.getStrCode(), 0, 300,0, 1000, 3, 3),
+
+                new 技能信息类("S", 按键枚举.S.getStrCode(), 18, 2500,0, 0, 1, 2),
+                new 技能信息类("F", 按键枚举.F.getStrCode(), 7, 300,0, 0, 1, 2),
+                new 技能信息类("Y", 按键枚举.Y.getStrCode(), 180, 3000,0, 0, 4, 1),
+
+                new 技能信息类("死亡左轮", "right|right|space", 20, 0,1, 0, 0, 0),
+                new 技能信息类("银弹", "right|space", 20, 0,1, 0, 0, 0)
+        ));
+        移动速度列表.put("shouldbe", new Pair<>(0.55, 0.22));
 
         技能栏配置列表.put("CodeTheWorld", Arrays.asList(
                 new 技能信息类("X", 按键枚举.X.getStrCode(), 3, 0,0, 1000, 1, 10),

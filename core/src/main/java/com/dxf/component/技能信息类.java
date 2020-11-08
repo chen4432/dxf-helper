@@ -36,6 +36,7 @@ public class 技能信息类 {
         } else {
             状态 = 技能状态_正常;
         }
+        System.out.println("按键： " + 按键 + ", 状态： " + 状态);
     }
 
     public String 使用技能() {
