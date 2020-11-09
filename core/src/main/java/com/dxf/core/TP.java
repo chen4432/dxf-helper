@@ -1,16 +1,13 @@
 package com.dxf.core;
 
 import com.dxf.component.基础功能类;
-import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Dispatch;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class TP {
@@ -309,6 +306,10 @@ public class TP {
         return Dispatch.call(DM, "MoveWindow", hwnd, x, y).getInt();
     }
 
+    public static int getWindowState(int hwnd, int flag) {
+        return Dispatch.call(DM, "GetWindowState", hwnd, flag).getInt();
+    }
+
     public static int setWindowState(int hwnd, int flag) {
         return Dispatch.call(DM, "SetWindowState", hwnd, flag).getInt();
     }
@@ -343,8 +344,22 @@ public class TP {
         return Dispatch.call(DM, "KeyPress", vkCode).getInt();
     }
 
+    public static int 按下按键(int 窗口句柄, int vkCode) {
+        while (getWindowState(窗口句柄, 1) != 1) {
+            setWindowState(窗口句柄, 1);
+        }
+        return Dispatch.call(DM, "KeyPress", vkCode).getInt();
+    }
+
     public static int keyPressChar(String keyStr) {
         return Dispatch.call(DM, "KeyPressChar", keyStr).getInt();
+    }
+
+    public static int 按下按键(int 窗口句柄, String 按键) {
+        while (getWindowState(窗口句柄, 1) != 1) {
+            setWindowState(窗口句柄, 1);
+        }
+        return Dispatch.call(DM, "KeyPressChar", 按键).getInt();
     }
 
     /**
@@ -362,6 +377,18 @@ public class TP {
         }
     }
 
+    public static void 按下按键序列(int 窗口句柄, List<String> 按键序列, int 延时时间) throws InterruptedException {
+        while (getWindowState(窗口句柄, 1) != 1) {
+            setWindowState(窗口句柄, 1);
+        }
+        if (按键序列.isEmpty()) return;
+        按下按键(窗口句柄, 按键序列.get(0));
+        for (int i = 1; i < 按键序列.size(); ++i) {
+            基础功能类.延时(延时时间);
+            按下按键(窗口句柄, 按键序列.get(i));
+        }
+    }
+
     public static int keyPressStr(String keyStr, int delay) {
         return Dispatch.call(DM, "KeyPressStr", keyStr, delay).getInt();
     }
@@ -370,7 +397,21 @@ public class TP {
         return Dispatch.call(DM, "KeyDown", vkCode).getInt();
     }
 
+    public static int 按住按键(int 窗口句柄, int vkCode) {
+        while (getWindowState(窗口句柄, 1) != 1) {
+            setWindowState(窗口句柄, 1);
+        }
+        return Dispatch.call(DM, "KeyDown", vkCode).getInt();
+    }
+
     public static int keyUp(int vkCode) {
+        return Dispatch.call(DM, "KeyUp", vkCode).getInt();
+    }
+
+    public static int 松开按键(int 窗口句柄, int vkCode) {
+        while (getWindowState(窗口句柄, 1) != 1) {
+            setWindowState(窗口句柄, 1);
+        }
         return Dispatch.call(DM, "KeyUp", vkCode).getInt();
     }
 
@@ -378,13 +419,39 @@ public class TP {
         return Dispatch.call(DM, "KeyDownChar", keyStr).getInt();
     }
 
+    public static int 按住按键(int 窗口句柄, String 按键) {
+        while (getWindowState(窗口句柄, 1) != 1) {
+            setWindowState(窗口句柄, 1);
+        }
+        return Dispatch.call(DM, "KeyDownChar", 按键).getInt();
+    }
+
     public static int keyUpChar(String keyStr) {
         return Dispatch.call(DM, "KeyUpChar", keyStr).getInt();
+    }
+
+    public static int 松开按键(int 窗口句柄, String 按键) {
+        while (getWindowState(窗口句柄, 1) != 1) {
+            setWindowState(窗口句柄, 1);
+        }
+        return Dispatch.call(DM, "KeyUpChar", 按键).getInt();
     }
 
     public static int leftClick() {
         return Dispatch.call(DM, "LeftClick").getInt();
     }
+
+    public static int 鼠标左击() {
+        return Dispatch.call(DM, "LeftClick").getInt();
+    }
+
+    public static int 鼠标左击(int 窗口句柄) {
+        while (getWindowState(窗口句柄, 1) != 1) {
+            setWindowState(窗口句柄, 1);
+        }
+        return leftClick();
+    }
+
 
     public static int moveTo(int x, int y) {
         return Dispatch.call(DM, "MoveTo", x, y).getInt();
