@@ -94,12 +94,12 @@ public class 人物角色类 {
         long 计时开始 = System.currentTimeMillis();
         TP.keyPress(KEY_RR);
         基础功能类.延时(30);
-        TP.keyDown(KEY_RR);
+        TP.按住按键(窗口句柄, KEY_RR);
         基础功能类.延时(30);
-        TP.keyDown(KEY_DN);
+        TP.按住按键(窗口句柄, KEY_DN);
         基础功能类.延时(888);
-        TP.keyUp(KEY_RR);
-        TP.keyUp(KEY_DN);
+        TP.松开按键(窗口句柄, KEY_RR);
+        TP.松开按键(窗口句柄, KEY_DN);
         long 计时结束 = System.currentTimeMillis();
         坐标类 终点 = 取人物坐标();
         int xDelta = 终点.X() - 起点.X();
@@ -125,34 +125,34 @@ public class 人物角色类 {
         }
         System.out.printf("xTime: %d\tyTime: %d\n", xTime, yTime);
         if (xDistance == 0) {
-            TP.keyDownChar(dirUD);
+            TP.按住按键(窗口句柄, dirUD);
             基础功能类.延时(yTime);
-            TP.keyUpChar(dirUD);
+            TP.松开按键(窗口句柄, dirUD);
             return;
         }
         if (yDistance == 0) {
-            TP.keyPressChar(dirLR);
+            TP.按下按键(窗口句柄, dirLR);
             基础功能类.延时(30);
-            TP.keyDownChar(dirLR);
+            TP.按住按键(窗口句柄, dirLR);
             基础功能类.延时(xTime);
-            TP.keyUpChar(dirLR);
+            TP.松开按键(窗口句柄, dirLR);
             return;
         }
-        TP.keyPressChar(dirLR);
+        TP.按下按键(窗口句柄, dirLR);
         基础功能类.延时(30);
-        TP.keyDownChar(dirLR);
+        TP.按住按键(窗口句柄, dirLR);
         基础功能类.延时(30);
-        TP.keyDownChar(dirUD);
+        TP.按住按键(窗口句柄, dirUD);
         if (xTime > yTime) {
             基础功能类.延时(yTime);
-            TP.keyUpChar(dirUD);
+            TP.松开按键(窗口句柄, dirUD);
             基础功能类.延时(xTime - yTime);
-            TP.keyUpChar(dirLR);
+            TP.松开按键(窗口句柄, dirLR);
         } else {
             基础功能类.延时(xTime);
-            TP.keyUpChar(dirLR);
+            TP.松开按键(窗口句柄, dirLR);
             基础功能类.延时(yTime - xTime);
-            TP.keyUpChar(dirUD);
+            TP.松开按键(窗口句柄, dirUD);
         }
         long 计时结束 = System.currentTimeMillis();
         int xDelta = Math.abs(target.X() - curr.X());
@@ -169,8 +169,8 @@ public class 人物角色类 {
 
     public void 调整方向(方向枚举 dir) {
         try {
-            if (dir == 方向枚举.右) TP.keyPressChar("right");
-            if (dir == 方向枚举.左) TP.keyPressChar("left");
+            if (dir == 方向枚举.右) TP.按下按键(窗口句柄, "right");
+            if (dir == 方向枚举.左) TP.按下按键(窗口句柄, "left");
             Thread.sleep(100);
         } catch (Exception e) {
             e.printStackTrace();
@@ -181,7 +181,7 @@ public class 人物角色类 {
         技能栏.sort(Comparator.comparingInt(技能信息类::取技能优先级_普通房间));
         for (技能信息类 技能 : 技能栏) {
             if (!技能.是否冷却中() && 技能.是否攻击类型()) {
-                if (技能.释放技能()) {
+                if (技能.释放技能(窗口句柄)) {
                     break;
                 }
             }
@@ -192,7 +192,7 @@ public class 人物角色类 {
         技能栏.sort(Comparator.comparingInt(技能信息类::取技能优先级_领主房间));
         for (技能信息类 技能 : 技能栏) {
             if (!技能.是否冷却中() && 技能.是否攻击类型()) {
-                if (技能.释放技能()) {
+                if (技能.释放技能(窗口句柄)) {
                     break;
                 }
             }
@@ -203,7 +203,7 @@ public class 人物角色类 {
         log.info("开始释放BUFF技能...");
         for (技能信息类 技能 : 技能栏) {
             if (!技能.是否冷却中() && 技能.是否状态技能()) {
-                技能.释放技能();
+                技能.释放技能(窗口句柄);
                 基础功能类.延时(1000);
             }
         }
@@ -240,7 +240,6 @@ public class 人物角色类 {
             移动到(最近的怪物坐标);
             领主房间释放技能();
         }
-        //基础功能类.延时(1000);
     }
 
     public void 普通房间清怪(房间信息类 room) throws InterruptedException {
@@ -264,7 +263,6 @@ public class 人物角色类 {
             移动到(最近的怪物坐标);
             普通房间释放技能();
         }
-        //基础功能类.延时(1000);
     }
 
     public void 执行刷图任务() throws InterruptedException {
@@ -286,10 +284,10 @@ public class 人物角色类 {
                     log.info("通关完成...");
                     捡物(room);
                     基础功能类.等待直到符合条件(() -> {
-                        TP.keyPressChar("ESC");
+                        TP.按下按键(窗口句柄, "ESC");
                         基础功能类.延时(500);
                         System.out.println("等待清算结束，返回城镇中...");
-                        TP.keyPressChar("F12");
+                        TP.按下按键(窗口句柄, "F12");
                         基础功能类.延时(500);
                         return 基础功能类.取游戏状态(窗口句柄) == 游戏状态枚举.城镇;
                     }, 10, 1000);
@@ -338,17 +336,14 @@ public class 人物角色类 {
                     key = "left";
                     break;
             }
-            TP.keyDownChar(key);
+            TP.按住按键(窗口句柄, key);
             基础功能类.延时(1000);
-            TP.keyUpChar(key);
-            //精确过门(door, dir);
+            TP.松开按键(窗口句柄, key);
         }
     }
 
     public void 捡物(房间信息类 room) throws InterruptedException {
-        //Thread.sleep(500);
-        TP.keyPressChar("v");
-        //Thread.sleep(500);
+        TP.按下按键(窗口句柄, "V");
     }
 
     public int get剩余疲劳值() {
@@ -360,14 +355,14 @@ public class 人物角色类 {
     public void 进图_根特皇宫() throws InterruptedException {
         if (基础功能类.取游戏状态(窗口句柄) != 游戏状态枚举.城镇) return;
         基础功能类.等待直到符合条件(() -> {
-            TP.keyDownChar(按键枚举.方向左.getStrCode());
+            TP.按住按键(窗口句柄, 按键枚举.方向左.getStrCode());
             return 基础功能类.取游戏状态(窗口句柄) == 游戏状态枚举.选择副本;
         }, 30, 1000);
-        TP.keyUpChar(按键枚举.方向左.getStrCode());
+        TP.松开按键(窗口句柄, 按键枚举.方向左.getStrCode());
         基础功能类.等待直到符合条件(() -> {
-            TP.keyPressChar("right");
+            TP.按下按键(窗口句柄, "right");
             基础功能类.延时(500);
-            TP.keyPressChar("space");
+            TP.按下按键(窗口句柄, "SPACE");
             return 基础功能类.取游戏状态(窗口句柄) == 游戏状态枚举.在副本中;
         }, 30, 1000);
     }

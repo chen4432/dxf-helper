@@ -351,30 +351,11 @@ public class TP {
         return Dispatch.call(DM, "KeyPress", vkCode).getInt();
     }
 
-    public static int keyPressChar(String keyStr) {
-        return Dispatch.call(DM, "KeyPressChar", keyStr).getInt();
-    }
-
     public static int 按下按键(int 窗口句柄, String 按键) {
         while (getWindowState(窗口句柄, 1) != 1) {
             setWindowState(窗口句柄, 1);
         }
         return Dispatch.call(DM, "KeyPressChar", 按键).getInt();
-    }
-
-    /**
-     * 按照序列依次Press按键
-     * @param keyStrList 按键序列
-     * @param delay 延迟时间
-     * @return
-     */
-    public static void keyPressCharList(List<String> keyStrList, int delay) throws InterruptedException {
-        if (keyStrList.isEmpty()) return;
-        keyPressChar(keyStrList.get(0));
-        for (int i = 1; i < keyStrList.size(); ++i) {
-            基础功能类.延时(delay);
-            keyPressChar(keyStrList.get(i));
-        }
     }
 
     public static void 按下按键序列(int 窗口句柄, List<String> 按键序列, int 延时时间) throws InterruptedException {
@@ -389,23 +370,11 @@ public class TP {
         }
     }
 
-    public static int keyPressStr(String keyStr, int delay) {
-        return Dispatch.call(DM, "KeyPressStr", keyStr, delay).getInt();
-    }
-
-    public static int keyDown(int vkCode) {
-        return Dispatch.call(DM, "KeyDown", vkCode).getInt();
-    }
-
     public static int 按住按键(int 窗口句柄, int vkCode) {
         while (getWindowState(窗口句柄, 1) != 1) {
             setWindowState(窗口句柄, 1);
         }
         return Dispatch.call(DM, "KeyDown", vkCode).getInt();
-    }
-
-    public static int keyUp(int vkCode) {
-        return Dispatch.call(DM, "KeyUp", vkCode).getInt();
     }
 
     public static int 松开按键(int 窗口句柄, int vkCode) {
@@ -415,10 +384,6 @@ public class TP {
         return Dispatch.call(DM, "KeyUp", vkCode).getInt();
     }
 
-    public static int keyDownChar(String keyStr) {
-        return Dispatch.call(DM, "KeyDownChar", keyStr).getInt();
-    }
-
     public static int 按住按键(int 窗口句柄, String 按键) {
         while (getWindowState(窗口句柄, 1) != 1) {
             setWindowState(窗口句柄, 1);
@@ -426,19 +391,11 @@ public class TP {
         return Dispatch.call(DM, "KeyDownChar", 按键).getInt();
     }
 
-    public static int keyUpChar(String keyStr) {
-        return Dispatch.call(DM, "KeyUpChar", keyStr).getInt();
-    }
-
     public static int 松开按键(int 窗口句柄, String 按键) {
         while (getWindowState(窗口句柄, 1) != 1) {
             setWindowState(窗口句柄, 1);
         }
         return Dispatch.call(DM, "KeyUpChar", 按键).getInt();
-    }
-
-    public static int leftClick() {
-        return Dispatch.call(DM, "LeftClick").getInt();
     }
 
     public static int 鼠标左击() {
@@ -449,7 +406,7 @@ public class TP {
         while (getWindowState(窗口句柄, 1) != 1) {
             setWindowState(窗口句柄, 1);
         }
-        return leftClick();
+        return 鼠标左击();
     }
 
 

@@ -52,30 +52,25 @@ public class 基础功能测试 {
     }
 
     @Test
-    public void 下一个角色() throws Exception {
-        基础功能类.进入选择角界面(dxf.get窗口句柄());
-    }
-
-    @Test
     public void 进入根特皇宫门口测试() throws Exception {
 
-        基础功能类.进入根特皇宫门口();
+        基础功能类.进入根特皇宫门口(dxf.get窗口句柄());
     }
 
     @Test
     public void 下一个角色测试() throws Exception {
-        基础功能类.下一个角色();
+        基础功能类.下一个角色(dxf.get窗口句柄());
     }
 
     @Test
     public void 每日() throws Exception {
         for (int i = 0; i < 32; ++i) {
             TP.moveTo(1175, 656);
-            TP.leftClick();
+            TP.鼠标左击(dxf.get窗口句柄());
             基础功能类.延时(60000);
             TP.setWindowState(dxf.get窗口句柄(), 1);
             基础功能类.延时(2000);
-            基础功能类.下一个角色();
+            基础功能类.下一个角色(dxf.get窗口句柄());
             基础功能类.延时(3000);
         }
     }

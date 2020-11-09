@@ -45,13 +45,13 @@ public class 技能信息类 {
         return 按键;
     }
 
-    public boolean 释放技能() throws InterruptedException {
+    public boolean 释放技能(int 窗口句柄) throws InterruptedException {
         if (状态 == 技能状态_冷却) return false;
         switch (类型) {
             case 技能类型_状态:
                 List<String> 按键序列 = Arrays.stream(按键.split("\\|")).collect(Collectors.toList());
                 log.info("BUFF技能名称：{}, 按键序列：{}", 名称, 按键序列);
-                TP.keyPressCharList(按键序列, 30);
+                TP.按下按键序列(窗口句柄, 按键序列, 30);
                 if (持续时间 > 0) {
                     基础功能类.延时(持续时间);
                 }
@@ -59,12 +59,12 @@ public class 技能信息类 {
             case 技能类型_攻击:
                 if (按键时间 > 0) {
                     log.info("攻击技能名称: {}, 按键时间: {}", 名称, 按键时间);
-                    TP.keyDownChar(按键);
+                    TP.按住按键(窗口句柄, 按键);
                     基础功能类.延时(按键时间);
-                    TP.keyUpChar(按键);
+                    TP.松开按键(窗口句柄, 按键);
                 } else {
                     log.info("攻击技能名称: {}, 按键时间: {}", 名称, 按键时间);
-                    TP.keyPressChar(按键);
+                    TP.按下按键(窗口句柄, 按键);
                 }
                 if (持续时间 > 0) {
                     基础功能类.延时(持续时间);

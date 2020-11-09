@@ -218,11 +218,4 @@ public class TPTest {
         }
     }
 
-    @Test
-    public void 连续按键测试() throws Exception {
-        基础功能类.延时(3000);
-        TP.keyPressCharList(Arrays.asList("right", "right", "space"), 30);
-    }
-
-
 }

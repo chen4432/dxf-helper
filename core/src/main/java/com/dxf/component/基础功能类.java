@@ -9,6 +9,9 @@ import com.dxf.util.回调函数接口;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import static com.dxf.model.按键枚举.方向右;
+import static com.dxf.model.按键枚举.空格;
+
 
 public class 基础功能类 {
 
@@ -261,48 +264,10 @@ public class 基础功能类 {
     }
 
 
-    public static void 进入选择角界面(int 窗口句柄) throws InterruptedException {
-        TP.setWindowState(窗口句柄, 1);
-        TP.keyPressChar("esc");
-
-        基础功能类.延时(1000);
-        TP.moveTo(380, 450);
-        TP.leftClick();
-        基础功能类.延时(2000);
-
-        TP.setWindowState(窗口句柄, 1);
-        TP.keyPressChar("right");
-        基础功能类.延时(2000);
-        TP.keyPressChar("space");
-        基础功能类.延时(2000);
-
-        /*
-        // 关闭装备指南
-        TP.moveTo(400, 520);
-        TP.leftClick();
-        */
-
-        TP.keyPressChar("6");
-        基础功能类.延时(1000);
-        TP.moveTo(62, 522);
-        TP.leftClick();
-        基础功能类.延时(1000);
-        TP.moveTo(160, 34);
-        TP.leftClick();
-        基础功能类.延时(1000);
-        TP.moveTo(160, 150);
-        TP.leftClick();
-        基础功能类.延时(1000);
-        TP.moveTo(200, 186);
-        TP.leftClick();
-        基础功能类.延时(1000);
-        TP.moveTo(62, 522);
-        TP.leftClick();
-    }
-
-    public static void 下一个角色() throws InterruptedException {
+    public static void 下一个角色(int 窗口句柄) throws InterruptedException {
         等待直到符合条件(()->{
-            TP.keyPressChar("esc");
+            //TP.keyPressChar("esc");
+            TP.按下按键(窗口句柄, "ESC");
             延时(500);
             String res = TP.findPicE(355-5, 462-5, 402+5, 476+5, "选择角色.bmp", "202020", 0.9, 0);
             System.out.println(res);
@@ -313,20 +278,24 @@ public class 基础功能类 {
         int y = Integer.parseInt(fields[2]);
         等待直到符合条件(()->{
             TP.moveTo(x, y);
-            TP.leftClick();
+            //TP.leftClick();
+            TP.鼠标左击(窗口句柄);
             Thread.sleep(500);
             return !"-1|-1|-1".equals(TP.findPicE(575-5, 565-5, 624+5, 579+5, "结束游戏.bmp", "202020", 0.9, 0));
         }, 10, 1000);
         延时(1000);
-        TP.keyPressChar("right");
+        //TP.keyPressChar("right");
+        TP.按下按键(窗口句柄, 方向右.getStrCode());
         延时(1000);
-        TP.keyPressChar("space");
+        //TP.keyPressChar("space");
+        TP.按下按键(窗口句柄, 空格.getStrCode());
         基础功能类.延时(5000);
     }
 
-    public static void 进入根特皇宫门口() throws InterruptedException {
+    public static void 进入根特皇宫门口(int 窗口句柄) throws InterruptedException {
         基础功能类.等待直到符合条件(()-> {
-            TP.keyPressChar("6");
+            //TP.keyPressChar("6");
+            TP.按下按键(窗口句柄, "6");
             基础功能类.延时(500);
             return !"-1|-1|-1".equals(TP.findPicE(0, 0, 800, 600, "选择地图.bmp", "202020", 0.9, 0));
         }, 10, 1000);
@@ -335,7 +304,7 @@ public class 基础功能类 {
         final int y1 = Integer.parseInt(fields[2]);
         等待直到符合条件(()->{
             TP.moveTo(x1, y1);
-            TP.leftClick();
+            TP.鼠标左击(窗口句柄);
             Thread.sleep(500);
             return !"-1|-1|-1".equals(TP.findPicE(0, 0, 800, 600, "世界.bmp", "202020", 0.9, 0));
         }, 10, 1000);
@@ -344,7 +313,7 @@ public class 基础功能类 {
         final int y2 = Integer.parseInt(fields[2]);
         等待直到符合条件(()->{
             TP.moveTo(x2, y2);
-            TP.leftClick();
+            TP.鼠标左击(窗口句柄);
             Thread.sleep(500);
             return !"-1|-1|-1".equals(TP.findPicE(0, 0, 800, 600, "皇都.bmp", "202020", 0.9, 0));
         }, 10, 1000);
@@ -353,7 +322,7 @@ public class 基础功能类 {
         final int y3 = Integer.parseInt(fields[2]);
         等待直到符合条件(()->{
             TP.moveTo(x3, y3);
-            TP.leftClick();
+            TP.鼠标左击(窗口句柄);
             Thread.sleep(500);
             return !"-1|-1|-1".equals(TP.findPicE(0, 0, 800, 600, "根特皇宫.bmp", "202020", 0.9, 0));
         }, 10, 1000);
@@ -362,7 +331,7 @@ public class 基础功能类 {
         final int y4 = Integer.parseInt(fields[2]) + 20;
         等待直到符合条件(()->{
             TP.moveTo(x4, y4);
-            TP.leftClick();
+            TP.鼠标左击(窗口句柄);
             Thread.sleep(500);
             return !"-1|-1|-1".equals(TP.findPicE(0, 0, 800, 600, "传送.bmp", "202020", 0.9, 0));
         }, 10, 1000);
@@ -370,7 +339,7 @@ public class 基础功能类 {
         final int x5 = Integer.parseInt(fields[1]);
         final int y5 = Integer.parseInt(fields[2]);
         TP.moveTo(x5, y5);
-        TP.leftClick();
+        TP.鼠标左击(窗口句柄);
     }
 
     public static boolean 是否在赛利亚房间() {

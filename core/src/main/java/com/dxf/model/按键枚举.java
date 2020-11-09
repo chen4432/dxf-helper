@@ -20,8 +20,9 @@ public enum 按键枚举 {
     方向上(0, "up"),
     方向下(0, "down"),
     方向左(0, "left"),
-    方向右(0, "right");
-
+    方向右(0, "right"),
+    退出(0, "esc"),
+    空格(0, "space");
     int vkCode;
     String strCode;
 
