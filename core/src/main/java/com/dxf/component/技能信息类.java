@@ -39,6 +39,11 @@ public class 技能信息类 {
         System.out.println("按键： " + 按键 + ", 状态： " + 状态);
     }
 
+    public void 重置冷却时间() {
+        tick = 0;
+        状态 = 技能状态_正常;
+    }
+
     public String 使用技能() {
         tick = 冷却时间;
         状态 = 技能状态_冷却;

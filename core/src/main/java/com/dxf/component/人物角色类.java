@@ -31,6 +31,8 @@ public class 人物角色类 {
     private Double 移动速度X = 0.44;
     private Double 移动速度Y = 0.18;
 
+    ScheduledExecutorService 线程池 = Executors.newSingleThreadScheduledExecutor();
+
     public 人物角色类(int 窗口句柄) {
         this.窗口句柄 = 窗口句柄;
         名称 = TP.readStringAddr(窗口句柄, TP.readLong(窗口句柄, 基址类.人物名称), 1, 50);
@@ -38,8 +40,14 @@ public class 人物角色类 {
         职业 = TP.readStringAddr(窗口句柄, TP.readLong(窗口句柄, 基址类.职业名称), 1, 50);
         设置技能配置();
         设置移动速度();
-        ScheduledExecutorService 线程池 = Executors.newSingleThreadScheduledExecutor();
+    }
+
+    public void 启动更新技能冷却时间任务() {
         线程池.scheduleAtFixedRate(new Task(), 1, 1000, TimeUnit.MILLISECONDS);
+    }
+
+    public void 停止更新技能冷却时间任务() {
+        线程池.shutdown();
     }
 
     @Override
@@ -196,6 +204,12 @@ public class 人物角色类 {
                     break;
                 }
             }
+        }
+    }
+
+    public void 重置技能冷却时间() {
+        for (技能信息类 技能 : 技能栏) {
+            技能.重置冷却时间();
         }
     }
 
@@ -361,7 +375,7 @@ public class 人物角色类 {
         TP.松开按键(窗口句柄, 按键枚举.方向左.getStrCode());
         基础功能类.等待直到符合条件(() -> {
             TP.按下按键(窗口句柄, "right");
-            基础功能类.延时(500);
+            基础功能类.延时(200);
             TP.按下按键(窗口句柄, "SPACE");
             return 基础功能类.取游戏状态(窗口句柄) == 游戏状态枚举.在副本中;
         }, 30, 1000);

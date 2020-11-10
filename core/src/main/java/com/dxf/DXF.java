@@ -124,19 +124,23 @@ public class DXF {
     private class 根特皇宫刷图任务 implements Runnable {
         @Override
         public void run() {
+            人物角色类 player = new 人物角色类(窗口句柄);
+            player.重置技能冷却时间();
             try {
                 激活窗口();
                 if (基础功能类.是否在赛利亚房间()) {
                     基础功能类.进入根特皇宫门口(窗口句柄);
                     基础功能类.延时(1000);
                 }
-                人物角色类 player = new 人物角色类(窗口句柄);
                 if (基础功能类.取游戏状态(窗口句柄) == 游戏状态枚举.城镇) {
                     player.进图_根特皇宫();
                 }
+                player.启动更新技能冷却时间任务();
                 player.执行刷图任务();
             } catch (InterruptedException e) {
                 System.out.println("刷图任务被中断！");
+            } finally {
+                player.停止更新技能冷却时间任务();
             }
         }
     }

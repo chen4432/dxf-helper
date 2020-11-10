@@ -38,7 +38,6 @@ public class 配置项类 {
         移动速度列表.put("剑圣花弄影", new Pair<>(0.80, 0.25));
 
         技能栏配置列表.put("南山、敬老院", Arrays.asList(
-
                 new 技能信息类("S", 按键枚举.S.getStrCode(), 1, 500,0, 1000, 11, 21),
                 new 技能信息类("F", 按键枚举.F.getStrCode(), 9, 1000,0, 0, 10, 20),
                 new 技能信息类("G", 按键枚举.G.getStrCode(), 13, 1000,0, 0, 10, 20),
@@ -47,6 +46,22 @@ public class 配置项类 {
                 new 技能信息类("W", 按键枚举.W.getStrCode(), 17, 1000,0, 0, 20, 5),
                 new 技能信息类("E", 按键枚举.E.getStrCode(), 37, 5000,0, 0, 20, 4),
                 new 技能信息类("Y", 按键枚举.Y.getStrCode(), 120, 8000,0, 0, 100, 1),
+
+                new 技能信息类("破极兵刃", "right|right|space", 20, 500,1, 0, 0, 0),
+                new 技能信息类("自动格挡", "up|down|space", 20, 500,1, 0, 0, 0),
+                new 技能信息类("流行狂", "a|space|a", 20, 500,1, 0, 0, 0)
+
+        ));
+
+        技能栏配置列表.put("、余音绕梁、", Arrays.asList(
+                new 技能信息类("S", 按键枚举.S.getStrCode(), 1, 500,0, 1000, 11, 21),
+                new 技能信息类("F", 按键枚举.F.getStrCode(), 9, 1000,0, 0, 10, 20),
+                new 技能信息类("G", 按键枚举.G.getStrCode(), 13, 1000,0, 0, 10, 20),
+
+                //new 技能信息类("Q", 按键枚举.Q.getStrCode(), 21, 1500,0, 0, 20, 6),
+                new 技能信息类("W", 按键枚举.W.getStrCode(), 17, 1000,0, 0, 20, 5),
+                new 技能信息类("E", 按键枚举.E.getStrCode(), 37, 5000,0, 0, 20, 4),
+                //new 技能信息类("Y", 按键枚举.Y.getStrCode(), 120, 8000,0, 0, 100, 1),
 
                 new 技能信息类("破极兵刃", "right|right|space", 20, 500,1, 0, 0, 0),
                 new 技能信息类("自动格挡", "up|down|space", 20, 500,1, 0, 0, 0),
@@ -76,7 +91,7 @@ public class 配置项类 {
 
                 new 技能信息类("A", 按键枚举.A.getStrCode(), 20, 1000,0, 0, 2, 3),
                 new 技能信息类("S", 按键枚举.S.getStrCode(), 13, 1500,0, 0, 1, 3),
-                new 技能信息类("F", 按键枚举.F.getStrCode(), 4, 1300,0, 0, 1, 3),
+                new 技能信息类("F", 按键枚举.F.getStrCode(), 4, 1000,0, 0, 1, 3),
                 new 技能信息类("G", 按键枚举.G.getStrCode(), 20, 1800,0, 0, 2, 2),
                 new 技能信息类("E", 按键枚举.E.getStrCode(), 36, 1800,0, 0, 2, 2),
                 new 技能信息类("R", 按键枚举.R.getStrCode(), 42, 1500,0, 0, 2, 2),
@@ -88,10 +103,10 @@ public class 配置项类 {
         ));
 
         技能栏配置列表.put("shouldbe", Arrays.asList(
-                new 技能信息类("X", 按键枚举.X.getStrCode(), 0, 300,0, 1000, 3, 3),
+                new 技能信息类("X", 按键枚举.X.getStrCode(), 0, 500,0, 1000, 3, 3),
 
                 new 技能信息类("S", 按键枚举.S.getStrCode(), 18, 2500,0, 0, 1, 2),
-                new 技能信息类("F", 按键枚举.F.getStrCode(), 7, 300,0, 0, 1, 2),
+                new 技能信息类("F", 按键枚举.F.getStrCode(), 7, 500,0, 0, 1, 2),
                 new 技能信息类("Y", 按键枚举.Y.getStrCode(), 180, 3000,0, 0, 4, 1),
 
                 new 技能信息类("死亡左轮", "right|right|space", 20, 0,1, 0, 0, 0),
@@ -176,14 +191,12 @@ public class 配置项类 {
                 new 技能信息类("S", 按键枚举.S.getStrCode(), 6, 0,0, 0, 1, 3),
                 new 技能信息类("D", 按键枚举.D.getStrCode(), 6, 0,0, 0, 1, 3),
                 new 技能信息类("F", 按键枚举.F.getStrCode(), 15, 0,0, 3000, 1, 3),
-                //new 技能信息类("G", 按键枚举.G.getStrCode(), 30, 0, 0, 1, 10),
                 new 技能信息类("H", 按键枚举.H.getStrCode(), 20, 0,0, 0, 1, 2),
 
                 new 技能信息类("Q", 按键枚举.Q.getStrCode(), 24, 0,0, 0, 2, 2),
                 new 技能信息类("W", 按键枚举.W.getStrCode(), 30, 0,0, 0, 2, 2),
                 new 技能信息类("E", 按键枚举.E.getStrCode(), 45, 0,0, 5000, 4, 2),
                 new 技能信息类("R", 按键枚举.R.getStrCode(), 50, 0,0, 0, 4, 2),
-                //new 技能信息类("T", 按键枚举.T.getStrCode(), 145, 0, 0, 110, 2),
                 new 技能信息类("Y", 按键枚举.Y.getStrCode(), 290, 0,0, 0, 10, 1),
                 new 技能信息类("涂毒", "right|right|space", 20, 0,1, 0, 0, 0),
                 new 技能信息类("挑衅", "down|down|space", 20, 0,1, 0, 0, 0)
@@ -195,7 +208,6 @@ public class 配置项类 {
 
                 new 技能信息类("波动爆发", 按键枚举.A.getStrCode(), 8, 0,0, 0, 1, 3),
                 new 技能信息类("地裂波动剑", 按键枚举.S.getStrCode(), 3, 0,0, 0, 3, 3),
-                //new 技能信息类("鬼斩", 按键枚举.D.getStrCode(), 6, 0, 0, 100, 100),
                 new 技能信息类("邪光斩", 按键枚举.F.getStrCode(), 10, 0,0, 888, 2, 3),
                 new 技能信息类("列波斩", 按键枚举.G.getStrCode(), 8, 0,0, 0, 2, 3),
                 new 技能信息类("邪光波动阵", 按键枚举.H.getStrCode(), 20, 0,0, 0, 1, 2),

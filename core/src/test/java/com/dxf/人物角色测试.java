@@ -2,7 +2,6 @@ package com.dxf;
 
 import com.dxf.component.人物角色类;
 import com.dxf.component.基础功能类;
-import com.dxf.component.房间信息类;
 import com.dxf.core.TP;
 import com.dxf.model.游戏状态枚举;
 import org.junit.After;
